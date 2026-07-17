@@ -30,7 +30,7 @@
             100% { transform: translateY(0px) rotate(0deg); }
         }
 
-        /* Classes controladas via Intersection Observer */
+        /* Classes de Animação de Scroll */
         .reveal {
             opacity: 0;
             transform: translateY(25px);
@@ -42,7 +42,6 @@
             transform: translateY(0);
         }
 
-        /* Delays escalonados para listas de cards */
         .delay-1 { transition-delay: 0.1s; }
         .delay-2 { transition-delay: 0.2s; }
         .delay-3 { transition-delay: 0.3s; }
@@ -71,16 +70,14 @@
             overflow-x: hidden;
         }
 
-        /* Container Limit */
         .container {
             max-width: 900px;
             margin: 0 auto;
             padding: 0 24px;
         }
 
-        /* Utility classes */
         .text-center { text-align: center; }
-        .text-yellow { color: var(--accent-yellow); }
+        
         .badge {
             background-color: var(--accent-yellow);
             color: var(--bg-dark);
@@ -94,7 +91,7 @@
             margin-bottom: 15px;
         }
 
-        /* Hero Section */
+        /* Hero */
         header {
             padding: 50px 0 40px 0;
             text-align: center;
@@ -126,7 +123,6 @@
             margin: 0 auto 30px auto;
         }
 
-        /* CTA Button */
         .cta-btn {
             animation: pulseGlow 3s ease-in-out infinite;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -160,7 +156,6 @@
             font-weight: 500;
         }
 
-        /* Hero Image */
         .hero-media {
             animation: floatMedia 5s ease-in-out infinite;
             margin: 35px auto 0 auto;
@@ -184,7 +179,6 @@
             margin-top: 20px;
         }
 
-        /* Sections General styling */
         section {
             padding: 50px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -198,7 +192,7 @@
             line-height: 1.25;
         }
 
-        /* Team Experience Block */
+        /* Dor / Contexto */
         .experience-box {
             background-color: var(--bg-card);
             border-radius: var(--border-radius);
@@ -222,7 +216,7 @@
             margin-bottom: 0;
         }
 
-        /* Checklists */
+        /* Checklist Benefícios */
         .grid-2col {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -268,7 +262,7 @@
             flex-shrink: 0;
         }
 
-        /* Timeline / Program structure */
+        /* Cronograma Dia a Dia */
         .timeline {
             display: flex;
             flex-direction: column;
@@ -326,7 +320,7 @@
             border-left: 3px solid var(--accent-red);
         }
 
-        /* Audience Grid */
+        /* Público-Alvo */
         .audience-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -370,7 +364,7 @@
             margin: 30px auto 0 auto;
         }
 
-        /* How it works */
+        /* Grid Dinâmico Alinhado 3x2 */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -427,7 +421,7 @@
             font-size: 0.85rem;
         }
 
-        /* What is included */
+        /* Lista Resumo */
         .includes-list {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -442,7 +436,7 @@
             }
         }
 
-        /* Price Anchor */
+        /* Preço / Ancoragem */
         .price-section {
             background: radial-gradient(circle at center, #16182c 0%, var(--bg-dark) 100%);
             text-align: center;
@@ -506,7 +500,7 @@
             display: inline-block;
         }
 
-        /* Comparison columns */
+        /* Comparativo Operacional */
         .comparison-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -591,7 +585,7 @@
         .comp-list li.neg-item svg { color: var(--accent-red); }
         .comp-list li.pos-item svg { color: var(--accent-green); }
 
-        /* Bio/Instructor Section */
+        /* Biografia */
         .bio-wrapper {
             display: flex;
             gap: 35px;
@@ -651,7 +645,7 @@
             color: var(--accent-yellow);
         }
 
-        /* FAQ Section */
+        /* FAQ Accordion */
         .faq-wrapper {
             max-width: 750px;
             margin: 30px auto 0 auto;
@@ -740,19 +734,19 @@
 </head>
 <body>
 
-    <!-- HERO / EMBARQUE -->
+    <!-- HERO -->
     <header>
         <div class="container">
             <div class="brand-name">Tata Pereira</div>
             <span class="badge">Operação Sob Controle</span>
             <h1>Em 7 dias, estruture o Processo de Avaliação de Cães da sua empresa e pare de decidir no improviso</h1>
-            <p class="hero-subtitle">Crie critérios mais claros para decidir quais cães podem fazer parte da sua operação com mais segurança, organization e previsibilidade.</p>
+            <p class="hero-subtitle">Crie critérios mais claros para decidir quais cães podem fazer parte da sua operação com mais segurança, organização e previsibilidade.</p>
             
             <a href="#" class="cta-btn stripe-link">Quero Estruturar Meu Processo</a>
             <span class="cta-subtext">Vagas limitadas.</span>
 
             <div class="hero-media">
-                <img src="https://raw.githubusercontent.com/profissaopet/sob-controle/main/assets/2.png" alt="Processo de Avaliação de Cães">
+                <img src="https://raw.githubusercontent.com/profissaopet/sob-controle/main/assets/1.png" alt="Processo de Avaliação de Cães">
             </div>
 
             <div class="hero-date">De 12 a 18 de agosto, às 20h.</div>
@@ -929,7 +923,7 @@
         </div>
     </section>
 
-    <!-- COMO VAI FUNCIONAR -->
+    <!-- COMO O DESAFIO VAI FUNCIONAR (GRID SIMÉTRICO 3x2) -->
     <section>
         <div class="container">
             <h2>Como o desafio vai funcionar</h2>
@@ -980,7 +974,7 @@
         </div>
     </section>
 
-    <!-- ENTREGÁVEIS / CHECKLIST RESUMO -->
+    <!-- TUDO O QUE VOCÊ RECEBE -->
     <section>
         <div class="container">
             <h2 class="text-center">Tudo o que você recebe ao garantir sua vaga:</h2>
@@ -1037,7 +1031,7 @@
         </div>
     </section>
 
-    <!-- SEÇÃO DE ANCORAGEM DE OFERTA -->
+    <!-- ANCORAGEM DE OFERTA -->
     <section id="oferta" class="price-section">
         <div class="container">
             <div class="price-card">
@@ -1054,7 +1048,7 @@
         </div>
     </section>
 
-    <!-- COMPARAÇÃO: IMPROVISO VS ESTRUTURADO -->
+    <!-- OPERAÇÃO IMPROVISADA VS ESTRUTURADA -->
     <section>
         <div class="container">
             <h2>Operação improvisada ou operação estruturada?</h2>
@@ -1119,7 +1113,7 @@
         </div>
     </section>
 
-    <!-- BIOGRAFIA / QUEM CONDUZ -->
+    <!-- BIOGRAFIA -->
     <section>
         <div class="container">
             <h2 class="text-center">Quem vai conduzir o desafio?</h2>
@@ -1142,12 +1136,12 @@
         </div>
     </section>
 
-    <!-- LISTA DE ESPERA BANNER -->
+    <!-- BANNER DE LISTA DE ESPERA / COMPRA ADICIONAL -->
     <section id="lista-espera-secao" style="background-color: rgba(255, 255, 255, 0.01);">
         <div class="container text-center" style="max-width: 700px;">
             <h2 style="margin-bottom: 12px;">Pronto para acabar com o improviso?</h2>
             <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 25px; line-height: 1.6;">
-                Garanta o acesso imediato ao desafio e monte o processo operacional padrão de avaliações da sua creche ou hotel pet de forma profissional.
+                Garanta o acesso imediato ao desafio e monte o processo operacional padrão de avaliações da sua creche ou hotel pet de forma profissional através do checkout seguro.
             </p>
             <a href="#" class="cta-btn stripe-link">Quero Garantir Minha Vaga Direta</a>
         </div>
@@ -1159,7 +1153,6 @@
             <h2>Perguntas frequentes</h2>
             
             <div class="faq-wrapper">
-                <!-- FAQ 1 -->
                 <div class="faq-item">
                     <button class="faq-trigger">
                         <span>Preciso ser especialista em comportamento canino?</span>
@@ -1170,7 +1163,6 @@
                     </div>
                 </div>
 
-                <!-- FAQ 2 -->
                 <div class="faq-item">
                     <button class="faq-trigger">
                         <span>O desafio serve para creches e hospedagens?</span>
@@ -1181,7 +1173,6 @@
                     </div>
                 </div>
 
-                <!-- FAQ 3 -->
                 <div class="faq-item">
                     <button class="faq-trigger">
                         <span>Posso participar se minha equipe realiza as avaliações?</span>
@@ -1192,7 +1183,6 @@
                     </div>
                 </div>
 
-                <!-- FAQ 4 -->
                 <div class="faq-item">
                     <button class="faq-trigger">
                         <span>As aulas ficarão gravadas?</span>
@@ -1203,7 +1193,6 @@
                     </div>
                 </div>
 
-                <!-- FAQ 5 -->
                 <div class="faq-item">
                     <button class="faq-trigger">
                         <span>Quanto tempo preciso dedicar ao desafio diariamente?</span>
@@ -1214,7 +1203,6 @@
                     </div>
                 </div>
 
-                <!-- FAQ 6 -->
                 <div class="faq-item">
                     <button class="faq-trigger">
                         <span>Por quanto tempo terei acesso ao material?</span>
@@ -1228,7 +1216,7 @@
         </div>
     </section>
 
-    <!-- CHAMADA FINAL DE SEGURANÇA (URGÊNCIA) -->
+    <!-- CHAMADA FINAL -->
     <section class="text-center" style="background-color: #0d0f1a; padding: 70px 0;">
         <div class="container">
             <h2 style="font-size: 2rem; line-height: 1.3; margin-bottom: 15px;">Pare de decidir no improviso.<br>Estruture seu processo em 7 dias.</h2>
@@ -1260,10 +1248,7 @@
             const trigger = item.querySelector('.faq-trigger');
             trigger.addEventListener('click', () => {
                 const isActive = item.classList.contains('active');
-                
-                // Fecha todas as outras FAQs
                 faqItems.forEach(i => i.classList.remove('active'));
-                
                 if (!isActive) {
                     item.classList.add('active');
                 }
@@ -1275,9 +1260,8 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // INSIRA SEU LINK DE CHECKOUT DA STRIPE AQUI:
-            const stripeCheckoutURL = "https://comunidade.aprenderecuidar.com.br/checkout/sob-controle";
+            const stripeCheckoutURL = "https://buy.stripe.com/vaga-desafio-sob-controle";
 
-            // Aplica o link da Stripe automaticamente a todos os botões de venda da página
             const ctaButtons = document.querySelectorAll('.stripe-link');
             ctaButtons.forEach(btn => {
                 btn.href = stripeCheckoutURL;
@@ -1285,11 +1269,10 @@
         });
     </script>
 
-    <!-- Script de Animação de Scroll Premium -->
+    <!-- Script de Animação de Scroll Premium (Intersection Observer) -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const revealElements = document.querySelectorAll('section, header, .timeline-card, .feature-card, .comparison-col');
-            
             revealElements.forEach(el => el.classList.add('reveal'));
 
             const observerOptions = {
