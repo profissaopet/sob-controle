@@ -10,6 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Script Oficial da Stripe -->
+    <script async src="https://js.stripe.com/v3/checkout.js"></script>
+    
     <style>
         /* CSS Reset & Variables */
         * {
@@ -29,6 +32,17 @@
             0% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-10px) rotate(0.5deg); }
             100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes pulseBadge {
+            0% { transform: scale(1); box-shadow: 0 4px 15px rgba(241, 191, 66, 0.2); }
+            50% { transform: scale(1.03); box-shadow: 0 10px 24px rgba(241, 191, 66, 0.4); }
+            100% { transform: scale(1); box-shadow: 0 4px 15px rgba(241, 191, 66, 0.2); }
+        }
+
+        @keyframes floatBadge {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-4px); }
         }
 
         /* Classes de Animação de Scroll */
@@ -159,9 +173,10 @@
 
         .hero-media {
             animation: floatMedia 5s ease-in-out infinite;
-            margin: 35px auto 0 auto;
-            max-width: 550px;
-            border-radius: var(--border-radius);
+            margin: 25px auto;
+            max-width: 720px;
+            aspect-ratio: 16 / 9;
+            border-radius: 18px;
             overflow: hidden;
             border: 2px solid rgba(255, 255, 255, 0.05);
             box-shadow: 0 15px 30px rgba(0,0,0,0.5);
@@ -223,17 +238,6 @@
             grid-template-columns: 1fr 1fr;
             gap: 16px;
             margin-top: 25px;
-        }
-
-        @media (max-width: 768px) {
-            .grid-2col {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            h1 { font-size: 1.8rem; }
-            h2 { font-size: 1.45rem; }
-            header { padding: 40px 0 30px 0; }
-            section { padding: 40px 0; }
         }
 
         .checklist-item {
@@ -324,9 +328,12 @@
         /* Público-Alvo */
         .audience-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 14px;
+            grid-template-columns: 1fr;
+            gap: 12px;
             margin-bottom: 30px;
+            max-width: 720px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .audience-card {
@@ -338,7 +345,7 @@
             align-items: center;
             gap: 12px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             transition: var(--transition);
         }
         
@@ -371,20 +378,6 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 16px;
-        }
-
-        @media (max-width: 768px) {
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 14px;
-            }
-        }
-
-        @media (max-width: 550px) {
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
         }
 
         .feature-card {
@@ -517,12 +510,6 @@
             margin-top: 30px;
         }
 
-        @media (max-width: 768px) {
-            .comparison-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
         .comparison-col {
             border-radius: var(--border-radius);
             padding: 25px;
@@ -603,17 +590,10 @@
             margin: 30px auto 0 auto;
         }
 
-        @media (max-width: 768px) {
-            .bio-wrapper {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-
         .bio-img {
             flex-shrink: 0;
             width: 240px;
-            height: 240px;
+            height: 268px;
             border-radius: var(--border-radius);
             overflow: hidden;
             border: 2px solid rgba(255, 255, 255, 0.05);
@@ -714,34 +694,317 @@
             transition: all 0.25s cubic-bezier(1, 0, 1, 0);
         }
 
-        /* Footer */
-        footer {
-            background-color: #080911;
-            padding: 40px 0;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        /* Elemento Flutuante de Conversão (Contador Dinâmico) */
+        .premium-floating-badge {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: min(290px, calc(100vw - 32px));
+            padding: 16px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, rgba(25, 27, 47, 0.98), rgba(15, 16, 29, 0.96));
+            color: var(--text-white);
+            z-index: 9999;
+            border: 1px solid rgba(241, 191, 66, 0.24);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
+            animation: floatBadge 3.2s ease-in-out infinite, pulseBadge 2.7s ease-in-out infinite;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .footer-links {
+        .premium-floating-badge:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 22px 44px rgba(0, 0, 0, 0.42);
+        }
+
+        .premium-floating-badge .countdown-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent-yellow);
+        }
+
+        .premium-floating-badge .countdown-header .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-yellow);
+            box-shadow: 0 0 0 0 rgba(241, 191, 66, 0.7);
+            animation: pulseDot 1.6s infinite;
+        }
+
+        .premium-floating-badge .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .premium-floating-badge .countdown-unit {
+            padding: 10px 6px;
+            border-radius: 14px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .premium-floating-badge .countdown-value {
+            display: block;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-white);
+        }
+
+        .premium-floating-badge .countdown-label {
+            display: block;
+            margin-top: 2px;
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        .premium-floating-badge .countdown-cta {
+            width: 100%;
+            border: none;
+            border-radius: 999px;
+            padding: 10px 12px;
+            background: linear-gradient(135deg, var(--accent-yellow), #ffd76a);
+            color: var(--bg-dark);
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 10px 24px rgba(241, 191, 66, 0.2);
+        }
+
+        .premium-floating-badge .countdown-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 28px rgba(241, 191, 66, 0.28);
+        }
+
+        @keyframes pulseDot {
+            0% { box-shadow: 0 0 0 0 rgba(241, 191, 66, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(241, 191, 66, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(241, 191, 66, 0); }
+        }
+
+        .hero-media .open-stripe-modal {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(8, 9, 17, 0.35), rgba(8, 9, 17, 0.1));
+            border: none;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .hero-media .open-stripe-modal:hover {
+            background: linear-gradient(135deg, rgba(8, 9, 17, 0.5), rgba(8, 9, 17, 0.25));
+            transform: scale(1.01);
+        }
+
+        .hero-media .open-stripe-modal svg {
+            width: 64px;
+            height: 64px;
+            color: white;
+            filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.45));
+        }
+
+        /* Estrutura do Modal Popup Integrado da Stripe */
+        .stripe-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(8, 9, 17, 0.76);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .stripe-popup-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .stripe-popup-container {
+            background: linear-gradient(145deg, rgba(25, 27, 47, 0.98), rgba(15, 16, 29, 0.96));
+            border: 1px solid rgba(241, 191, 66, 0.28);
+            width: 100%;
+            max-width: 480px;
+            border-radius: 24px;
+            padding: 28px 24px 24px 24px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.55);
+            position: relative;
+            transform: translateY(10px) scale(0.96);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+        }
+
+        .stripe-popup-overlay.active .stripe-popup-container {
+            transform: translateY(0) scale(1);
+        }
+
+        .stripe-popup-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(241, 191, 66, 0.45), rgba(255, 255, 255, 0.04));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .stripe-popup-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(241, 191, 66, 0.14);
+            color: var(--accent-yellow);
+            font-weight: 700;
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+
+        .stripe-popup-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+        }
+
+        .stripe-popup-close:hover {
+            color: var(--accent-red);
+            background: rgba(255, 82, 82, 0.12);
+            transform: rotate(90deg) scale(1.04);
+        }
+
+        .stripe-popup-content {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.65;
+            margin-bottom: 18px;
+        }
+
+        .stripe-popup-buywrap {
             display: flex;
             justify-content: center;
-            gap: 24px;
-            margin-bottom: 16px;
+            width: 100%;
+            margin-top: 6px;
         }
 
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: var(--transition);
-        }
+        /* Responsividade Responsável (Mobile) */
+        @media (max-width: 768px) {
+            .grid-2col, .features-grid, .includes-list, .audience-grid, .comparison-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px;
+            }
+            .checklist-item {
+                grid-column: span 1 !important;
+            }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.45rem; }
+            header { padding: 40px 0 30px 0; }
+            section { padding: 40px 0; }
+            .premium-floating-badge {
+                bottom: 16px;
+                right: 16px;
+                left: 16px;
+                width: auto;
+                padding: 14px;
+            }
 
-        .footer-links a:hover {
-            color: var(--accent-yellow);
+            .premium-floating-badge .countdown-grid {
+                gap: 6px;
+            }
+
+            .premium-floating-badge .countdown-unit {
+                padding: 8px 4px;
+            }
+
+            .stripe-popup-container {
+                padding: 24px 18px 20px 18px;
+            }
+            .bio-wrapper {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            .bio-img {
+                width: 200px;
+                height: 200px;
+            }
         }
     </style>
 </head>
 <body>
+
+    <!-- CONTADOR DINÂMICO PARA GERAR URGÊNCIA E CHAMAR A ATENÇÃO -->
+    <div class="premium-floating-badge" aria-live="polite">
+        <div class="countdown-header">
+            <span><span class="pulse-dot"></span> Inscrição encerra em</span>
+            <strong id="countdown-status">agora</strong>
+        </div>
+        <div class="countdown-grid">
+            <div class="countdown-unit">
+                <span id="countdown-days" class="countdown-value">00</span>
+                <span class="countdown-label">Dias</span>
+            </div>
+            <div class="countdown-unit">
+                <span id="countdown-hours" class="countdown-value">00</span>
+                <span class="countdown-label">Horas</span>
+            </div>
+            <div class="countdown-unit">
+                <span id="countdown-minutes" class="countdown-value">00</span>
+                <span class="countdown-label">Min</span>
+            </div>
+            <div class="countdown-unit">
+                <span id="countdown-seconds" class="countdown-value">00</span>
+                <span class="countdown-label">Seg</span>
+            </div>
+        </div>
+        <button class="countdown-cta open-stripe-modal" type="button" aria-label="Abrir modal de inscrição">
+            Garantir vaga • R$ 37
+        </button>
+    </div>
 
     <!-- HERO -->
     <header>
@@ -750,15 +1013,23 @@
             <span class="badge">Operação Sob Controle</span>
             <h1>Em 7 dias, estruture o Processo de Avaliação de Cães da sua empresa e pare de decidir no improviso</h1>
             <p class="hero-subtitle">Crie critérios mais claros para decidir quais cães podem fazer parte da sua operação com mais segurança, organização e previsibilidade.</p>
-            <div class="hero-media">
-                <img src="https://raw.githubusercontent.com/profissaopet/sob-controle/main/assets/2.png" alt="Processo de Avaliação de Cães">
-            </div>
-    <div class="hero-date">De 12 a 18 de agosto, às 20h.</div>
-            <a href="#" class="cta-btn stripe-link">Quero Estruturar Meu Processo</a>
-            <span class="cta-subtext">Vagas limitadas.</span>
-
             
-        
+            <!-- REQUISITO: Div da imagem do processo e player de vídeo -->
+            <div class="hero-media" style="position: relative;">
+                <img src="https://raw.githubusercontent.com/profissaopet/sob-controle/main/assets/3.png" alt="Tata Pereira com cão branco de coleira colorida">
+                <button type="button" class="open-stripe-modal" aria-label="Abrir modal de inscrição">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                </button>
+            </div>
+              <div class="hero-date">De 12 a 18 de agosto, às 20h.</div>
+            <br>
+              <!-- REQUISITO: Div de inscrições/botões fica localizada abaixo da imagem -->
+            <div style="margin-top: 10px;">
+                <button class="cta-btn open-stripe-modal">Quero Estruturar Meu Processo</button>
+                <span class="cta-subtext">Vagas limitadas.</span>
+            </div>
+            
+          
         </div>
     </header>
 
@@ -806,152 +1077,16 @@
                 </div>
                 <div class="checklist-item" style="grid-column: span 2;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    <span>Como transformar a avaliação em uma rotina profissional e escalável</span>
+                    <span>Como transformar a avaliação em uma rotina profissional, repetível, registrada e utilizada pela empresa</span>
                 </div>
             </div>
             
             <div class="text-center" style="margin-top: 30px;">
-                <a href="#" class="cta-btn stripe-link">Quero Participar do Desafio</a>
+                <button class="cta-btn open-stripe-modal">Quero Participar do Desafio</button>
             </div>
         </div>
     </section>
-
-    <!-- CRONOGRAMA DIA A DIA -->
-    <section>
-        <div class="container">
-            <h2>O que você vai construir durante o desafio</h2>
-            
-            <div class="timeline">
-                <!-- DIA 1 -->
-                <div class="timeline-card">
-                    <div class="timeline-day">Dia 1 — Estruturando a Avaliação</div>
-                    <p class="timeline-desc">Você vai entender por que uma avaliação precisa existir, quais erros mais acontecem e o que esse processo precisa responder de forma pragmática.</p>
-                    <div class="timeline-deliverable">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                        <span>Entregável: Mapa do Processo + Fluxograma completo + Modelo personalizável</span>
-                    </div>
-                </div>
-
-                <!-- DIA 2 -->
-                <div class="timeline-card">
-                    <div class="timeline-day">Dia 2 — Construindo o Questionário</div>
-                    <p class="timeline-desc">Você vai estruturar perguntas que realmente ajudam na tomada de decisão: histórico, rotina, alimentação, saúde, convivência, passeios e sinais de alerta.</p>
-                    <div class="timeline-deliverable">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                        <span>Entregável: Questionário de Avaliação editável</span>
-                    </div>
-                </div>
-
-                <!-- DIA 3 -->
-                <div class="timeline-card">
-                    <div class="timeline-day">Dia 3 — Criando o Checklist Técnico</div>
-                    <p class="timeline-desc">Organize exatamente o que precisa ser observado em cada momento: chegada, interação, manipulação, passeio, descanso e alimentação.</p>
-                    <div class="timeline-deliverable">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                        <span>Entregável: Checklist Técnico da Avaliação</span>
-                    </div>
-                </div>
-
-                <!-- DIA 4 -->
-                <div class="timeline-card">
-                    <div class="timeline-day">Dia 4 — Tomando a Decisão</div>
-                    <p class="timeline-desc">Defina critérios rígidos para que a decisão não dependa apenas de impressões subjetivas. Crie matrizes para aprovado, aprovado com restrições, nova avaliação ou reprovado.</p>
-                    <div class="timeline-deliverable">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                        <span>Entregável: Matriz de Decisão da Avaliação</span>
-                    </div>
-                </div>
-
-                <!-- DIA 5 -->
-                <div class="timeline-card">
-                    <div class="timeline-day">Dia 5 — Formalizando a Avaliação</div>
-                    <p class="timeline-desc">Transforme o que foi construído em um processo profissional. Estabeleça POP (Procedimento Operacional Padrão), relatórios e formatos eficientes de comunicação.</p>
-                    <div class="timeline-deliverable">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                        <span>Entregável: Modelo de POP + Modelo de Relatório</span>
-                    </div>
-                </div>
-
-                <!-- DIA 6 -->
-                <div class="timeline-card">
-                    <div class="timeline-day">Dia 6 — Organizando os Registros</div>
-                    <p class="timeline-desc">Aprenda a organizar as informações para que a empresa não dependa da memória de indivíduos: armazenamento seguro, localização rápida, histórico estruturado e visualização integrada.</p>
-                    <div class="timeline-deliverable">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                        <span>Entregável: Planilha de Controle + Dashboard de acompanhamento</span>
-                    </div>
-                </div>
-
-                <!-- DIA 7 -->
-                <div class="timeline-card">
-                    <div class="timeline-day">Dia 7 — Imersão Domus: Engenharia de uma Creche Estruturada</div>
-                    <p class="timeline-desc">Encontro especial ao vivo para consolidar o trabalho da semana, revisar o seu processo, receber um Plano de Ação para os próximos 30 dias e aprender a lógica do consagrado Método Domus.</p>
-                    <div class="timeline-deliverable exclusive">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-red)"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                        <span>Exclusivamente ao vivo. Não terá replay.</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- TUDO O QUE VOCÊ RECEBE -->
-    <section>
-        <div class="container">
-            <h2 class="text-center">Tudo o que você recebe ao garantir sua vaga:</h2>
-            <div class="includes-list">
-                <div class="checklist-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    <span>6 encontros ao vivo de implementação</span>
-                </div>
-                <div class="checklist-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    <span>1 Imersão Domus exclusiva ao vivo</span>
-                </div>
-                <div class="checklist-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    <span>Mapa do Processo de Avaliação</span>
-                </div>
-                <div class="checklist-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    <span>Fluxograma de Avaliação completo</span>
-                </div>
-                <div class="checklist-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    <span>Questionário de Avaliação editável</span>
-                </div>
-                <div class="checklist-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    <span>Checklist Técnico operacional</span>
-                </div>
-                <div class="checklist-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    <span>Matriz de Decisão estruturada</span>
-                </div>
-                <div class="checklist-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    <span>Modelo de POP (Procedimento Padrão)</span>
-                </div>
-                <div class="checklist-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    <span>Modelo de Relatório profissional</span>
-                </div>
-                <div class="checklist-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    <span>Planilha de Controle das Avaliações</span>
-                </div>
-                <div class="checklist-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    <span>Dashboard de Acompanhamento gerencial</span>
-                </div>
-                <div class="checklist-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    <span>Grupo exclusivo no WhatsApp + suporte por 30 dias</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
+  
     <!-- PÚBLICO ALVO -->
     <section>
         <div class="container">
@@ -979,34 +1114,28 @@
                 </div>
                 <div class="audience-card">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>Quem percebe que a equipe avalia de formas diferentes</span>
+                </div>
+                <div class="audience-card">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     <span>Quem quer reduzir improvisos e aumentar previsibilidade</span>
                 </div>
             </div>
 
             <div class="exclusion-box">
-                <strong>Importante:</strong> Este desafio não é indicado para quem ainda não possui uma operação funcionando. O foco é organizar e blindar o processo dentro de uma empresa que já atende e lida com cães no seu dia a dia.
+                <strong>Este desafio não é indicado para quem ainda não possui uma operação funcionando.</strong> O foco é organizar um processo dentro de uma empresa que já atende cães.
             </div>
         </div>
     </section>
 
-    <!-- ANCORAGEM DE OFERTA -->
-    <section id="oferta" class="price-section">
-        <div class="container">
-            <div class="price-card">
-                <div class="price-original">De R$ 197</div>
-                <div class="price-promo-label">por apenas:</div>
-                <div class="price-tag">
-                    <span class="price-currency">R$</span>37<span class="price-discount-badge">81% OFF</span>
-                </div>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">Apenas para os primeiros participantes do desafio</p>
-                
-                <a href="#" class="cta-btn stripe-link" style="width: 100%;">Quero Garantir Minha Vaga por R$ 37</a>
-                <span class="cta-subtext" style="margin-top: 12px;">Vagas limitadas devido ao suporte personalizado.</span>
-            </div>
-        </div>
+    <!-- SEÇÃO ANTES E DEPOIS (IMPROVISO AO PROCESSO) -->
+    <section >
+    
+                <img src="https://raw.githubusercontent.com/profissaopet/sob-controle/main/assets/4.png" alt="Do improviso ao processo - comparação antes e depois" style="max-width: 800px; margin: 0 auto; display: flex;; border-radius: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.35);">
+        
     </section>
 
-    <!-- COMO O DESAFIO VAI FUNCIONAR (GRID SIMÉTRICO 3x2) -->
+    <!-- COMO O DESAFIO VAI FUNCIONAR -->
     <section>
         <div class="container">
             <h2>Como o desafio vai funcionar</h2>
@@ -1023,36 +1152,216 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     </div>
                     <div class="feature-title">Duração</div>
-                    <div class="feature-desc">Cada encontro dura aproximadamente 45 minutos, com conteúdo prático e direto ao ponto.</div>
+                    <div class="feature-desc">Cada encontro dura aproximadamente 45 minutos com conteúdo prático e direto.</div>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon-wrapper">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7a2 2 0 0 0-2.45-1.45L16 7V5a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2l4.55 1.45A2 2 0 0 0 23 17V7z"></path></svg>
                     </div>
                     <div class="feature-title">Gravações</div>
-                    <div class="feature-desc">Aulas gravadas disponíveis por 30 dias na plataforma para revisão (exceto a Imersão Domus ao vivo).</div>
+                    <div class="feature-desc">Aulas gravadas disponíveis por 30 dias. Imersão Domus exclusivamente ao vivo.</div>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon-wrapper">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path></svg>
                     </div>
-                    <div class="feature-title">Grupo Privado</div>
-                    <div class="feature-desc">Acesso exclusivo ao grupo de WhatsApp para suporte direto, tirar dúvidas e trocar experiências.</div>
+                    <div class="feature-title">Grupo</div>
+                    <div class="feature-desc">Acesso exclusivo ao grupo no WhatsApp para suporte, dúvidas e implementação com a comunidade.</div>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon-wrapper">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
                     </div>
                     <div class="feature-title">Materiais</div>
-                    <div class="feature-desc">Acesso a 12 templates e modelos 100% personalizáveis, incluindo fluxogramas, checklists e dashboards.</div>
+                    <div class="feature-desc">Acesso a 12 templates e modelos personalizáveis: fluxogramas, checklists, planilhas e dashboards.</div>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon-wrapper">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
                     </div>
-                    <div class="feature-title">Missões Diárias</div>
-                    <div class="feature-desc">Missões e tarefas práticas ao final de cada aula para aplicar imediatamente o aprendizado na sua empresa.</div>
+                    <div class="feature-title">Missões</div>
+                    <div class="feature-desc">Missões práticas ao final de cada aula para transformar aprendizado em resultados reais.</div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CRONOGRAMA DIA A DIA -->
+    <section>
+        <div class="container">
+            <h2>O que você vai construir durante o desafio</h2>
+            
+            <div class="timeline">
+                <!-- DIA 1 -->
+                <div class="timeline-card">
+                    <div class="timeline-day">Dia 1 — Estruturando a Avaliação</div>
+                    <p class="timeline-desc">Você vai entender por que uma avaliação precisa existir, quais erros mais acontecem e o que esse processo precisa responder.</p>
+                    <div class="timeline-deliverable">
+                        <span style="font-size: 1rem; line-height: 1;">🗂️</span>
+                        <span>Mapa do Processo + Fluxograma completo + Modelo personalizável</span>
+                    </div>
+                </div>
+
+                <!-- DIA 2 -->
+                <div class="timeline-card">
+                    <div class="timeline-day">Dia 2 — Construindo o Questionário</div>
+                    <p class="timeline-desc">Você vai estruturar perguntas que realmente ajudam na tomada de decisão: histórico, rotina, alimentação, saúde, convivência, passeios e sinais de alerta.</p>
+                    <div class="timeline-deliverable">
+                        <span style="font-size: 1rem; line-height: 1;">📝</span>
+                        <span>Questionário de Avaliação editável</span>
+                    </div>
+                </div>
+
+                <!-- DIA 3 -->
+                <div class="timeline-card">
+                    <div class="timeline-day">Dia 3 — Criando o Checklist Técnico</div>
+                    <p class="timeline-desc">Organize o que precisa ser observado: chegada, interação, manipulação, passeio, descanso e alimentação.</p>
+                    <div class="timeline-deliverable">
+                        <span style="font-size: 1rem; line-height: 1;">✅</span>
+                        <span>Checklist Técnico da Avaliação</span>
+                    </div>
+                </div>
+
+                <!-- DIA 4 -->
+                <div class="timeline-card">
+                    <div class="timeline-day">Dia 4 — Tomando a Decisão</div>
+                    <p class="timeline-desc">Defina critérios para que a decisão não dependa apenas de uma impressão geral: aprovado, aprovado com restrições, nova avaliação ou reprovado.</p>
+                    <div class="timeline-deliverable">
+                        <span style="font-size: 1rem; line-height: 1;">⚖️</span>
+                        <span>Matriz de Decisão da Avaliação</span>
+                    </div>
+                </div>
+
+                <!-- DIA 5 -->
+                <div class="timeline-card">
+                    <div class="timeline-day">Dia 5 — Formalizando a Avaliação</div>
+                    <p class="timeline-desc">Transforme o que foi construído em um processo profissional: POP, relatório, comunicação e organização dos documentos.</p>
+                    <div class="timeline-deliverable">
+                        <span style="font-size: 1rem; line-height: 1;">📄</span>
+                        <span>Modelo de POP + Modelo de Relatório</span>
+                    </div>
+                </div>
+
+                <!-- DIA 6 -->
+                <div class="timeline-card">
+                    <div class="timeline-day">Dia 6 — Organizando os Registros</div>
+                    <p class="timeline-desc">Aprenda a organizar informações para que a empresa não dependa da memória: armazenamento, localização, histórico e visualização.</p>
+                    <div class="timeline-deliverable">
+                        <span style="font-size: 1rem; line-height: 1;">📊</span>
+                        <span>Planilha de Controle + Dashboard de acompanhamento</span>
+                    </div>
+                </div>
+
+                <!-- DIA 7 -->
+                <div class="timeline-card" style="border: 2px solid var(--accent-yellow);">
+                    <div class="timeline-day">Dia 7 — Imersão Domus: Engenharia de uma Creche Estruturada</div>
+                    <p class="timeline-desc">Encontro especial ao vivo para consolidar o trabalho da semana, revisar o processo, receber um Plano de Ação para 30 dias e conhecer a lógica do Método Domus para construir uma creche pet estruturada.</p>
+                    <div class="timeline-deliverable exclusive">
+                        <span style="font-size: 1rem; line-height: 1;">⚠️</span>
+                        <span>Exclusivamente ao vivo. Não terá replay.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ANCORAGEM DE OFERTA -->
+    <section id="oferta" class="price-section">
+        <div class="container">
+            <div class="price-card">
+                <div class="price-original">De R$ 197</div>
+                <div class="price-promo-label">por apenas:</div>
+                <div class="price-tag">
+                    <span class="price-currency">R$</span>37<span class="price-discount-badge">81% OFF</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">Apenas para os primeiros participantes do desafio</p>
+                
+                <button class="cta-btn open-stripe-modal" style="width: 100%;">Quero Garantir Minha Vaga por R$ 37</button>
+                <span class="cta-subtext" style="margin-top: 12px;">Vagas limitadas.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- TUDO O QUE VOCÊ RECEBE -->
+    <section>
+        <div class="container">
+            <h2 class="text-center">Tudo o que você recebe</h2>
+            <div class="includes-list">
+                <div class="checklist-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>✓ 6 encontros ao vivo de implementação</span>
+                </div>
+                <div class="checklist-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>✓ 1 Imersão Domus ao vivo</span>
+                </div>
+                <div class="checklist-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>✓ Mapa do Processo de Avaliação</span>
+                </div>
+                <div class="checklist-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>✓ Fluxograma completo</span>
+                </div>
+                <div class="checklist-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>✓ Questionário de Avaliação editável</span>
+                </div>
+                <div class="checklist-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>✓ Checklist Técnico</span>
+                </div>
+                <div class="checklist-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>✓ Matriz de Decisão</span>
+                </div>
+                <div class="checklist-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>✓ Modelo de POP</span>
+                </div>
+                <div class="checklist-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>✓ Modelo de Relatório</span>
+                </div>
+                <div class="checklist-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>✓ Planilha de Controle das Avaliações</span>
+                </div>
+                <div class="checklist-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>✓ Dashboard de acompanhamento</span>
+                </div>
+                <div class="checklist-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>✓ Grupo exclusivo no WhatsApp + acesso 30 dias</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO POR QUE CUSTA APENAS R$ 37 -->
+    <section>
+        <div class="container">
+            <h2 class="text-center">Se tudo isso está incluso, por que custa apenas R$ 37?</h2>
+            <div class="comparison-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="timeline-card" style="text-align: center;">
+                    <div style="background-color: rgba(241, 191, 66, 0.08); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-yellow); font-weight: bold; margin: 0 auto 12px auto;">1</div>
+                    <h3 style="font-size: 1rem; margin-bottom: 8px;">Porque organizar uma operação pet não deveria começar com um investimento alto</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Processos estruturados reduzem retrabalho, erros e custos quando a operação cresce.</p>
+                </div>
+                <div class="timeline-card" style="text-align: center;">
+                    <div style="background-color: rgba(241, 191, 66, 0.08); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-yellow); font-weight: bold; margin: 0 auto 12px auto;">2</div>
+                    <h3 style="font-size: 1rem; margin-bottom: 8px;">Você não está sozinha</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Aprender em grupo com outras empresárias custa menos e traz suporte real na implementação.</p>
+                </div>
+                <div class="timeline-card" style="text-align: center;">
+                    <div style="background-color: rgba(241, 191, 66, 0.08); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-yellow); font-weight: bold; margin: 0 auto 12px auto;">3</div>
+                    <h3 style="font-size: 1rem; margin-bottom: 8px;">Porque este é o seu primeiro contato com o Método Domus</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Este desafio estrutura sua avaliação. Muitas continuam com a Jornada Domus para consolidar a creche.</p>
+                </div>
+            </div>
+            <div class="exclusion-box" style="border: 1px solid rgba(241, 191, 66, 0.2); background: rgba(241, 191, 66, 0.02); margin-top: 20px;">
+                Por R$ 37, uma semana intensiva, ferramentas editáveis, e comunidade de suporte. Seu primeiro passo para uma operação estruturada começa agora.
             </div>
         </div>
     </section>
@@ -1074,19 +1383,19 @@
                     <ul class="comp-list">
                         <li class="neg-item">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                            <span>A operação cresce mas você continua presa ao operacional de avaliações.</span>
+                            <span>Operação cresce mas você continua presa</span>
                         </li>
                         <li class="neg-item">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                            <span>Tudo depende unicamente de você ou da memória para funcionar corretamente.</span>
+                            <span>Tudo depende de você para funcionar</span>
                         </li>
                         <li class="neg-item">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                            <span>A equipe executa cada tarefa de um jeito diferente por falta de um padrão limpo.</span>
+                            <span>A equipe executa cada tarefa de um jeito diferente</span>
                         </li>
                         <li class="neg-item">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                            <span>Você vive apagando incêndios e resolvendo conflitos por falha na triagem de entrada.</span>
+                            <span>Você vive apagando incêndios</span>
                         </li>
                     </ul>
                 </div>
@@ -1102,19 +1411,19 @@
                     <ul class="comp-list">
                         <li class="pos-item">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            <span>Etapas definidas e critérios de observação claros e transparentes.</span>
+                            <span>Etapas definidas e critérios de observação claros</span>
                         </li>
                         <li class="pos-item">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            <span>Documentos padronizados e extremamente fáceis de localizar.</span>
+                            <span>Documentos padronizados e fáceis de localizar</span>
                         </li>
                         <li class="pos-item">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            <span>Organização excelente de processos, agenda de avaliações e responsabilidades da equipe.</span>
+                            <span>Organizar processos, agenda e responsabilidades</span>
                         </li>
                         <li class="pos-item">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            <span>Delegar avaliações com total segurança, confiança e blindagem de qualidade.</span>
+                            <span>Delegar com segurança e confiança</span>
                         </li>
                     </ul>
                 </div>
@@ -1128,11 +1437,11 @@
             <h2 class="text-center">Quem vai conduzir o desafio?</h2>
             <div class="bio-wrapper">
                 <div class="bio-img">
-                    <img src="https://raw.githubusercontent.com/profissaopet/sob-controle/main/assets/1.png" alt="Tata Pereira">
+                    <img src="https://raw.githubusercontent.com/profissaopet/sob-controle/main/assets/1.png" alt="Especialista Tata Pereira">
                 </div>
                 <div class="bio-content">
                     <h3>Tata Pereira</h3>
-                    <p class="bio-text">Tata Pereira é especialista em comportamento canino, formação de profissionais e estruturação de negócios pet. Fundadora da Tata Educacão e criadora do reconhecido Método Domus, une profundo conhecimento técnico, vasta vivência operacional e engenhosidade na estruturação de processos.</p>
+                    <p class="bio-text">Tata Pereira é especialista em comportamento canino, formação de profissionais e estruturação de negócios pet. Fundadora da Tata EducaCão e criadora do Método Domus, une conhecimento técnico, vivência operacional e estruturação de processos.</p>
                     
                     <div class="bio-stats">
                         <div class="bio-stat-card">8 anos no mercado pet</div>
@@ -1142,17 +1451,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- BANNER DE COMPRA ADICIONAL -->
-    <section id="lista-espera-secao" style="background-color: rgba(255, 255, 255, 0.01);">
-        <div class="container text-center" style="max-width: 700px;">
-            <h2 style="margin-bottom: 12px;">Pronto para acabar com o improviso?</h2>
-            <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 25px; line-height: 1.6;">
-                Garanta o acesso imediato ao desafio e monte o processo operacional padrão de avaliações da sua creche ou hotel pet de forma profissional através do checkout seguro.
-            </p>
-            <a href="#" class="cta-btn stripe-link">Quero Garantir Minha Vaga Direta</a>
         </div>
     </section>
 
@@ -1168,7 +1466,7 @@
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
                     <div class="faq-content">
-                        <p>Não. O foco é exatamente estruturar o processo operacional de avaliação da sua empresa, organizando perguntas, observações técnicas, critérios de corte, documentações e registros para que qualquer pessoa treinada possa seguir de forma segura.</p>
+                        <p>Não. O foco é estruturar o processo operacional de avaliação da sua empresa, organizando perguntas, observações, critérios, documentos e registros.</p>
                     </div>
                 </div>
 
@@ -1178,7 +1476,7 @@
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
                     <div class="faq-content">
-                        <p>Sim. É amplamente indicado para empresas que precisam avaliar a sociabilidade, saúde e comportamento de cães antes da entrada em atividades coletivas ou estadias de hospedagem, garantindo a segurança de todo o grupo.</p>
+                        <p>Sim. É indicado para empresas que precisam avaliar cães antes da entrada em atividades coletivas, hospedagens ou integrações.</p>
                     </div>
                 </div>
 
@@ -1188,7 +1486,7 @@
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
                     <div class="faq-content">
-                        <p>Sim. Você poderá construir o processo com base nos modelos oferecidos e utilizá-lo exatamente para orientar, auditar e padronizar a atuação da sua equipe de avaliadores, eliminando as decisões "de cabeça".</p>
+                        <p>Sim. Você poderá construir o processo e utilizá-lo para orientar e padronizar a atuação da equipe.</p>
                     </div>
                 </div>
 
@@ -1198,27 +1496,27 @@
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
                     <div class="faq-content">
-                        <p>As aulas práticas dos dias 1 ao 6 ficarão gravadas e totalmente disponíveis na plataforma por 30 dias após o encerramento. No entanto, a Imersão Domus do Dia 7 será exclusivamente ao vivo, sem gravação ou replay.</p>
+                        <p>As aulas dos dias 1 ao 6 ficarão disponíveis por 30 dias. A Imersão Domus (dia 7) será exclusivamente ao vivo e não terá replay.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-trigger">
-                        <span>Quanto tempo preciso dedicar ao desafio diariamente?</span>
+                        <span>Quanto tempo preciso dedicar?</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
                     <div class="faq-content">
-                        <p>Aproximadamente uma hora por dia é o suficiente: 45 minutos de aula de implantação prática e 15 minutos para executar a missão e preencher os materiais do dia.</p>
+                        <p>Aproximadamente uma hora por dia para assistir à aula e realizar a missão proposta.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-trigger">
-                        <span>Por quanto tempo terei acesso ao material?</span>
+                        <span>Por quanto tempo terei acesso?</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </button>
                     <div class="faq-content">
-                        <p>As gravações e os materiais complementares para download ficarão disponíveis por 30 dias na plataforma para você assistir e baixar quando quiser.</p>
+                        <p>As gravações e materiais ficarão disponíveis por 30 dias após o encerramento do desafio.</p>
                     </div>
                 </div>
             </div>
@@ -1230,24 +1528,50 @@
         <div class="container">
             <h2 style="font-size: 2rem; line-height: 1.3; margin-bottom: 15px;">Pare de decidir no improviso.<br>Estruture seu processo em 7 dias.</h2>
             <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 650px; margin: 0 auto 30px auto;">
-                De 12 a 18 de agosto, às 20h • 6 encontros + 1 Imersão Domus + materiais editáveis + suporte exclusivo.
+                De 12 a 18 de agosto, às 20h • 6 encontros + 1 Imersão Domus + materiais editáveis + grupo de implementação
             </p>
             
-            <a href="#" class="cta-btn stripe-link">Quero Estruturar Meu Processo de Avaliação</a>
-            <span class="cta-subtext" style="margin-top: 12px;">Vagas limitadas por apenas R$ 37.</span>
+            <button class="cta-btn open-stripe-modal">Quero Estruturar Meu Processo de Avaliação</button>
+            <span class="cta-subtext" style="margin-top: 12px;">Vagas limitadas.</span>
         </div>
     </section>
 
     <!-- FOOTER -->
     <footer>
-        <div class="container text-center">
-            <div class="footer-links">
-                <a href="#">Condições e suporte</a>
-                <a href="#">Política de Privacidade</a>
+        <div class="container text-center" style="padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.05);">
+            <div class="footer-links" style="margin-bottom: 15px; display: flex; justify-content: center; gap: 20px;">
+                <a href="#" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">Condições e suporte</a>
+                <a href="#" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">Política de Privacidade</a>
             </div>
-            <p>© 2026 Tata Pereira • Tata Educação • Todos os direitos reservados.</p>
+            <p style="color: var(--text-muted); font-size: 0.8rem;">© 2026 Tata Pereira • Tata Educação • Todos os direitos reservados.</p>
         </div>
     </footer>
+
+
+    <!-- MODAL POP-UP CONTAINER DO COMPONENTE OFICIAL DA STRIPE -->
+    <div id="stripe-checkout-popup" class="stripe-popup-overlay">
+        <div class="stripe-popup-container" role="dialog" aria-modal="true" aria-labelledby="stripe-popup-title">
+            <button id="close-stripe-popup" class="stripe-popup-close" aria-label="Fechar janela">
+                <svg width="22" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+
+            <span class="stripe-popup-badge">Pagamento seguro</span>
+            <h3 id="stripe-popup-title" style="font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; color: var(--text-white);">Finalize sua inscrição</h3>
+            <p class="stripe-popup-content">
+                Clique no botão oficial abaixo para abrir o ambiente criptografado de pagamento com cartão ou Pix.
+            </p>
+
+            <div class="stripe-popup-buywrap">
+                <div id="stripe-buy-button-container"><stripe-buy-button
+  buy-button-id="buy_btn_1TuG9jPoZcULugVUnpTDLqb2"
+  publishable-key="pk_live_51SS2SwPoZcULugVU9M7u6QgIyVAiVSQY7b4xLnQYp0MD68jbXJu00Utq7mr7QXlTO1muco8yx5kUiJxlH9TJFP4F00hDhYks6X"
+>
+</stripe-buy-button></div>
+                
+            </div>
+        </div>
+    </div>
+
 
     <!-- Script Accordion do FAQ -->
     <script>
@@ -1265,27 +1589,104 @@
         });
     </script>
 
-    <!-- Script de Configuração do Link de Checkout Stripe -->
+    <!-- Script de Ativação do Modal Dinâmico da Stripe -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // INSIRA SEU LINK DE CHECKOUT DA STRIPE AQUI:
-            const stripeCheckoutURL = "https://buy.stripe.com/vaga-desafio-sob-controle";
+            const stripeModal = document.getElementById('stripe-checkout-popup');
+            const openModalButtons = document.querySelectorAll('.open-stripe-modal');
+            const closeModalButton = document.getElementById('close-stripe-popup');
+            const stripeContainer = document.getElementById('stripe-buy-button-container');
 
-            const ctaButtons = document.querySelectorAll('.stripe-link');
-            ctaButtons.forEach(btn => {
-                btn.href = stripeCheckoutURL;
+            openModalButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    stripeModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+
+                    if (stripeContainer && !stripeContainer.dataset.initialized) {
+                        stripeContainer.dataset.initialized = 'true';
+                        const script = document.createElement('script');
+                        script.src = 'https://js.stripe.com/v3/buy-button.js';
+                        script.async = true;
+                        script.onload = function() {
+                            if (window.StripeBuyButton) {
+                                window.StripeBuyButton({
+                                    publishableKey: 'pk_live_51SS2SwPoZcULugVU9M7u6QgIyVAiVSQY7b4xLnQYp0MD68jbXJu00Utq7mr7QXlTO1muco8yx5kUiJxlH9TJFP4F00hDhYks6X',
+                                    buyButtonId: 'buy_btn_1TuG9jPoZcULugVUnpTDLqb2',
+                                    containerId: 'stripe-buy-button-container'
+                                });
+                            }
+                        };
+                        document.body.appendChild(script);
+                    }
+                });
             });
+
+            if (closeModalButton) {
+                closeModalButton.addEventListener('click', closePopup);
+            }
+
+            stripeModal.addEventListener('click', (e) => {
+                if (e.target === stripeModal) {
+                    closePopup();
+                }
+            });
+
+            function closePopup() {
+                stripeModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
         });
     </script>
 
-    <!-- Script de Animação de Scroll Premium (Intersection Observer Modificado e Seguro) -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Elementos estruturais principais
-            const structuralElements = document.querySelectorAll('section, header, .timeline-card, .feature-card, .comparison-col');
-            structuralElements.forEach(el => el.classList.add('reveal'));
+            const daysEl = document.getElementById('countdown-days');
+            const hoursEl = document.getElementById('countdown-hours');
+            const minutesEl = document.getElementById('countdown-minutes');
+            const secondsEl = document.getElementById('countdown-seconds');
+            const statusEl = document.getElementById('countdown-status');
 
-            // Aplicando classes reveal de forma segura nas listas internas e filhos diretos
+            if (!daysEl || !hoursEl || !minutesEl || !secondsEl || !statusEl) return;
+
+            const targetDate = new Date('2026-08-11T20:00:00-03:00');
+
+            function updateCountdown() {
+                const now = new Date();
+                const diff = targetDate - now;
+
+                if (diff <= 0) {
+                    daysEl.textContent = '00';
+                    hoursEl.textContent = '00';
+                    minutesEl.textContent = '00';
+                    secondsEl.textContent = '00';
+                    statusEl.textContent = 'aberta';
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                daysEl.textContent = String(days).padStart(2, '0');
+                hoursEl.textContent = String(hours).padStart(2, '0');
+                minutesEl.textContent = String(minutes).padStart(2, '0');
+                secondsEl.textContent = String(seconds).padStart(2, '0');
+                statusEl.textContent = '';
+            }
+
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        });
+    </script>
+
+    <!-- Script de Animação de Scroll Premium (Intersection Observer) -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const revealElements = document.querySelectorAll('section, header, .timeline-card, .feature-card, .comparison-col');
+            revealElements.forEach(el => el.classList.add('reveal'));
+
             const gridsAndLists = document.querySelectorAll('.grid-2col, .includes-list, .audience-grid, .features-grid, .comparison-grid');
             gridsAndLists.forEach(list => {
                 const items = list.children;
@@ -1296,24 +1697,21 @@
                 }
             });
 
-            // Configuração refinada do Observer
             const observerOptions = {
                 root: null,
-                threshold: 0.05, // Dispara logo no início do contato visual com o card
-                rootMargin: "0px 0px 50px 0px" // Margem estendida para evitar que elementos sumam
+                threshold: 0.05,
+                rootMargin: "0px 0px 50px 0px"
             };
 
             const revealObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting || entry.boundingClientRect.top < 0) { 
-                        // Força a exibição se o elemento já estiver visível ou acima da dobra da tela
                         entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
+                        revealObserver.unobserve(entry.target);
                     }
                 });
             }, observerOptions);
 
-            // Observa todos os elementos registrados com a classe reveal
             document.querySelectorAll('.reveal').forEach(element => {
                 revealObserver.observe(element);
             });
