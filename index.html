@@ -694,114 +694,99 @@
             transition: all 0.25s cubic-bezier(1, 0, 1, 0);
         }
 
-        /* Elemento Flutuante de Conversão (Contador Dinâmico) */
-        .premium-floating-badge {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            width: min(300px, calc(100vw - 32px));
-            padding: 16px;
-            border-radius: 22px;
-            background: linear-gradient(135deg, rgba(25, 27, 47, 0.98), rgba(15, 16, 29, 0.96));
-            color: var(--text-white);
+        /* Barra de Contagem Regressiva do Header (Top Sticky Banner) */
+        .header-top-banner {
+            background: linear-gradient(135deg, #181a30 0%, #0f101d 100%);
+            border-bottom: 1px solid rgba(241, 191, 66, 0.25);
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
             z-index: 9999;
-            border: 1px solid rgba(241, 191, 66, 0.25);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.38);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(12px);
-            animation: floatBadge 3.2s ease-in-out infinite, pulseBadge 2.7s ease-in-out infinite;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .premium-floating-badge:hover {
-            transform: translateY(-3px) scale(1.01);
-            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.44);
-        }
-
-        .premium-floating-badge .countdown-header {
+        .header-top-container {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--accent-yellow);
+            gap: 16px;
         }
 
-        .premium-floating-badge .countdown-header .pulse-dot {
+        .countdown-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-yellow);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .countdown-title .pulse-dot {
             display: inline-block;
             width: 8px;
             height: 8px;
-            margin-right: 6px;
             border-radius: 50%;
             background: var(--accent-yellow);
             box-shadow: 0 0 0 0 rgba(241, 191, 66, 0.7);
             animation: pulseDot 1.6s infinite;
         }
 
-        .premium-floating-badge .countdown-status {
-            font-size: 0.72rem;
+        .countdown-digits {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .countdown-digits .colon {
             font-weight: 800;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: #ffe08a;
+            color: var(--accent-yellow);
+            font-size: 1rem;
         }
 
-        .premium-floating-badge .countdown-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-        }
-
-        .premium-floating-badge .countdown-unit {
-            padding: 10px 6px;
-            border-radius: 14px;
-            text-align: center;
-            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
-        }
-
-        .premium-floating-badge .countdown-value {
-            display: block;
-            font-size: 1.18rem;
+        .countdown-digits .digit-box {
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(241, 191, 66, 0.2);
+            padding: 4px 8px;
+            border-radius: 8px;
             font-weight: 800;
-            color: var(--text-white);
-            line-height: 1;
+            font-size: 1.05rem;
+            color: #ffffff;
+            font-variant-numeric: tabular-nums;
         }
 
-        .premium-floating-badge .countdown-label {
-            display: block;
-            margin-top: 3px;
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
+        .countdown-digits .digit-unit {
+            font-size: 0.7rem;
+            font-weight: 600;
             color: var(--text-muted);
+            text-transform: lowercase;
         }
 
-        .premium-floating-badge .countdown-cta {
-            width: 100%;
-            border: none;
-            border-radius: 999px;
-            padding: 10px 12px;
-            background: linear-gradient(135deg, var(--accent-yellow), #ffd76a);
+        .header-banner-cta {
+            background: var(--accent-yellow);
             color: var(--bg-dark);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
             font-weight: 800;
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             text-transform: uppercase;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.5px;
             cursor: pointer;
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-            box-shadow: 0 10px 24px rgba(241, 191, 66, 0.2);
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(241, 191, 66, 0.2);
+            white-space: nowrap;
         }
 
-        .premium-floating-badge .countdown-cta:hover {
+        .header-banner-cta:hover {
+            background-color: var(--accent-yellow-hover);
             transform: translateY(-1px);
-            box-shadow: 0 14px 28px rgba(241, 191, 66, 0.28);
+            box-shadow: 0 6px 20px rgba(241, 191, 66, 0.35);
         }
 
         @keyframes pulseDot {
@@ -956,20 +941,20 @@
             h2 { font-size: 1.45rem; }
             header { padding: 40px 0 30px 0; }
             section { padding: 40px 0; }
-            .premium-floating-badge {
-                bottom: 16px;
-                right: 16px;
-                left: 16px;
-                width: auto;
-                padding: 14px;
+            .header-top-container {
+                flex-direction: column;
+                justify-content: center;
+                gap: 8px;
+                text-align: center;
+                padding: 4px 12px;
             }
-
-            .premium-floating-badge .countdown-grid {
-                gap: 6px;
+            .countdown-title {
+                font-size: 0.78rem;
             }
-
-            .premium-floating-badge .countdown-unit {
-                padding: 8px 4px;
+            .header-banner-cta {
+                width: 100%;
+                text-align: center;
+                padding: 10px;
             }
 
             .stripe-popup-container {
@@ -989,33 +974,39 @@
 </head>
 <body>
 
-    <!-- CONTADOR DINÂMICO PARA GERAR URGÊNCIA E CHAMAR A ATENÇÃO -->
-    <div class="premium-floating-badge" aria-live="polite">
-        <div class="countdown-header">
-            <span><span class="pulse-dot"></span> Inscrição encerra em</span>
-            <strong id="countdown-status" class="countdown-status">agora</strong>
+    <!-- BARRA FIXA DE CONTAGEM REGRESSIVA NO HEADER -->
+    <div class="header-top-banner" aria-live="polite">
+        <div class="container header-top-container">
+            <div class="countdown-title">
+                <span class="pulse-dot"></span>
+                <span>As inscrições encerram em:</span>
+                <strong id="countdown-status" style="margin-left: 4px; font-weight: 800;"></strong>
+            </div>
+            <div class="countdown-digits">
+                <div class="digit-box">
+                    <span id="countdown-days">00</span>
+                    <span class="digit-unit">d</span>
+                </div>
+                <span class="colon">:</span>
+                <div class="digit-box">
+                    <span id="countdown-hours">00</span>
+                    <span class="digit-unit">h</span>
+                </div>
+                <span class="colon">:</span>
+                <div class="digit-box">
+                    <span id="countdown-minutes">00</span>
+                    <span class="digit-unit">m</span>
+                </div>
+                <span class="colon">:</span>
+                <div class="digit-box">
+                    <span id="countdown-seconds">00</span>
+                    <span class="digit-unit">s</span>
+                </div>
+            </div>
+            <button class="header-banner-cta open-stripe-modal" type="button" aria-label="Abrir modal de inscrição">
+                Garantir vaga • R$ 37
+            </button>
         </div>
-        <div class="countdown-grid">
-            <div class="countdown-unit">
-                <span id="countdown-days" class="countdown-value">00</span>
-                <span class="countdown-label">Dias</span>
-            </div>
-            <div class="countdown-unit">
-                <span id="countdown-hours" class="countdown-value">00</span>
-                <span class="countdown-label">Horas</span>
-            </div>
-            <div class="countdown-unit">
-                <span id="countdown-minutes" class="countdown-value">00</span>
-                <span class="countdown-label">Min</span>
-            </div>
-            <div class="countdown-unit">
-                <span id="countdown-seconds" class="countdown-value">00</span>
-                <span class="countdown-label">Seg</span>
-            </div>
-        </div>
-        <button class="countdown-cta open-stripe-modal" type="button" aria-label="Abrir modal de inscrição">
-            Garantir vaga • R$ 37
-        </button>
     </div>
 
     <!-- HERO -->
@@ -1141,10 +1132,13 @@
     </section>
 
     <!-- SEÇÃO ANTES E DEPOIS (IMPROVISO AO PROCESSO) -->
-    <section >
-    
-                <img src="https://raw.githubusercontent.com/profissaopet/sob-controle/main/assets/4.png" alt="Do improviso ao processo - comparação antes e depois" style="max-width: 800px; margin: 0 auto; display: flex;; border-radius: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.35);">
-        
+    <section>
+        <div class="container" style="display: flex; justify-content: center;">
+            <picture style="width: 100%; max-width: 800px;">
+                <source media="(max-width: 768px)" srcset="assets/4-mobile.png">
+                <img src="assets/4.png" alt="Do improviso ao processo - comparação antes e depois" style="width: 100%; max-width: 800px; margin: 0 auto; display: block; border-radius: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.35);">
+            </picture>
+        </div>
     </section>
 
     <!-- COMO O DESAFIO VAI FUNCIONAR -->
