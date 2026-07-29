@@ -1,0 +1,2155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Creche Estruturada — Mentoria Tata Pereira</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Uma mentoria individual para donas de creches, hospedagens e serviços pet que desejam deixar o improviso e construir uma empresa com mais processos, segurança e previsibilidade.">
+    <meta name="keywords" content="mentoria pet, creche pet, hospedagem pet, método domus, tata pereira, gestão pet, processos pet">
+    <meta name="author" content="Tata Pereira">
+    <meta name="theme-color" content="#020422">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Minha Creche Estruturada — Mentoria Tata Pereira">
+    <meta property="og:description" content="Deixe o improviso. Construa uma empresa pet sólida, com processos claros, segurança e previsibilidade.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/profissaopet/sob-controle/main/assets/og-cover.jpg">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
+    
+    <!-- Google Fonts: Inter e Satisfy -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Satisfy&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Reset & Variables */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        :root {
+            /* Spacing Scale (Strict 8px Grid) */
+            --space-1: 8px;
+            --space-2: 16px;
+            --space-3: 24px;
+            --space-4: 32px;
+            --space-5: 40px;
+            --space-6: 48px;
+            --space-8: 64px;
+            --space-10: 80px;
+            --space-12: 96px;
+            --space-16: 128px;
+
+            /* Typographic Scale */
+            --font-xs: 0.88rem;
+            --font-sm: 0.95rem;
+            --font-base: 1.05rem;
+            --font-lg: 1.2rem;
+            --font-xl: 1.5rem;
+            --font-2xl: 2.2rem;
+            --font-3xl: 2.8rem;
+            
+            /* Visual Tokens */
+            --border-radius: 24px; /* Unificado para todos os cartões */
+            --border-radius-sm: 12px;
+            --border-radius-lg: 32px;
+            
+            /* Color System */
+            --bg-dark: #020422; /* Azul Marinho Escuro Premium */
+            --bg-dark-gradient: linear-gradient(180deg, #020422 0%, #060938 100%);
+            --bg-light: #ffffff;
+            --bg-light-muted: #fdfbf7; /* Creme Champagne Suave */
+            --accent-yellow: #cfa426; /* Dourado do Canva */
+            --accent-yellow-gradient: linear-gradient(135deg, #e5be49 0%, #b0871a 100%);
+            --accent-yellow-hover: #b58e1c;
+            --text-white: #ffffff;
+            --text-dark: #020422;
+            --text-muted: #5e6488;
+            --text-light-muted: #aab2dd;
+            --accent-red: #e74c3c;
+            --accent-green: #2ecc71;
+            
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --shadow-subtle: 0 10px 30px rgba(2, 4, 34, 0.03);
+            --shadow-medium: 0 20px 40px rgba(2, 4, 34, 0.06);
+            --shadow-dark: 0 25px 50px rgba(0, 0, 0, 0.45);
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.75;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 0 var(--space-3);
+        }
+
+        .text-center { text-align: center; }
+
+        /* Scroll Reveal Effect */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 { transition-delay: 0.05s; }
+        .delay-2 { transition-delay: 0.1s; }
+        .delay-3 { transition-delay: 0.15s; }
+        .delay-4 { transition-delay: 0.2s; }
+
+        /* Sticky Navigation Bar */
+        .sticky-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(2, 4, 34, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            z-index: 9998;
+            transform: translateY(-100%);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+            padding: var(--space-2) 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .sticky-navbar.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .sticky-navbar-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sticky-logo-container {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+        }
+
+        .sticky-logo-dog {
+            width: 34px;
+            height: auto;
+        }
+
+        .sticky-logo-text-group {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .sticky-logo-text {
+            font-family: 'Satisfy', cursive;
+            font-size: 1.35rem;
+            color: var(--text-white);
+        }
+
+        .sticky-logo-label {
+            font-size: 0.55rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-yellow);
+            margin-top: 2px;
+        }
+
+        .sticky-cta-btn {
+            background: var(--accent-yellow-gradient);
+            color: var(--text-white);
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 10px 24px;
+            border-radius: 100px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(207, 164, 38, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sticky-cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(207, 164, 38, 0.45);
+        }
+
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+            z-index: 9999;
+            transition: var(--transition);
+            animation: pulse-whatsapp 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1) translateY(-3px);
+            background-color: #20ba5a;
+            box-shadow: 0 12px 30px rgba(37, 211, 102, 0.45);
+        }
+
+        @keyframes pulse-whatsapp {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        /* Hero Section (Dark Blue Gradient) */
+        .hero {
+            background: var(--bg-dark-gradient);
+            color: var(--text-white);
+            padding: var(--space-12) 0 var(--space-10) 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            position: relative;
+        }
+
+        .hero-logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: var(--space-4);
+        }
+
+        .hero-logo-dog {
+            width: 80px;
+            height: auto;
+            display: block;
+            margin-bottom: var(--space-1);
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+        }
+
+        .hero-logo-text {
+            font-family: 'Satisfy', cursive;
+            font-size: 3rem;
+            color: var(--text-white);
+            font-weight: 400;
+            line-height: 1;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+        }
+
+        .hero-logo-label {
+            font-size: 0.8rem;
+            font-weight: 900;
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            color: var(--accent-yellow);
+            margin-top: var(--space-1);
+            opacity: 0.95;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-title-banner {
+            background: var(--accent-yellow-gradient);
+            padding: var(--space-2) var(--space-6);
+            border-radius: 100px;
+            display: inline-block;
+            margin-bottom: var(--space-4);
+            max-width: 100%;
+            box-shadow: 0 10px 35px rgba(207, 164, 38, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-title-banner h1 {
+            font-size: var(--font-2xl);
+            font-weight: 900;
+            color: var(--text-white);
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+            text-shadow: 0 2px 4px rgba(2, 4, 34, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: var(--font-base);
+            color: var(--text-light-muted);
+            max-width: 780px;
+            margin: 0 auto var(--space-4) auto;
+            line-height: 1.75;
+            font-weight: 400;
+        }
+
+        /* Headline Quote Box */
+        .hero-quote-banner {
+            background: linear-gradient(135deg, #a48222 0%, #735712 100%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: var(--border-radius-sm);
+            padding: var(--space-3) var(--space-5);
+            max-width: 740px;
+            margin: 0 auto var(--space-6) auto;
+            box-shadow: var(--shadow-dark);
+        }
+
+        .hero-quote-banner p {
+            font-size: var(--font-xl);
+            font-weight: 800;
+            color: var(--text-white);
+            line-height: 1.45;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-quote-banner p span.quote-marks {
+            color: rgba(255, 255, 255, 0.65);
+            font-family: Georgia, serif;
+            font-size: 2rem;
+            vertical-align: middle;
+        }
+
+        /* Video Header & Curved Arrows */
+        .hero-video-header {
+            margin-bottom: var(--space-3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            position: relative;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .curved-arrow {
+            color: var(--accent-yellow);
+            width: 60px;
+            height: auto;
+            opacity: 0.85;
+        }
+
+        .curved-arrow path {
+            stroke: var(--accent-yellow);
+            stroke-linecap: round;
+        }
+
+        span.video-cta-text {
+            color: var(--text-white);
+            font-weight: 800;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* Video Player Mockup */
+        .video-player-container {
+            max-width: 740px;
+            margin: 0 auto var(--space-5) auto;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 2px solid rgba(207, 164, 38, 0.35);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.55);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .video-player-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .video-player-container:hover img {
+            transform: scale(1.02);
+        }
+
+        .play-button-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 84px;
+            height: 84px;
+            background: var(--accent-yellow-gradient);
+            color: #ffffff;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            box-shadow: 0 10px 30px rgba(207, 164, 38, 0.5);
+            transition: var(--transition);
+            z-index: 2;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .video-player-container:hover .play-button-overlay {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 15px 35px rgba(207, 164, 38, 0.7);
+        }
+
+        .play-icon-svg {
+            width: 32px;
+            height: 32px;
+            fill: currentColor;
+            margin-left: 5px;
+        }
+
+        /* Hero Button & CTA subtext */
+        .hero-cta-btn {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-weight: 850;
+            font-size: var(--font-base);
+            padding: var(--space-2) var(--space-5);
+            border-radius: 100px;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.12);
+            border: 2px solid transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-cta-btn:hover {
+            background: var(--accent-yellow-gradient);
+            color: var(--text-white);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(207, 164, 38, 0.35);
+        }
+
+        .hero-cta-subtext {
+            font-size: var(--font-sm);
+            color: var(--text-light-muted);
+            margin-top: var(--space-2);
+            max-width: 580px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.65;
+        }
+
+        /* Generic Section Styling (Strict Vertical Rhythm) */
+        section {
+            padding: var(--space-12) 0;
+            background-color: var(--bg-light);
+            border-bottom: 1px solid #eef1f6;
+            position: relative;
+        }
+
+        section.muted-bg {
+            background-color: var(--bg-light-muted);
+        }
+
+        h2 {
+            font-size: var(--font-2xl);
+            font-weight: 900;
+            color: var(--text-dark);
+            text-align: center;
+            margin-bottom: var(--space-2);
+            line-height: 1.25;
+            letter-spacing: -0.8px;
+        }
+
+        .section-subtitle {
+            font-size: var(--font-lg);
+            color: var(--text-muted);
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto var(--space-5) auto;
+            line-height: 1.7;
+        }
+
+        .section-cta-block {
+            text-align: center;
+            margin-top: var(--space-6);
+        }
+
+        .section-cta-btn {
+            background: var(--accent-yellow-gradient);
+            color: var(--text-white);
+            font-weight: 800;
+            font-size: var(--font-base);
+            padding: var(--space-2) var(--space-5);
+            border-radius: 100px;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition);
+            box-shadow: 0 10px 25px rgba(207, 164, 38, 0.25);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(207, 164, 38, 0.45);
+        }
+
+        /* Section 2: target audience cards */
+        .target-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .target-card {
+            background-color: #ffffff;
+            border: 1px solid rgba(2, 4, 34, 0.05);
+            padding: var(--space-4);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            box-shadow: var(--shadow-subtle);
+            transition: var(--transition);
+        }
+
+        .target-card:hover {
+            border-color: rgba(207, 164, 38, 0.35);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .target-icon {
+            background: var(--accent-yellow-gradient);
+            color: var(--text-white);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 1.05rem;
+            font-weight: 900;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(207, 164, 38, 0.2);
+        }
+
+        .target-text {
+            font-size: var(--font-sm);
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.45;
+        }
+
+        /* Section 3: Split layout & Pills */
+        .benefits-grid-layout {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: var(--space-8);
+            align-items: center;
+        }
+
+        .benefits-list-col h2 {
+            text-align: left;
+            margin-bottom: var(--space-3);
+        }
+
+        .benefits-pills-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .benefit-pill {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            padding: var(--space-2) var(--space-3);
+            border-radius: 100px;
+            font-size: var(--font-xs);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            box-shadow: 0 8px 20px rgba(2, 4, 34, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            transition: var(--transition);
+        }
+
+        .benefit-pill:hover {
+            transform: translateX(5px);
+            border-color: rgba(207, 164, 38, 0.35);
+        }
+
+        .benefit-pill::before {
+            content: "➔";
+            color: var(--accent-yellow);
+            font-weight: 900;
+            font-size: var(--font-base);
+        }
+
+        .benefits-image-col img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* Section 4: A Creche Cresce (Pain Grid) */
+        .pain-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pain-card {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: var(--space-4);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            box-shadow: 0 10px 25px rgba(2, 4, 34, 0.18);
+            transition: var(--transition);
+        }
+
+        .pain-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(207, 164, 38, 0.4);
+            box-shadow: 0 15px 35px rgba(207, 164, 38, 0.15);
+        }
+
+        .pain-icon {
+            background: var(--accent-yellow-gradient);
+            color: var(--text-white);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-weight: 900;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(207, 164, 38, 0.2);
+        }
+
+        .pain-text {
+            font-size: var(--font-sm);
+            font-weight: 700;
+            line-height: 1.45;
+        }
+
+        .pain-callout {
+            background-color: var(--bg-light-muted);
+            border: 1px dashed rgba(207, 164, 38, 0.45);
+            padding: var(--space-4) var(--space-5);
+            border-radius: var(--border-radius);
+            text-align: center;
+            font-size: var(--font-base);
+            color: var(--text-muted);
+            max-width: 900px;
+            margin: var(--space-6) auto 0 auto;
+            line-height: 1.75;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .pain-callout strong {
+            color: var(--text-dark);
+            font-weight: 800;
+        }
+
+        /* Section 5: Chaos Section */
+        .chaos-section {
+            background: var(--bg-dark-gradient);
+            color: var(--text-white);
+            padding: var(--space-12) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .chaos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-8);
+            align-items: center;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .chaos-left-title {
+            font-size: var(--font-2xl);
+            font-weight: 900;
+            line-height: 1.4;
+            letter-spacing: -0.5px;
+            font-style: italic;
+            position: relative;
+        }
+
+        .chaos-left-title::before {
+            content: "“";
+            position: absolute;
+            top: -40px;
+            left: -20px;
+            font-size: 6rem;
+            color: rgba(207, 164, 38, 0.15);
+            font-family: Georgia, serif;
+        }
+
+        .chaos-right-card {
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--border-radius);
+            padding: var(--space-5);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+        }
+
+        .chaos-right-card h3 {
+            font-size: var(--font-lg);
+            font-weight: 900;
+            color: var(--accent-yellow);
+            margin-bottom: var(--space-3);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .chaos-transform-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-2);
+            margin-bottom: var(--space-3);
+        }
+
+        .chaos-transform-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .chaos-num-badge {
+            background: var(--accent-yellow-gradient);
+            color: var(--text-white);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: var(--font-xs);
+            font-weight: 900;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(207, 164, 38, 0.2);
+        }
+
+        .chaos-desc {
+            font-size: var(--font-sm);
+            font-weight: 600;
+            line-height: 1.55;
+            color: var(--text-white);
+        }
+
+        /* Section 6: Biography & Stats */
+        .mentor-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: var(--space-8);
+            align-items: center;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .mentor-name {
+            font-size: var(--font-sm);
+            font-weight: 900;
+            color: var(--accent-yellow);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: var(--space-1);
+        }
+
+        .mentor-title {
+            font-size: var(--font-2xl);
+            font-weight: 950;
+            color: var(--text-dark);
+            margin-bottom: var(--space-3);
+            letter-spacing: -0.5px;
+        }
+
+        .mentor-bio {
+            color: var(--text-muted);
+            font-size: var(--font-sm);
+            line-height: 1.75;
+            margin-bottom: var(--space-4);
+        }
+
+        .mentor-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-2);
+        }
+
+        .mentor-stat-card {
+            background-color: #ffffff;
+            border: 1px solid rgba(2, 4, 34, 0.05);
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--border-radius);
+            font-size: var(--font-xs);
+            font-weight: 800;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            box-shadow: var(--shadow-subtle);
+            transition: var(--transition);
+        }
+
+        .mentor-stat-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(207, 164, 38, 0.3);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .mentor-stat-icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        /* Solid Gold Image Wrapping for Tata */
+        .bio-image-wrapper {
+            background: var(--accent-yellow-gradient);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            box-shadow: 0 25px 50px rgba(2, 4, 34, 0.15);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .bio-image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transform-origin: bottom center;
+            transition: var(--transition);
+        }
+
+        .bio-image-wrapper:hover img {
+            transform: scale(1.03);
+        }
+
+        /* Section 7: Domus Method */
+        .domus-intro-grid {
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            gap: var(--space-8);
+            align-items: center;
+            margin-bottom: var(--space-8);
+        }
+
+        .domus-intro-image {
+            background: var(--accent-yellow-gradient);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            box-shadow: 0 25px 50px rgba(2, 4, 34, 0.15);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .domus-intro-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transform-origin: bottom center;
+            transition: var(--transition);
+        }
+
+        .domus-intro-image:hover img {
+            transform: scale(1.03);
+        }
+
+        .domus-intro-content h2 {
+            text-align: left;
+            margin-bottom: var(--space-2);
+        }
+
+        .domus-intro-content p {
+            color: var(--text-muted);
+            font-size: var(--font-sm);
+            line-height: 1.75;
+            margin-bottom: var(--space-2);
+        }
+
+        .domus-intro-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .domus-house-diagram {
+            background-color: #ffffff;
+            border: 1px solid rgba(2, 4, 34, 0.05);
+            border-radius: var(--border-radius-lg);
+            padding: var(--space-5);
+            max-width: 900px;
+            margin: 0 auto var(--space-5) auto;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .domus-house-diagram img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .domus-footer-callout {
+            background: var(--accent-yellow-gradient);
+            color: var(--text-white);
+            font-weight: 900;
+            font-size: var(--font-base);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-align: center;
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--border-radius-sm);
+            box-shadow: 0 10px 25px rgba(207, 164, 38, 0.35);
+            max-width: 900px;
+            margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            text-shadow: 0 2px 4px rgba(2, 4, 34, 0.2);
+        }
+
+        /* Section 8: Como funciona a Mentoria */
+        .logistics-section {
+            background: var(--bg-dark-gradient);
+            color: var(--text-white);
+            padding: var(--space-12) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .logistics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-3);
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .logistics-card {
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: var(--space-4);
+            border-radius: var(--border-radius);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+            position: relative;
+        }
+
+        .logistics-card:hover {
+            border-color: var(--accent-yellow);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 45px rgba(207, 164, 38, 0.15);
+        }
+
+        .logistics-icon {
+            font-size: 1.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+        }
+
+        .logistics-title {
+            font-size: var(--font-sm);
+            font-weight: 800;
+            color: var(--text-white);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .logistics-desc {
+            font-size: var(--font-xs);
+            color: var(--text-light-muted);
+            line-height: 1.65;
+        }
+
+        /* Section 9: POPs Section */
+        .pops-section {
+            background: var(--bg-dark-gradient);
+            color: var(--text-white);
+            padding: var(--space-12) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .pops-section-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-8);
+            align-items: center;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .pops-left-col {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--space-3);
+        }
+
+        .pops-badge-icon {
+            background: var(--accent-yellow-gradient);
+            color: var(--text-white);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 1.4rem;
+            font-weight: 900;
+            box-shadow: 0 6px 15px rgba(207, 164, 38, 0.3);
+        }
+
+        .pops-left-desc {
+            font-size: var(--font-lg);
+            font-weight: 700;
+            line-height: 1.7;
+            color: var(--text-white);
+        }
+
+        .pops-gold-box {
+            border: 3px solid var(--accent-yellow);
+            border-radius: var(--border-radius);
+            padding: var(--space-5);
+            background-color: rgba(255, 255, 255, 0.01);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        .pops-gold-box h3 {
+            font-size: var(--font-lg);
+            font-weight: 900;
+            color: var(--accent-yellow);
+            margin-bottom: var(--space-3);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .pop-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-2);
+            font-size: var(--font-sm);
+            font-weight: 700;
+        }
+
+        .pop-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .pop-check-icon {
+            color: var(--accent-yellow);
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+
+        /* Section 10: Application Steps */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-3);
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .step-card {
+            background-color: #ffffff;
+            border: 1px solid rgba(2, 4, 34, 0.05);
+            padding: var(--space-4) var(--space-3);
+            border-radius: var(--border-radius);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+            box-shadow: var(--shadow-subtle);
+            transition: var(--transition);
+        }
+
+        .step-card:hover {
+            border-color: rgba(207, 164, 38, 0.35);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .step-num {
+            background-color: rgba(207, 164, 38, 0.12);
+            color: var(--accent-yellow);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 1.1rem;
+            font-weight: 900;
+        }
+
+        .step-title {
+            font-size: var(--font-sm);
+            font-weight: 800;
+            color: var(--text-dark);
+            line-height: 1.35;
+        }
+
+        .step-desc {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* FAQ Accordion Styling */
+        .faq-accordion {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .faq-item {
+            background-color: #ffffff;
+            border: 1px solid rgba(2, 4, 34, 0.05);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-subtle);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-item:hover {
+            border-color: rgba(207, 164, 38, 0.25);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .faq-question {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: none;
+            border: none;
+            padding: var(--space-3) var(--space-4);
+            font-size: var(--font-base);
+            font-weight: 800;
+            color: var(--text-dark);
+            text-align: left;
+            cursor: pointer;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .faq-question .faq-icon {
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question {
+            color: var(--accent-yellow-hover);
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .faq-answer-inner {
+            padding: 0 var(--space-4) var(--space-3) var(--space-4);
+            color: var(--text-muted);
+            font-size: var(--font-sm);
+            line-height: 1.7;
+        }
+
+        /* Section 11: Support block (Tata with Dog) */
+        .support-grid {
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            gap: var(--space-8);
+            align-items: center;
+            max-width: 880px;
+            margin: 0 auto;
+        }
+
+        .support-img-col img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .support-content-col {
+            background-color: var(--bg-light-muted);
+            border: 1px solid rgba(207, 164, 38, 0.15);
+            padding: var(--space-5);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .support-content-col h3 {
+            font-size: var(--font-xl);
+            font-weight: 900;
+            color: var(--text-dark);
+            margin-bottom: var(--space-2);
+            letter-spacing: -0.5px;
+        }
+
+        .support-content-col p {
+            color: var(--text-muted);
+            font-size: var(--font-base);
+            margin-bottom: var(--space-4);
+            line-height: 1.7;
+        }
+
+        .support-cta-btn {
+            background-color: #25d366;
+            color: var(--text-white);
+            font-weight: 800;
+            font-size: var(--font-base);
+            padding: 18px 40px;
+            border-radius: 100px;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.25);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .support-cta-btn:hover {
+            background-color: #20ba5a;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #000000;
+            padding: var(--space-5) 0;
+            color: var(--text-light-muted);
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-4);
+            margin-bottom: var(--space-3);
+        }
+
+        .footer-links a {
+            color: var(--text-light-muted);
+            text-decoration: none;
+            font-size: var(--font-xs);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-yellow);
+        }
+
+        .footer-copy {
+            font-size: var(--font-xs);
+            opacity: 0.8;
+        }
+
+        /* Application Selection Modal Popup */
+        .app-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(2, 4, 34, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            padding: 20px;
+        }
+
+        .app-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .app-modal-container {
+            background: linear-gradient(145deg, #0e123a, #020422);
+            border: 1px solid rgba(207, 164, 38, 0.3);
+            width: 100%;
+            max-width: 480px;
+            border-radius: var(--border-radius-lg);
+            padding: var(--space-5) var(--space-4) var(--space-4) var(--space-4);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.65);
+            position: relative;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+            text-align: center;
+        }
+
+        .app-modal-overlay.active .app-modal-container {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            color: var(--text-light-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close-btn:hover {
+            color: var(--accent-red);
+            background: rgba(231, 76, 60, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-size: var(--font-xl);
+            font-weight: 900;
+            margin-bottom: var(--space-1);
+            color: var(--text-white);
+            letter-spacing: -0.3px;
+        }
+
+        .modal-subtitle {
+            font-size: var(--font-sm);
+            color: var(--text-light-muted);
+            line-height: 1.6;
+            margin-bottom: var(--space-4);
+        }
+
+        .modal-options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .modal-option-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: var(--space-2) var(--space-3);
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: var(--font-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+        }
+
+        .modal-option-btn.primary {
+            background: var(--accent-yellow-gradient);
+            color: var(--text-white);
+            box-shadow: 0 6px 18px rgba(207, 164, 38, 0.25);
+        }
+
+        .modal-option-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(207, 164, 38, 0.4);
+        }
+
+        .modal-option-btn.secondary {
+            background-color: #25d366;
+            color: white;
+            box-shadow: 0 6px 18px rgba(37, 211, 102, 0.2);
+        }
+
+        .modal-option-btn.secondary:hover {
+            background-color: #20ba5a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(37, 211, 102, 0.35);
+        }
+
+        /* Responsiveness */
+        @media (max-width: 992px) {
+            .benefits-grid-layout, .chaos-grid, .mentor-grid, .domus-intro-grid, .pops-section-grid, .support-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-5);
+            }
+            .benefits-list-col h2, .domus-intro-content h2 {
+                text-align: center;
+            }
+            .bio-image-wrapper, .domus-intro-image, .benefits-image-col, .support-img-col {
+                max-width: 480px;
+                margin: 0 auto;
+            }
+            .logistics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .target-list, .pain-list {
+                grid-template-columns: 1fr;
+                gap: var(--space-2);
+            }
+            h1 { font-size: 2rem !important; }
+            .hero-title-banner { padding: 12px 30px !important; }
+            h2 { font-size: 1.85rem !important; }
+            .hero-quote-banner p { font-size: 1.25rem !important; }
+            .hero-quote-banner { padding: 18px 24px !important; }
+            .chaos-left-title { font-size: 1.75rem !important; text-align: center; }
+            .chaos-left-title::before { display: none; }
+            .mentor-title { font-size: 1.85rem !important; text-align: center !important; }
+            .mentor-name { text-align: center; }
+            .domus-house-diagram { padding: var(--space-3); }
+            .logistics-grid, .steps-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-2);
+            }
+            .support-content-col { padding: var(--space-4); text-align: center; }
+            .pops-left-desc { text-align: center; }
+            .pops-badge-icon { margin: 0 auto; }
+            .curved-arrow { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CONFIGURAÇÕES DE LINKS -->
+    <script>
+        window.CONFIG = {
+            whatsappUrl: "https://wa.me/5511999999999?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20um%20diagn%C3%B3stico%20para%20a%20Mentoria%20Minha%20Creche%20Estruturada.",
+            applicationUrl: "https://forms.google.com/sua-anamnese-de-mentoria"
+        };
+    </script>
+
+    <!-- STICKY NAVBAR -->
+    <nav class="sticky-navbar">
+        <div class="container sticky-navbar-container">
+            <div class="sticky-logo-container">
+                <img class="sticky-logo-dog" src="assets/tata-logo-dog.png" alt="Tata Pereira Logo Dog">
+                <div class="sticky-logo-text-group">
+                    <span class="sticky-logo-text">Tata Pereira</span>
+                    <span class="sticky-logo-label">Mentoria</span>
+                </div>
+            </div>
+            <a href="#" class="sticky-cta-btn open-app-modal">Quero Estruturar</a>
+        </div>
+    </nav>
+
+    <!-- FLOATING WHATSAPP -->
+    <a href="#" class="whatsapp-float" onclick="this.href=window.CONFIG.whatsappUrl" target="_blank" aria-label="WhatsApp Support">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="fill: white; stroke: none;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+    </a>
+
+    <!-- HERO SECTION -->
+    <header class="hero">
+        <div class="container">
+            <!-- Brand Logo -->
+            <div class="hero-logo-container">
+                <img class="hero-logo-dog" src="assets/tata-logo-dog.png" alt="Tata Pereira Logo Dog">
+                <span class="hero-logo-text">Tata Pereira</span>
+                <span class="hero-logo-label">Mentoria</span>
+            </div>
+            
+            <!-- Main Title Banner -->
+            <div class="hero-title-banner">
+                <h1>MINHA CRECHE ESTRUTURADA</h1>
+            </div>
+            
+            <!-- Subtitle -->
+            <p class="hero-subtitle">
+                Uma mentoria individual para donas de creches, hospedagens e serviços pet que desejam deixar o improviso e construir uma empresa com mais processos, segurança e previsibilidade.
+            </p>
+            
+            <!-- Headline Quote Box -->
+            <div class="hero-quote-banner">
+                <p>
+                    <span class="quote-marks">“</span>Você não precisa trabalhar mais. <br> Você precisa estruturar melhor!<span class="quote-marks">”</span>
+                </p>
+            </div>
+            
+            <!-- Video CTA Header with SVG Curved Arrows -->
+            <div class="hero-video-header">
+                <svg class="curved-arrow" width="60" height="40" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 5 C 25 15, 30 20, 48 30" stroke="#cfa426" stroke-width="2.5" stroke-dasharray="4 4" fill="none"/>
+                    <path d="M42 30 L48 30 L48 24" stroke="#cfa426" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                <span class="video-cta-text">Assista ao vídeo e entenda como</span>
+                <svg class="curved-arrow" width="60" height="40" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 C 35 15, 30 20, 12 30" stroke="#cfa426" stroke-width="2.5" stroke-dasharray="4 4" fill="none"/>
+                    <path d="M18 30 L12 30 L12 24" stroke="#cfa426" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+            </div>
+            
+            <!-- Video Player Mockup -->
+            <div class="video-player-container open-app-modal">
+                <img src="assets/tata-video-placeholder.png" alt="Tata Pereira dando explicações sobre a mentoria no vídeo">
+                <div class="play-button-overlay">
+                    <svg class="play-icon-svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+            </div>
+
+            <!-- CTA Button Block -->
+            <div style="margin-top: 30px;">
+                <a href="#" class="hero-cta-btn open-app-modal">Quero Estruturar Minha Creche</a>
+                <p class="hero-cta-subtext">
+                    Clique no botão abaixo para agendar uma reunião de diagnóstico. Isso lhe dará uma visão clara e mostrará como a mentoria pode te ajudar.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- SECTION 2: ESSA MENTORIA É PARA VOCÊ QUE -->
+    <section>
+        <div class="container">
+            <h2>Essa mentoria é para você que:</h2>
+            <p class="section-subtitle">Veja se você se identifica com algum destes cenários do mercado pet:</p>
+            
+            <div class="target-list">
+                <div class="target-card">
+                    <div class="target-icon">✓</div>
+                    <span class="target-text">Sente que o negócio depende de você.</span>
+                </div>
+                <div class="target-card">
+                    <div class="target-icon">✓</div>
+                    <span class="target-text">Não consegue delegar com segurança.</span>
+                </div>
+                <div class="target-card">
+                    <div class="target-icon">✓</div>
+                    <span class="target-text">Vive apagando incêndios na rotina.</span>
+                </div>
+                <div class="target-card">
+                    <div class="target-icon">✓</div>
+                    <span class="target-text">Quer organizar a rotina, os processos e a agenda.</span>
+                </div>
+                <div class="target-card">
+                    <div class="target-icon">✓</div>
+                    <span class="target-text">Percebe que a equipe trabalha sem um padrão.</span>
+                </div>
+                <div class="target-card">
+                    <div class="target-icon">✓</div>
+                    <span class="target-text">Tem a sensação de que corre e não sai do lugar.</span>
+                </div>
+                <div class="target-card">
+                    <div class="target-icon">✓</div>
+                    <span class="target-text">Tem uma creche ou hospedagem pet em operação.</span>
+                </div>
+                <div class="target-card">
+                    <div class="target-icon">✓</div>
+                    <span class="target-text">Quer crescer sem aumentar o caos.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: COM A MENTORIA VOCÊ TERÁ -->
+    <section class="muted-bg">
+        <div class="container benefits-grid-layout">
+            <div class="benefits-list-col">
+                <h2>Com a mentoria, você terá:</h2>
+                <div class="benefits-pills-list">
+                    <div class="benefit-pill">diagnóstico da operação</div>
+                    <div class="benefit-pill">encontros individuais</div>
+                    <div class="benefit-pill">plano de ação personalizado</div>
+                    <div class="benefit-pill">acompanhamento da implementação</div>
+                    <div class="benefit-pill">clareza sobre gestão, números e indicadores</div>
+                    <div class="benefit-pill">suporte diário</div>
+                    <div class="benefit-pill">organização da rotina</div>
+                    <div class="benefit-pill">construção de processos</div>
+                    <div class="benefit-pill">materiais customizados</div>
+                    <div class="benefit-pill">direcionamento para gestão da equipe</div>
+                </div>
+            </div>
+            <div class="benefits-image-col">
+                <img src="assets/tata-apontando-voce.png" alt="Tata apontando e indicando o seu sucesso na estruturação">
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: A CRECHE CRESCE... -->
+    <section>
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 40px;">
+                <p style="font-size: 0.88rem; font-weight: 800; color: var(--accent-yellow); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;">A verdade que ninguém te conta:</p>
+                <h2>A creche cresce… mas você continua presa na operação.</h2>
+            </div>
+            
+            <div class="pain-list">
+                <div class="pain-card">
+                    <div class="pain-icon">!</div>
+                    <span class="pain-text">Tudo depende de você para funcionar.</span>
+                </div>
+                <div class="pain-card">
+                    <div class="pain-icon">!</div>
+                    <span class="pain-text">Os mesmos erros continuam se repetindo frequentemente.</span>
+                </div>
+                <div class="pain-card">
+                    <div class="pain-icon">!</div>
+                    <span class="pain-text">A equipe executa cada tarefa de um jeito diferente.</span>
+                </div>
+                <div class="pain-card">
+                    <div class="pain-icon">!</div>
+                    <span class="pain-text">Delegar ainda parece arriscado.</span>
+                </div>
+                <div class="pain-card">
+                    <div class="pain-icon">!</div>
+                    <span class="pain-text">Você vive apagando incêndios.</span>
+                </div>
+                <div class="pain-card">
+                    <div class="pain-icon">!</div>
+                    <span class="pain-text">Crescer só aumenta a sobrecarga.</span>
+                </div>
+            </div>
+            
+            <div class="pain-callout">
+                Isso acontece quando a operação cresce sem <strong>processos claros</strong>, <strong>rotina padronizada</strong> e <strong>critérios bem definidos</strong> para a equipe.
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: CHAOS VS TRANSFORMATION -->
+    <section class="chaos-section">
+        <div class="container chaos-grid">
+            <div class="chaos-left-title">
+                "Crescer sem uma equipe estruturada não é evolução, é um convite ao caos."
+            </div>
+            <div class="chaos-right-card">
+                <h3>A Mentoria existe para transformar:</h3>
+                
+                <div class="chaos-transform-item">
+                    <div class="chaos-num-badge">1</div>
+                    <span class="chaos-desc">Improviso em previsibilidade;</span>
+                </div>
+                <div class="chaos-transform-item">
+                    <div class="chaos-num-badge">2</div>
+                    <span class="chaos-desc">Sobrecarga em organização;</span>
+                </div>
+                <div class="chaos-transform-item">
+                    <div class="chaos-num-badge">3</div>
+                    <span class="chaos-desc">Faturamento em crescimento sustentável.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: QUEM SERÁ A SUA MENTORA -->
+    <section class="muted-bg">
+        <div class="container mentor-grid">
+            <div>
+                <div class="mentor-name">Quem será a sua mentora?</div>
+                <h2 class="mentor-title">Tata Pereira</h2>
+                <p class="mentor-bio">
+                    Tata Pereira é especialista em comportamento canino, formação de profissionais e estruturação de negócios pet. Fundadora da Tata EducaCão e criadora do Método Domus, veio do mercado corporativo para o mercado pet e já passou por diferentes funções da operação: pet sitter, dog walker, adestradora, monitora, supervisora e consultora de creches. Sua experiência une prática, gestão e rotina real de operação.
+                </p>
+                
+                <div class="mentor-stats-grid">
+                    <div class="mentor-stat-card">
+                        <span class="mentor-stat-icon">🐕</span>
+                        <span><strong class="stat-number" data-target="8">0</strong> anos no mercado pet</span>
+                    </div>
+                    <div class="mentor-stat-card">
+                        <span class="mentor-stat-icon">🎓</span>
+                        <span>Mais de <strong class="stat-number" data-target="100">0</strong> profissionais capacitados</span>
+                    </div>
+                    <div class="mentor-stat-card">
+                        <span class="mentor-stat-icon">🏡</span>
+                        <span>Mais de <strong class="stat-number" data-target="1000">0</strong> famílias atendidas</span>
+                    </div>
+                    <div class="mentor-stat-card">
+                        <span class="mentor-stat-icon">💼</span>
+                        <span><strong class="stat-number" data-target="13">0</strong> anos no corporativo</span>
+                    </div>
+                    <div class="mentor-stat-card" style="grid-column: span 2;">
+                        <span class="mentor-stat-icon">⚙️</span>
+                        <span>Especialista em processos e estruturação de creches</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bio-image-wrapper">
+                <img src="assets/tata-bracos-cruzados.png" alt="Tata Pereira fundadora da mentoria com braços cruzados e sorrindo">
+            </div>
+        </div>
+        <div class="text-center" style="margin-top: 55px;">
+            <a href="#" class="section-cta-btn open-app-modal">Quero Estruturar Minha Creche</a>
+        </div>
+    </section>
+
+    <!-- SECTION 7: POR DENTRO DO MÉTODO DOMUS -->
+    <section>
+        <div class="container">
+            <div class="domus-intro-grid">
+                <div class="domus-intro-image">
+                    <img src="assets/tata-apontando-cima.png" alt="Tata apontando para cima e sinalizando o método">
+                </div>
+                <div class="domus-intro-content">
+                    <h2>Por dentro do Método Domus</h2>
+                    <p>Durante a mentoria, você aplicará o nosso Método exclusivo para organizar uma operação pet desestruturada.</p>
+                    <p>Ele parte de uma lógica simples: <strong>Uma creche precisa funcionar como uma casa bem construída!</strong></p>
+                    <p>Não existe crescimento sem uma equipe estruturada e funcional.</p>
+                    <p>Uma creche saudável deve cuidar tanto da percepção do cliente quanto da estrutura interna do negócio.</p>
+                </div>
+            </div>
+            
+            <div class="domus-house-diagram">
+                <img src="assets/metodo-domus-casa.png" alt="Diagrama da Casa do Método Domus: Receita e Escala, Sistema de Percepção, Sistema de Sustentação">
+            </div>
+            
+            <div class="domus-footer-callout">
+                O crescimento acelera, mas só uma equipe estruturada sustenta o peso do topo.
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 8: COMO FUNCIONA A MENTORIA -->
+    <section class="logistics-section">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 50px;">
+                <p style="font-size: 0.88rem; font-weight: 800; color: var(--accent-yellow); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;">Identificamos que sua marca tem um grande potencial, mas atualmente:</p>
+                <h2>Como funciona a mentoria:</h2>
+            </div>
+            
+            <div class="logistics-grid">
+                <div class="logistics-card">
+                    <div class="logistics-icon">📅</div>
+                    <div class="logistics-title">4 MESES DE DURAÇÃO</div>
+                    <p class="logistics-desc">Período planejado para redefinir as rotinas da sua empresa e acompanhar a equipe na fixação do novo modelo.</p>
+                </div>
+                <div class="logistics-card">
+                    <div class="logistics-icon">👥</div>
+                    <div class="logistics-title">10 encontros individuais</div>
+                    <p class="logistics-desc">Sessões estratégicas focadas no seu faturamento, processos operacionais e infraestrutura pet.</p>
+                </div>
+                <div class="logistics-card">
+                    <div class="logistics-icon">🎥</div>
+                    <div class="logistics-title">GRAVAÇÃO DOS ENCONTROS</div>
+                    <p class="logistics-desc">Assista novamente quando quiser ou utilize as gravações para treinar seus gerentes de creche.</p>
+                </div>
+                <div class="logistics-card">
+                    <div class="logistics-icon">💬</div>
+                    <div class="logistics-title">Suporte via WhatsApp</div>
+                    <p class="logistics-desc">Acesso diário e direto à Tata Pereira nos intervalos das sessões para tirar dúvidas rápidas e aprovar processos.</p>
+                </div>
+                <div class="logistics-card">
+                    <div class="logistics-icon">📂</div>
+                    <div class="logistics-title">Modelos e Documentos</div>
+                    <p class="logistics-desc">Acesso a modelos de POPs, planilhas operacionais e materiais de treinamento prontos para preencher.</p>
+                </div>
+                <div class="logistics-card">
+                    <div class="logistics-icon">🔄</div>
+                    <div class="logistics-title">Feedback e Ajustes</div>
+                    <p class="logistics-desc">Auditorias constantes dos seus procedimentos operacionais e acompanhamento dos indicadores operacionais.</p>
+                </div>
+            </div>
+            
+            <div class="section-cta-block">
+                <a href="#" class="section-cta-btn open-app-modal">Quero Estruturar Minha Creche</a>
+                <p style="font-size: 0.88rem; color: var(--text-light-muted); margin-top: 18px; max-width: 580px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+                    Clique no botão abaixo para agendar uma reunião de diagnóstico. Isso lhe dará uma visão clara e mostrará como a mentoria pode te ajudar.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 9: POPs -->
+    <section class="pops-section">
+        <div class="container pops-section-grid">
+            <div class="pops-left-col">
+                <div class="pops-badge-icon">ℹ</div>
+                <div class="pops-left-desc">
+                    Durante a mentoria, você terá acesso a modelos de procedimentos operacionais padrão (POPs) para creches e, com a Tata, desenvolverá os modelos adaptados à sua realidade operacional.
+                </div>
+            </div>
+            
+            <div class="pops-gold-box">
+                <h3>Como por exemplo:</h3>
+                <div class="pop-item">
+                    <span class="pop-check-icon">✓</span>
+                    <span>POP de Entrada e Saída dos Cães</span>
+                </div>
+                <div class="pop-item">
+                    <span class="pop-check-icon">✓</span>
+                    <span>POP de Alimentação</span>
+                </div>
+                <div class="pop-item">
+                    <span class="pop-check-icon">✓</span>
+                    <span>POP de Manejo e Monitoramento dos Cães</span>
+                </div>
+                <div class="pop-item">
+                    <span class="pop-check-icon">✓</span>
+                    <span>POP de Limpeza e Higienização</span>
+                </div>
+                <div class="pop-item">
+                    <span class="pop-check-icon">✓</span>
+                    <span>POP de Segurança Operacional</span>
+                </div>
+                <div class="pop-item">
+                    <span class="pop-check-icon">✓</span>
+                    <span>POP de Integração e Treinamento de Equipe</span>
+                </div>
+                <div class="pop-item">
+                    <span class="pop-check-icon">✓</span>
+                    <span>POP de Triagem e Avaliação de Cães</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 10: COMO FUNCIONA A APLICAÇÃO -->
+    <section>
+        <div class="container">
+            <h2>Como funciona a aplicação?</h2>
+            <p class="section-subtitle">Confira as 4 etapas para iniciar o seu processo de mentoria individual:</p>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <div class="step-title">Você preenche o formulário</div>
+                    <p class="step-desc">Você responde a perguntas sobre sua creche, hospedagem ou serviço pet, sua rotina, desafios e o momento do seu negócio.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <div class="step-title">Sua aplicação é analisada</div>
+                    <p class="step-desc">A Tatá analisa se a mentoria é adequada para o seu momento e se pode ajudar com seus desafios.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <div class="step-title">Sessão de Diagnóstico</div>
+                    <p class="step-desc">Se o seu perfil for aprovado, você será convidada para uma reunião com a Tatá, que avaliará os desafios da sua operação e mostrará como a mentoria pode ajudar.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">4</div>
+                    <div class="step-title">Recebimento da proposta</div>
+                    <p class="step-desc">A mentoria começa após a formalização da proposta de trabalho. Este serviço é voltado para empresas que desejam se estruturar de maneira sólida, deixando de lado a improvisação.</p>
+                </div>
+            </div>
+            
+            <div class="section-cta-block">
+                <a href="#" class="section-cta-btn open-app-modal">Quero Estruturar Minha Creche</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 11: PERGUNTAS FREQUENTES (FAQ Accordion) -->
+    <section class="faq-section">
+        <div class="container">
+            <h2>Perguntas Frequentes</h2>
+            <p class="section-subtitle">Tire suas dúvidas rápidas sobre o funcionamento da mentoria individual:</p>
+            
+            <div class="faq-accordion">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>A mentoria serve para quem está começando do zero?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            <p>Sim, serve perfeitamente. Estruturar o seu negócio pet com processos claros e rotinas padronizadas desde o primeiro dia evita retrabalhos, desentendimentos na equipe e prejuízos operacionais futuros. É o caminho ideal para começar já com o pé direito.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Como funcionam os encontros individuais?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            <p>São reuniões 100% online, ao vivo e individuais de planejamento estratégico. Em cada sessão, nós avaliamos os gargalos da sua creche, desenhamos processos personalizados (POPs), redefinimos a rotina operacional e acompanhamos a implementação prática dos novos procedimentos.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Terei acesso a materiais prontos?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            <p>Sim! Você terá acesso a modelos estruturados de Procedimentos Operacionais Padrão (POPs) de entrada/saída, alimentação, manejo e limpeza, além de planilhas de gestão de equipe e indicadores de desempenho. Você só precisará preencher e adaptá-los com a ajuda da Tata.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Qual é a duração da mentoria e o formato do suporte?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            <p>A mentoria individual tem duração de 4 meses, período ideal para fixar a nova cultura e rotina em sua empresa pet. O suporte é diário diretamente com a Tata Pereira pelo WhatsApp para aprovação de documentos e resolução de dúvidas práticas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>A equipe da minha creche participará das sessões estratégicas?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            <p>As sessões são exclusivas para as proprietárias/gestoras. No entanto, todas as sessões são gravadas e os materiais desenvolvidos são entregues prontos para que você os utilize diretamente no treinamento e capacitação da sua equipe.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 12: AINDA EM DÚVIDA? -->
+    <section class="muted-bg" style="border-bottom: none;">
+        <div class="container support-grid">
+            <div class="support-img-col">
+                <img src="assets/mentoria-tata-dog.png" alt="Tata Pereira com o Cão e bandana de banana">
+            </div>
+            <div class="support-content-col">
+                <h3>AINDA EM DÚVIDA?</h3>
+                <p>
+                    Chame nossa equipe no WhatsApp e eles poderão te ajudar a decidir se a mentoria realmente é pra você.
+                </p>
+                <a href="#" class="support-cta-btn" onclick="this.href=window.CONFIG.whatsappUrl" target="_blank">
+                    Chamar no WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container text-center">
+            <div class="footer-links">
+                <a href="#" onclick="alert('Suporte Comercial: fale conosco via botão do WhatsApp.')">Condições e suporte</a>
+                <a href="#" onclick="alert('Política de Privacidade: Os dados preenchidos na aplicação são confidenciais e utilizados unicamente para fins de avaliação da mentoria.')">Política de Privacidade</a>
+            </div>
+            <p class="footer-copy">
+                © 2026 Tata Pereira • Tata Educação • Todos os direitos reservados.
+            </p>
+        </div>
+    </footer>
+
+    <!-- APPLICATION POPUP MODAL -->
+    <div id="app-modal" class="app-modal-overlay">
+        <div class="app-modal-container" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <button id="close-modal" class="modal-close-btn" aria-label="Fechar janela">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+
+            <h3 id="modal-title" class="modal-title">Como deseja aplicar?</h3>
+            <p class="modal-subtitle">
+                Recomendamos preencher o formulário para adiantar sua análise, mas você também pode falar com a Tata diretamente.
+            </p>
+
+            <div class="modal-options">
+                <a href="#" class="modal-option-btn primary" onclick="this.href=window.CONFIG.applicationUrl" target="_blank">
+                    📋 Preencher Formulário de Aplicação
+                </a>
+                <a href="#" class="modal-option-btn secondary" onclick="this.href=window.CONFIG.whatsappUrl" target="_blank">
+                    💬 Agendar Reunião via WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Modal -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const modal = document.getElementById('app-modal');
+            const openButtons = document.querySelectorAll('.open-app-modal, .video-player-container');
+            const closeButton = document.getElementById('close-modal');
+
+            openButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            if (closeButton) {
+                closeButton.addEventListener('click', closeModal);
+            }
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+
+    <!-- Script Scroll Reveal Dynamic Animation -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const revealElements = document.querySelectorAll('section, header, .logistics-card, .pain-card, .step-card, .domus-card, .support-content-col, .target-card, .bio-image-wrapper, .domus-intro-image, .support-img-col');
+            revealElements.forEach(el => el.classList.add('reveal'));
+
+            const gridsAndLists = document.querySelectorAll('.benefits-pills-list, .pain-list, .steps-grid, .mentor-stats-grid, .target-list');
+            gridsAndLists.forEach(list => {
+                const items = list.children;
+                for (let i = 0; i < items.length; i++) {
+                    items[i].classList.add('reveal');
+                    const delayClass = 'delay-' + ((i % 4) + 1);
+                    items[i].classList.add(delayClass);
+                }
+            });
+
+            const observerOptions = {
+                root: null,
+                threshold: 0.05,
+                rootMargin: "0px 0px 50px 0px"
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting || entry.boundingClientRect.top < 0) { 
+                        entry.target.classList.add('active');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(element => {
+                revealObserver.observe(element);
+            });
+        });
+    </script>
+
+    <!-- Script Sticky Navbar, FAQ Accordion & Stats Counters -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. Sticky Navbar Toggle
+            const stickyNavbar = document.querySelector('.sticky-navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 400) {
+                    stickyNavbar.classList.add('visible');
+                } else {
+                    stickyNavbar.classList.remove('visible');
+                }
+            });
+
+            // 2. FAQ Accordion Toggle
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                const answer = item.querySelector('.faq-answer');
+                
+                question.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close other items
+                    faqItems.forEach(i => {
+                        i.classList.remove('active');
+                        i.querySelector('.faq-answer').style.maxHeight = null;
+                    });
+                    
+                    if (!isActive) {
+                        item.classList.add('active');
+                        answer.style.maxHeight = answer.scrollHeight + 'px';
+                    }
+                });
+            });
+
+            // 3. Animated Stats Counter
+            const statsSection = document.querySelector('.mentor-stats-grid');
+            const statNumbers = document.querySelectorAll('.stat-number');
+            let animated = false;
+
+            const animateStats = () => {
+                statNumbers.forEach(stat => {
+                    const target = +stat.getAttribute('data-target');
+                    const duration = 2000; // 2 seconds animation
+                    const stepTime = Math.abs(Math.floor(duration / target));
+                    
+                    let current = 0;
+                    const increment = target > 500 ? 10 : 1;
+                    
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            stat.textContent = target.toLocaleString('pt-BR');
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = current.toLocaleString('pt-BR');
+                        }
+                    }, target > 500 ? stepTime * 10 : stepTime);
+                });
+            };
+
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !animated) {
+                        animateStats();
+                        animated = true;
+                        statsObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            if (statsSection) {
+                statsObserver.observe(statsSection);
+            }
+        });
+    </script>
+</body>
+</html>
