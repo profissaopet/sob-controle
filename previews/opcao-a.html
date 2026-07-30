@@ -61,7 +61,8 @@
             left: 0;
             pointer-events: none;
             z-index: 10000;
-            transform: translate(-50%, -50%);
+            transform: translate3d(0, 0, 0) translate(-50%, -50%);
+            will-change: transform;
             transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
                         height 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
                         background 0.3s cubic-bezier(0.16, 1, 0.3, 1),
@@ -108,13 +109,13 @@
             gap: 10px;
             text-decoration: none;
             opacity: 0;
-            transform: translateX(-15px);
+            transform: translate3d(-15px, 0, 0);
             transition: var(--transition-slow);
         }
 
         .header-logo-box.visible-logo {
             opacity: 1;
-            transform: translateX(0);
+            transform: translate3d(0, 0, 0);
         }
 
         .header-logo {
@@ -306,13 +307,13 @@
 
         .info-card-text > * {
             opacity: 0;
-            transform: translateY(24px);
+            transform: translate3d(0, 24px, 0);
             transition: var(--transition-slow);
         }
 
         .parallax-section.active-section .info-card-text > * {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate3d(0, 0, 0);
         }
 
         .parallax-section.active-section .info-card-text > .badge { transition-delay: 0.1s; }
@@ -462,8 +463,9 @@
             justify-content: center;
             align-items: center;
             pointer-events: none;
-            transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
             transform-style: preserve-3d;
+            will-change: transform;
         }
 
         .local-grid-bg {
@@ -515,13 +517,21 @@
             background-position: center top;
             cursor: none;
             opacity: 0;
-            transform: translateY(40px) scale(0.95);
-            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translate3d(0, 40px, 0) scale(0.95);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+
+        /* Accelerated Pure CSS 3D Tilt Hover */
+        .visual-parallax-canvas:hover .para-main-card {
+            transform: translate3d(0, 0, 25px) rotateY(12deg) rotateX(6deg) !important;
+            border-color: var(--accent-gold-hover);
+            box-shadow: 0 30px 65px rgba(207, 164, 38, 0.3);
         }
 
         .active-section .para-main-card {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translate3d(0, 0, 0) scale(1);
         }
 
         .badge-icon {
@@ -547,13 +557,20 @@
             display: flex;
             align-items: center;
             opacity: 0;
-            transform: translateY(40px) scale(0.9);
-            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translate3d(0, 40px, 0) scale(0.9);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+
+        /* Accelerated CSS badge pop hover */
+        .visual-parallax-canvas:hover .para-badge {
+            transform: translate3d(10px, -10px, 50px) scale(1.05) !important;
+            border-color: var(--accent-gold-hover);
         }
 
         .active-section .para-badge {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translate3d(0, 0, 0) scale(1);
         }
 
         .dot-navigation-wrapper {
@@ -999,7 +1016,7 @@
                     <span class="badge">A Engenharia</span>
                     <h2>O Método <br><span class="cursive">Domus</span></h2>
                     <p>
-                        O Método Domus não é teoria de livro. É uma engenharia prática de rotinas, triagens científicas e POPs que transformam o pátio num relógio suíço. Dividido em 4 pilares, ele garante que sua equipe saiba exatamente como conduzir e agir em cada situação, devolvendo a sua liberdade de tempo e protegendo o seu negócio.
+                        O Método Domus não é teoria de livro. É uma engenharia prática de rotinas, triagens científicas e POPs que transformam o pátio num relógio suíço. Dividido em 4 pilares, ele garante que sua equipe saiba exatamente como conduzir e agir in cada situação, devolvendo a sua liberdade de tempo e protegendo o seu negócio.
                     </p>
                     <div class="btn-group" style="pointer-events:auto;">
                         <button class="btn-header" onclick="scrollToSection(3)">
@@ -1194,6 +1211,7 @@
             } catch (e) {}
         }
 
+        // Hardware-Accelerated 3D Transform Translate3d follow cursor (Zero Layout Paint Reflow)
         let followerX = 0, followerY = 0;
         let targetX = 0, targetY = 0;
         const lerpFactor = 0.15; 
@@ -1210,8 +1228,7 @@
                 followerY += (targetY - followerY) * lerpFactor;
 
                 if (follower) {
-                    follower.style.left = followerX + 'px';
-                    follower.style.top = followerY + 'px';
+                    follower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%)`;
                 }
             }
             requestAnimationFrame(animateCursorFollower);
@@ -1248,36 +1265,17 @@
             { o1: '#2ecc71', o2: '#cfa426' }  
         ];
 
-        let tiltX = 0, tiltY = 0;
-
-        document.querySelectorAll('.visual-parallax-canvas').forEach(canvas => {
-            const coordinatesHud = canvas.querySelector('.blueprint-coordinates-hud');
-            const originalHudText = coordinatesHud ? coordinatesHud.innerText : '';
-
-            canvas.addEventListener('mousemove', (e) => {
-                const rect = canvas.getBoundingClientRect();
-                const x = Math.round(e.clientX - rect.left);
-                const y = Math.round(e.clientY - rect.top);
-
-                const normX = (x / rect.width) - 0.5;
-                const normY = (y / rect.height) - 0.5;
-
-                tiltX = normX * 18; 
-                tiltY = -normY * 18; 
-
-                if (coordinatesHud) {
-                    coordinatesHud.innerText = `${originalHudText} | X: ${x} Y: ${y}`;
-                    coordinatesHud.style.color = 'var(--accent-gold)';
-                }
-            });
-
-            canvas.addEventListener('mouseleave', () => {
-                tiltX = 0;
-                tiltY = 0;
-                if (coordinatesHud) {
-                    coordinatesHud.innerText = originalHudText;
-                    coordinatesHud.style.color = '';
-                }
+        // Optimized Parallax System: Pre-selecting elements to avoid DOM queries inside the scroll event loop
+        const parallaxLayers = [];
+        const sections = document.querySelectorAll('.parallax-section, .intro-curtain-section');
+        
+        document.querySelectorAll('.parallax-layer').forEach(layer => {
+            if (layer.classList.contains('local-grid-bg') || layer.classList.contains('vector-blueprint-circle')) return;
+            parallaxLayers.push({
+                element: layer,
+                speed: parseFloat(layer.getAttribute('data-speed')) || 0,
+                direction: parseFloat(layer.getAttribute('data-direction')) || 1,
+                section: layer.closest('.parallax-section')
             });
         });
 
@@ -1317,7 +1315,6 @@
                 dot.classList.toggle('active', idx === activeIndex);
             });
 
-            const sections = document.querySelectorAll('.parallax-section, .intro-curtain-section');
             sections.forEach((sec, idx) => {
                 sec.classList.toggle('active-section', idx === activeIndex);
             });
@@ -1327,40 +1324,14 @@
                 orb2.style.background = orbGlowColors[activeIndex].o2;
             }
 
-            sections.forEach((sec, idx) => {
-                const secTop = idx * height;
-                const relativeScroll = sTop - secTop;
-
-                const layers = sec.querySelectorAll('.parallax-layer');
-                layers.forEach(layer => {
-                    if (layer.classList.contains('local-grid-bg') || layer.classList.contains('vector-blueprint-circle')) return;
-
-                    const speed = parseFloat(layer.getAttribute('data-speed')) || 0;
-                    const direction = parseFloat(layer.getAttribute('data-direction')) || 1;
-
-                    const translateY = relativeScroll * speed * direction;
-                    layer.style.transform = `translateY(${translateY}px)`;
-                });
+            // High Performance Parallax: Uses pre-calculated indexes and viewport scrollTop height instead of getBoundingClientRect()
+            parallaxLayers.forEach(item => {
+                const sectionIndex = Array.from(sections).indexOf(item.section);
+                const relativeScroll = sTop - (sectionIndex * height);
+                const translateY = relativeScroll * item.speed * item.direction * 0.45;
+                item.element.style.transform = `translate3d(0, ${translateY}px, 0)`;
             });
         });
-
-        function render3DLoop() {
-            if (!window.matchMedia('(pointer: coarse)').matches) {
-                const activeSec = document.querySelector('.parallax-section.active-section');
-                if (activeSec) {
-                    const cards = activeSec.querySelectorAll('.para-main-card');
-                    cards.forEach(card => {
-                        card.style.transform = `rotateX(${tiltY}deg) rotateY(${tiltX}deg) translateZ(25px)`;
-                    });
-                    const badges = activeSec.querySelectorAll('.para-badge');
-                    badges.forEach(badge => {
-                        badge.style.transform = `rotateX(${tiltY * 1.2}deg) rotateY(${tiltX * 1.2}deg) translateZ(45px)`;
-                    });
-                }
-            }
-            requestAnimationFrame(render3DLoop);
-        }
-        render3DLoop();
 
         function scrollToSection(idx) {
             const height = viewport.clientHeight;
