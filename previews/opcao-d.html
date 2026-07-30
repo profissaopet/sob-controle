@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opção D — Clean Neo-Mint & Cobre</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Satisfy&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-mint: #f4f8f6;
+            --card-glass: rgba(255, 255, 255, 0.45);
+            --border-glass: rgba(255, 255, 255, 0.6);
+            --accent-green: #0a3d25;
+            --accent-green-hover: #115c3a;
+            --accent-copper: #c17d5c;
+            --accent-copper-light: #f5e6de;
+            --text-dark: #121c17;
+            --text-muted: #5e6b64;
+            --border-radius-pebble: 80px 40px 100px 50px;
+            --transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            --transition-slow: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-mint);
+            color: var(--text-dark);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        @media (pointer: coarse) {
+            #mint-cursor, #mint-cursor-ring { display: none !important; }
+            body { cursor: auto !important; }
+        }
+
+        #mint-cursor {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+        }
+
+        #mint-cursor-ring {
+            width: 28px;
+            height: 28px;
+            border: 1px solid var(--accent-copper);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, width 0.3s, height 0.3s, border-color 0.3s, background-color 0.3s;
+        }
+
+        body.hovering #mint-cursor {
+            width: 12px;
+            height: 12px;
+            background: var(--accent-copper);
+        }
+
+        body.hovering #mint-cursor-ring {
+            width: 44px;
+            height: 44px;
+            border-color: var(--accent-green);
+            background: rgba(10, 61, 37, 0.04);
+        }
+
+        .ambient-glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(130px);
+            opacity: 0.18;
+            pointer-events: none;
+            z-index: 0;
+            transition: background 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .header-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            padding: 0 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(244, 248, 246, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(10, 61, 37, 0.05);
+        }
+
+        .header-logo-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .header-logo-img {
+            width: 26px;
+            height: auto;
+            filter: drop-shadow(0 2px 5px rgba(10, 61, 37, 0.15));
+        }
+
+        .header-logo-text {
+            font-family: 'Satisfy', cursive;
+            font-size: 1.6rem;
+            color: var(--accent-green);
+        }
+
+        .header-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .header-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: var(--transition);
+        }
+
+        .header-link:hover {
+            color: var(--accent-green);
+        }
+
+        .header-right-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .audio-toggle-btn {
+            background: transparent;
+            border: 1px solid rgba(10, 61, 37, 0.12);
+            color: var(--text-muted);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .audio-toggle-btn:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            background: rgba(10, 61, 37, 0.03);
+        }
+
+        .audio-toggle-btn.sound-on {
+            background: rgba(10, 61, 37, 0.06);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .btn-header {
+            background: var(--accent-green);
+            color: var(--bg-mint);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            padding: 11px 24px;
+            border-radius: 30px;
+            border: none;
+            cursor: none;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(10, 61, 37, 0.12);
+        }
+
+        .btn-header:hover {
+            background: var(--accent-green-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(10, 61, 37, 0.2);
+        }
+
+        .page-wrapper {
+            padding-top: 70px;
+        }
+
+        .mint-section {
+            min-height: 90vh;
+            padding: 100px 80px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-mint);
+        }
+
+        .mint-section:nth-child(even) {
+            background-color: #ebf2ee;
+        }
+
+        .mint-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 70px;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .reversed-layout .mint-container {
+            grid-template-columns: 0.85fr 1.15fr;
+        }
+
+        .glass-panel-editorial {
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            padding: 50px 40px;
+            border-radius: 24px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 20px 45px rgba(10, 61, 37, 0.03);
+            transition: var(--transition-slow);
+        }
+
+        .mint-subtitle {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-copper);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .mint-title {
+            font-size: 3.2rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--accent-green);
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .mint-title span.cursive {
+            font-family: 'Satisfy', cursive;
+            text-transform: none;
+            color: var(--accent-copper);
+            font-weight: normal;
+            font-size: 3.6rem;
+            display: inline-block;
+        }
+
+        .mint-paragraph {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .pebble-frame-box {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pebble-photo-frame {
+            width: 310px;
+            height: 420px;
+            border-radius: var(--border-radius-pebble);
+            border: 3px solid #ffffff;
+            box-shadow: 0 25px 50px rgba(10, 61, 37, 0.08);
+            overflow: hidden;
+            position: relative;
+            background-size: cover;
+            background-position: center top;
+            transition: var(--transition-slow);
+            z-index: 5;
+        }
+
+        .circle-photo-frame {
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            box-shadow: 0 25px 50px rgba(10, 61, 37, 0.08);
+            overflow: hidden;
+            position: relative;
+            background-size: cover;
+            background-position: center top;
+            transition: var(--transition-slow);
+            z-index: 5;
+        }
+
+        .pebble-frame-box:hover .pebble-photo-frame, .pebble-frame-box:hover .circle-photo-frame {
+            transform: scale(1.03) rotate(1deg);
+            border-color: var(--accent-copper-light);
+            box-shadow: 0 35px 65px rgba(193, 125, 92, 0.15);
+        }
+
+        .pebble-label-sticker {
+            position: absolute;
+            background: #ffffff;
+            border: 1px solid rgba(10, 61, 37, 0.08);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 10;
+            transition: var(--transition-slow);
+        }
+
+        .pebble-label-sticker svg {
+            color: var(--accent-copper);
+        }
+
+        .intro-fresh-section {
+            height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: var(--bg-mint);
+        }
+
+        .intro-fresh-content {
+            z-index: 10;
+            max-width: 800px;
+            padding: 0 40px;
+        }
+
+        .intro-fresh-title {
+            font-family: 'Satisfy', cursive;
+            font-size: 5rem;
+            color: var(--accent-green);
+            font-weight: normal;
+            line-height: 1.1;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 10px rgba(10, 61, 37, 0.08);
+        }
+
+        .intro-fresh-subtitle {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            margin-bottom: 45px;
+        }
+
+        .intro-scroll-ripple {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(10, 61, 37, 0.15);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scrollRipple 2.2s infinite;
+        }
+
+        .intro-scroll-ripple svg {
+            color: var(--accent-green);
+            animation: arrowHop 2.2s infinite;
+        }
+
+        @keyframes scrollRipple {
+            0% { transform: scale(0.9); opacity: 1; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        @keyframes arrowHop {
+            0%, 100% { transform: translateY(-2px); }
+            50% { transform: translateY(2px); }
+        }
+
+        .pricing-pebble-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            width: 100%;
+        }
+
+        .pricing-pebble-card {
+            background: #ffffff;
+            border: 1px solid rgba(10, 61, 37, 0.06);
+            padding: 40px 30px;
+            border-radius: 24px;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 15px 35px rgba(10, 61, 37, 0.02);
+        }
+
+        .pricing-pebble-card:hover {
+            border-color: var(--accent-copper);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 45px rgba(193, 125, 92, 0.08);
+        }
+
+        .pricing-pebble-card.featured-pebble {
+            background: var(--accent-copper-light);
+            border-color: var(--accent-copper);
+            box-shadow: 0 20px 45px rgba(193, 125, 92, 0.06);
+        }
+
+        .pricing-pebble-card.featured-pebble .btn-header {
+            background: var(--accent-copper);
+        }
+
+        .pricing-pebble-card.featured-pebble .btn-header:hover {
+            background: #ab6a4a;
+        }
+
+        .pebble-price-tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-copper);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .pebble-price-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            margin-bottom: 12px;
+        }
+
+        .pebble-price-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 25px;
+        }
+
+        .pebble-price-value span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .pebble-price-list {
+            list-style: none;
+            margin-bottom: 30px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .pebble-price-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pebble-price-list li svg {
+            color: var(--accent-copper);
+        }
+
+        .mint-footer {
+            background-color: var(--accent-green);
+            color: var(--bg-mint);
+            padding: 80px 80px 40px 80px;
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-grid-mint {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo-mint {
+            font-family: 'Satisfy', cursive;
+            font-size: 2.2rem;
+            color: var(--accent-copper-light);
+            margin-bottom: 10px;
+        }
+
+        .footer-desc-mint {
+            color: #b2c9be;
+            line-height: 1.6;
+            max-width: 320px;
+        }
+
+        .footer-title-mint {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-copper-light);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .footer-links-mint {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links-mint a {
+            color: #b2c9be;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links-mint a:hover {
+            color: var(--accent-copper-light);
+            padding-left: 4px;
+        }
+
+        .footer-bottom-mint {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #b2c9be;
+        }
+
+        .footer-bottom-mint a {
+            color: #b2c9be;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-bottom-mint a:hover {
+            color: var(--accent-copper-light);
+        }
+
+        @media (max-width: 900px) {
+            .header-bar {
+                padding: 0 30px;
+            }
+
+            .mint-section {
+                padding: 80px 30px;
+            }
+
+            .mint-container {
+                grid-template-columns: 1fr !important;
+                gap: 50px;
+            }
+
+            .pebble-frame-box {
+                order: 2;
+            }
+
+            .mint-title {
+                font-size: 2.8rem;
+                text-align: center;
+            }
+
+            .mint-title span.cursive {
+                font-size: 3.2rem;
+            }
+
+            .mint-subtitle {
+                text-align: center;
+            }
+
+            .mint-paragraph {
+                text-align: center;
+            }
+
+            .btn-header-center {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .pricing-pebble-container {
+                grid-template-columns: 1fr !important;
+            }
+
+            .footer-grid-mint {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-bar {
+                padding: 0 16px;
+                height: 52px;
+            }
+
+            .header-logo-text {
+                display: none;
+            }
+
+            .header-menu {
+                display: none !important;
+            }
+
+            .btn-header {
+                font-size: 0.65rem;
+                padding: 8px 16px;
+            }
+
+            .intro-fresh-title {
+                font-size: 3.4rem;
+            }
+
+            .pebble-photo-frame {
+                width: 210px;
+                height: 290px;
+            }
+
+            .circle-photo-frame {
+                width: 220px;
+                height: 220px;
+            }
+
+            .mint-footer {
+                padding: 40px 20px;
+            }
+
+            .footer-bottom-mint {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mint-cursor"></div>
+    <div id="mint-cursor-ring"></div>
+
+    <div class="ambient-glow-orb" style="top: 15%; left: 10%; width: 500px; height: 500px; background: #e3ede8;"></div>
+    <div class="ambient-glow-orb" style="bottom: 15%; right: 15%; width: 600px; height: 600px; background: #faede6;"></div>
+
+    <header class="header-bar">
+        <a href="#" class="header-logo-box">
+            <img class="header-logo-img" src="../assets/tata-logo-dog.png" alt="Logo Tata Pereira" style="width:24px; height:auto;">
+            <span class="header-logo-text">Tata Pereira</span>
+        </a>
+        <nav class="header-menu">
+            <a href="#section-bio" class="header-link">A Mentora</a>
+            <a href="#section-metodo" class="header-link">O Método</a>
+            <a href="#section-riscos" class="header-link">Conscientização</a>
+            <a href="#section-solucoes" class="header-link">Soluções</a>
+        </nav>
+        <div class="header-right-actions">
+            <button class="audio-toggle-btn" id="audio-toggle" onclick="toggleAudio()" aria-label="Som Orgânico">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" id="audio-icon"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M23 9l-6 6M17 9l6 6" id="audio-mute-lines"/></svg>
+            </button>
+            <a href="#" class="btn-header">Mentoria</a>
+        </div>
+    </header>
+
+    <div class="page-wrapper">
+
+        <section class="intro-fresh-section">
+            <div class="intro-fresh-content">
+                <img src="../assets/tata-logo-dog.png" alt="Silhueta do Cachorro Tata Pereira" style="width: 120px; height: auto; margin-bottom: 20px; filter: drop-shadow(0 4px 10px rgba(10, 61, 37, 0.1));">
+                <h1 class="intro-fresh-title">Tata Pereira</h1>
+                <p class="intro-fresh-subtitle">Rotinas seguras e triagens técnicas de pátio</p>
+                <div class="intro-scroll-ripple">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+            </div>
+        </section>
+
+        <section class="mint-section" id="section-bio">
+            <div class="mint-container">
+                <div class="section-left-info">
+                    <div class="glass-panel-editorial">
+                        <span class="mint-subtitle">Sua Mentora</span>
+                        <h2 class="mint-title">A transição do <span class="cursive">caos</span> para a segurança.</h2>
+                        <p class="mint-paragraph">
+                            Foram mais de 10 anos de operacional de creche lidando com matilhas no dia a dia. Eu entendo a exaustão física e a preocupação constante do empreendedor pet. A metodologia Domus foi estruturada para tirar você do operacional e blindar o seu negócio de forma técnica.
+                        </p>
+                        <div class="btn-header-center">
+                            <a href="#section-metodo" class="btn-header">Conhecer o Método</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pebble-frame-box">
+                    <div class="pebble-photo-frame" style="background-image: url('../assets/3.png');" id="img-bio"></div>
+                    <div class="pebble-label-sticker" style="top: 15%; left: -25px;">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        10+ Anos de Rotina
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mint-section reversed-layout" id="section-metodo">
+            <div class="mint-container">
+                <div class="pebble-frame-box">
+                    <div class="circle-photo-frame" style="background-image: url('../assets/1.png');" id="img-metodo"></div>
+                    <div class="pebble-label-sticker" style="bottom: 20%; right: -25px;">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        Processos Seguros
+                    </div>
+                </div>
+                <div class="section-right-info" style="z-index: 10;">
+                    <div class="glass-panel-editorial">
+                        <span class="mint-subtitle">Método Domus</span>
+                        <h2 class="mint-title">A engenharia da <span class="cursive">matilha</span> blindada.</h2>
+                        <p class="mint-paragraph">
+                            Substitua o improviso do pátio por rotinas matemáticas de POPs e checklists de equipe. Com a triagem científica correta e protocolos de portão blindados, você garante a segurança física dos cães e a sua liberdade de tempo.
+                        </p>
+                        <div class="btn-header-center">
+                            <a href="#section-riscos" class="btn-header">O Risco do Improviso</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mint-section" id="section-riscos">
+            <div class="mint-container">
+                <div class="section-left-info">
+                    <div class="glass-panel-editorial" style="border-color: rgba(193, 125, 92, 0.25); background: rgba(255,255,255,0.3);">
+                        <span class="mint-subtitle" style="color: var(--accent-copper);">Sinais de Alerta</span>
+                        <h2 class="mint-title">Não decida pelo <span class="cursive" style="color: var(--accent-copper);">feeling</span>.</h2>
+                        <p class="mint-paragraph">
+                            A negligência e a falta de processos rígidos de triagem colocam em risco a vida dos animais sob sua responsabilidade e a estabilidade da sua empresa. Uma triagem mal planejada ou uma falha de equipe no portão podem destruir anos de reputação comercial.
+                        </p>
+                        <div class="btn-header-center">
+                            <a href="#section-solucoes" class="btn-header" style="background: var(--accent-copper); color: white;">Como Blindar Meu Espaço</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pebble-frame-box">
+                    <div class="pebble-photo-frame" style="background-image: url('../assets/tata-apontando-voce.png');" id="img-riscos"></div>
+                    <div class="pebble-label-sticker" style="top: 20%; right: -25px; border-color: rgba(193, 125, 92, 0.3);">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                        Alto Risco Físico
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mint-section" id="section-solucoes">
+            <div class="mint-container" style="grid-template-columns: 0.85fr 1.15fr;">
+                <div class="section-left-info">
+                    <span class="mint-subtitle">Direcionamento</span>
+                    <h2 class="mint-title">Mude hoje a <span class="cursive">sua creche</span>.</h2>
+                    <p class="mint-paragraph" style="max-width:320px;">
+                        Escolha entre soluções práticas gravadas imediatas ou o acompanhamento individual exclusivo para a formatação do seu negócio.
+                    </p>
+                    <div class="pebble-frame-box" style="justify-content: flex-start;">
+                        <div class="pebble-photo-frame" style="background-image: url('../assets/tata-apontando-cima.png'); width: 220px; height: 320px; border-radius: 40px 100px 40px 100px;" id="img-solucoes"></div>
+                    </div>
+                </div>
+                <div class="section-right-info">
+                    <div class="pricing-pebble-container">
+                        <div class="pricing-pebble-card">
+                            <div>
+                                <span class="pebble-price-tag">Triagem Rápida</span>
+                                <h3 class="pebble-price-title">Desafio 7 Dias</h3>
+                                <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom: 20px; font-weight:300;">
+                                    Blinde o portão da creche e triplique a segurança operacional de entrada.
+                                </p>
+                                <div class="pebble-price-value">R$ 37 <span>/ taxa única</span></div>
+                                <ul class="pebble-price-list">
+                                    <li>
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                        POP de Triagem Prática
+                                    </li>
+                                    <li>
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                        Checklists de Portão
+                                    </li>
+                                </ul>
+                            </div>
+                            <a href="#" class="btn-header" style="text-align:center;">Garantir Vaga</a>
+                        </div>
+                        <div class="pricing-pebble-card featured-pebble">
+                            <div>
+                                <span class="pebble-price-tag">Mentoria Premium</span>
+                                <h3 class="pebble-price-title">Mentoria Domus</h3>
+                                <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom: 20px; font-weight:300;">
+                                    Acompanhamento individual direto comigo para a formatação e delegação da creche.
+                                </p>
+                                <div class="pebble-price-value">Consulte <span>/ Individual</span></div>
+                                <ul class="pebble-price-list">
+                                    <li>
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                        Encontros ao Vivo Individuais
+                                    </li>
+                                    <li>
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                        Reestruturação de Pátio
+                                    </li>
+                                </ul>
+                            </div>
+                            <a href="#" class="btn-header" style="text-align:center; color:white;">Lista de Espera</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="mint-footer">
+            <div class="footer-grid-mint">
+                <div>
+                    <h4 class="footer-logo-mint">Tata Pereira</h4>
+                    <p class="footer-desc-mint">
+                        Profissionalização de creches e hotéis de cães através de POPs rigorosos de manejo e triagens de pátio científicas.
+                    </p>
+                </div>
+                <div>
+                    <span class="footer-title-mint">Navegação</span>
+                    <ul class="footer-links-mint">
+                        <li><a href="#section-bio">A Mentora</a></li>
+                        <li><a href="#section-metodo">O Método Domus</a></li>
+                        <li><a href="#section-riscos">O Perigo do Feeling</a></li>
+                        <li><a href="#section-solucoes">Preços e Planos</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <span class="footer-title-mint">Atendimento</span>
+                    <ul class="footer-links-mint">
+                        <li><a href="mailto:contato@tatapereira.com">contato@tatapereira.com</a></li>
+                        <li><a href="#"> WhatsApp Suporte</a></li>
+                        <li><a href="#"> Instagram @tatapereira</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom-mint">
+                <div>
+                    &copy; 2026 Tata Pereira. Todos os direitos reservados.
+                    <br>
+                    <span style="font-size:0.7rem; color:#b2c9be;">CNPJ: 38.492.203/0001-84 | Profissão Pet Escola de Adestramento LTDA</span>
+                </div>
+                <div class="footer-legal-links">
+                    <a href="#">Termos de Uso</a>
+                    <a href="#">Políticas de Privacidade</a>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        let audioCtx = null;
+        let audioEnabled = false;
+
+        function toggleAudio() {
+            const btn = document.getElementById('audio-toggle');
+            const icon = document.getElementById('audio-icon');
+
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            audioEnabled = !audioEnabled;
+
+            if (audioEnabled) {
+                audioCtx.resume();
+                btn.classList.add('sound-on');
+                icon.innerHTML = '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
+                playWindchimeSweep(); 
+            } else {
+                btn.classList.remove('sound-on');
+                icon.innerHTML = '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M23 9l-6 6M17 9l6 6"/>';
+            }
+        }
+
+        function playWindchimeSweep() {
+            if (!audioEnabled || !audioCtx) return;
+            try {
+                const now = audioCtx.currentTime;
+                const notes = [523.25, 659.25, 783.99, 987.77, 1046.50];
+
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.type = 'sine';
+                    const triggerTime = now + (idx * 0.08);
+
+                    osc.frequency.setValueAtTime(freq, triggerTime);
+
+                    gain.gain.setValueAtTime(0, now);
+                    gain.gain.setValueAtTime(0, triggerTime);
+                    gain.gain.linearRampToValueAtTime(0.03, triggerTime + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.001, triggerTime + 0.5);
+
+                    osc.start(triggerTime);
+                    osc.stop(triggerTime + 0.52);
+                });
+            } catch (e) {}
+        }
+
+        let targetX = 0, targetY = 0;
+        let cursorX = 0, cursorY = 0;
+        let ringX = 0, ringY = 0;
+
+        const cursorDot = document.getElementById('mint-cursor');
+        const cursorRing = document.getElementById('mint-cursor-ring');
+
+        window.addEventListener('mousemove', (e) => {
+            targetX = e.clientX;
+            targetY = e.clientY;
+        });
+
+        function animateMintCursor() {
+            if (!window.matchMedia('(pointer: coarse)').matches) {
+                cursorX += (targetX - cursorX) * 0.25;
+                cursorY += (targetY - cursorY) * 0.25;
+                
+                ringX += (targetX - ringX) * 0.12;
+                ringY += (targetY - ringY) * 0.12;
+
+                if (cursorDot) {
+                    cursorDot.style.left = cursorX + 'px';
+                    cursorDot.style.top = cursorY + 'px';
+                }
+                if (cursorRing) {
+                    cursorRing.style.left = ringX + 'px';
+                    cursorRing.style.top = ringY + 'px';
+                }
+            }
+            requestAnimationFrame(animateMintCursor);
+        }
+        animateMintCursor();
+
+        const hoverSelectors = 'a, button, .pebble-photo-frame, .circle-photo-frame, .pricing-pebble-card, .glass-panel-editorial';
+        document.body.addEventListener('mouseover', (e) => {
+            if (e.target.closest(hoverSelectors)) {
+                document.body.classList.add('hovering');
+            }
+        });
+        document.body.addEventListener('mouseout', (e) => {
+            if (e.target.closest(hoverSelectors)) {
+                document.body.classList.remove('hovering');
+            }
+        });
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const viewportHeight = window.innerHeight;
+
+            const imgBio = document.getElementById('img-bio');
+            if (imgBio) {
+                const rect = imgBio.getBoundingClientRect();
+                imgBio.style.transform = `translateY(${rect.top * 0.05}px) rotate(${rect.top * 0.005}deg)`;
+            }
+
+            const imgMetodo = document.getElementById('img-metodo');
+            if (imgMetodo) {
+                const rect = imgMetodo.getBoundingClientRect();
+                imgMetodo.style.transform = `translateY(${rect.top * -0.04}px) rotate(${rect.top * -0.003}deg)`;
+            }
+
+            const imgRiscos = document.getElementById('img-riscos');
+            if (imgRiscos) {
+                const rect = imgRiscos.getBoundingClientRect();
+                imgRiscos.style.transform = `translateY(${rect.top * 0.04}px)`;
+            }
+
+            const imgSolucoes = document.getElementById('img-solucoes');
+            if (imgSolucoes) {
+                const rect = imgSolucoes.getBoundingClientRect();
+                imgSolucoes.style.transform = `scale(${1 + Math.abs(rect.top) * 0.00012})`;
+            }
+        });
+
+        let currentSectionIdx = 0;
+        const sectionIds = ['section-bio', 'section-metodo', 'section-riscos', 'section-solucoes'];
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const viewportHeight = window.innerHeight;
+
+            sectionIds.forEach((id, idx) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top < viewportHeight / 2 && rect.bottom > viewportHeight / 2) {
+                        if (currentSectionIdx !== idx + 1) {
+                            currentSectionIdx = idx + 1;
+                            playWindchimeSweep();
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

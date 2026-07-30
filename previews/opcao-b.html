@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opção B — Editorial Champagne de Luxo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Satisfy&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-cream: #fbf9f4;
+            --bg-dark: #12131a;
+            --text-dark: #1a1b24;
+            --text-muted: #6e707a;
+            --text-light: #ffffff;
+            --gold-primary: #b88b20;
+            --gold-dark: #916a12;
+            --gold-light: #f5dfa8;
+            --sand-medium: #e0d9cc;
+            --sand-light: #f0ebe0;
+            --danger-sand: #d46363;
+            --transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            --transition-slow: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        @media (pointer: coarse) {
+            #organic-cursor { display: none !important; }
+            body { cursor: auto !important; }
+        }
+
+        #organic-cursor {
+            width: 8px;
+            height: 8px;
+            background: var(--gold-primary);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+        }
+
+        #organic-cursor-ring {
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(184, 139, 32, 0.4);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s, height 0.3s, border-color 0.3s;
+        }
+
+        .hovering #organic-cursor {
+            width: 14px;
+            height: 14px;
+            background: var(--gold-dark);
+        }
+
+        .hovering #organic-cursor-ring {
+            width: 48px;
+            height: 48px;
+            border-color: var(--gold-primary);
+            background: rgba(184, 139, 32, 0.05);
+        }
+
+        .header-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            padding: 0 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(251, 249, 244, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+            transition: var(--transition);
+        }
+
+        .header-logo-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .header-logo-img {
+            width: 26px;
+            height: auto;
+            filter: drop-shadow(0 2px 4px rgba(184, 139, 32, 0.2));
+        }
+
+        .header-logo-text {
+            font-family: 'Satisfy', cursive;
+            font-size: 1.6rem;
+            color: var(--gold-primary);
+        }
+
+        .header-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .header-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: var(--transition);
+        }
+
+        .header-link:hover {
+            color: var(--gold-primary);
+        }
+
+        .header-right-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .audio-toggle-btn {
+            background: transparent;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            color: var(--text-muted);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .audio-toggle-btn:hover {
+            border-color: var(--gold-primary);
+            color: var(--gold-primary);
+            background: var(--sand-light);
+        }
+
+        .audio-toggle-btn.sound-on {
+            background: rgba(184, 139, 32, 0.08);
+            border-color: var(--gold-primary);
+            color: var(--gold-primary);
+        }
+
+        .btn-header {
+            background: var(--text-dark);
+            color: var(--bg-cream);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 12px 26px;
+            border-radius: 40px;
+            border: none;
+            cursor: none;
+            transition: var(--transition);
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-header:hover {
+            background: var(--gold-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(184, 139, 32, 0.25);
+        }
+
+        .page-wrapper {
+            padding-top: 70px;
+        }
+
+        .content-section {
+            padding: 120px 80px;
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background-color: var(--bg-cream);
+        }
+
+        .content-section:nth-child(even) {
+            background-color: var(--sand-light);
+        }
+
+        .section-danger-dark {
+            background-color: var(--bg-dark) !important;
+            color: var(--text-light);
+        }
+
+        .section-danger-dark .header-bar {
+            background: rgba(18, 19, 26, 0.85);
+            border-bottom-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .editorial-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .reversed-layout .editorial-container {
+            grid-template-columns: 0.9fr 1.1fr;
+        }
+
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.6rem;
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+
+        .serif-title span.italic {
+            font-style: italic;
+            font-family: 'Playfair Display', serif;
+            color: var(--gold-primary);
+        }
+
+        .section-subtitle {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold-primary);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .editorial-paragraph {
+            font-size: 1.05rem;
+            line-height: 1.75;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+            font-weight: 300;
+        }
+
+        .section-danger-dark .editorial-paragraph {
+            color: #a8aac0;
+        }
+
+        .bg-watermark-text {
+            position: absolute;
+            font-family: 'Playfair Display', serif;
+            font-size: 10rem;
+            font-weight: 700;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(184, 139, 32, 0.08);
+            pointer-events: none;
+            z-index: 1;
+            white-space: nowrap;
+            letter-spacing: -2px;
+        }
+
+        .section-danger-dark .bg-watermark-text {
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.02);
+        }
+
+        .fine-art-portal-box {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .portal-arch-frame {
+            width: 320px;
+            height: 440px;
+            border-radius: 160px 160px 24px 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+            border: 4px solid var(--bg-cream);
+            position: relative;
+            background-size: cover;
+            background-position: center top;
+            transition: var(--transition-slow);
+        }
+
+        .content-section:nth-child(even) .portal-arch-frame {
+            border-color: var(--sand-light);
+        }
+
+        .portal-leaf-frame {
+            width: 320px;
+            height: 440px;
+            border-radius: 120px 20px 120px 20px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+            border: 4px solid var(--bg-cream);
+            position: relative;
+            background-size: cover;
+            background-position: center top;
+            transition: var(--transition-slow);
+        }
+
+        .portal-circle-frame {
+            width: 330px;
+            height: 330px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+            border: 4px solid var(--bg-cream);
+            position: relative;
+            background-size: cover;
+            background-position: center top;
+            transition: var(--transition-slow);
+        }
+
+        .rotating-gold-seal {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            width: 100px;
+            height: 100px;
+            background: var(--gold-light);
+            border: 1px dashed var(--gold-primary);
+            border-radius: 50%;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(184, 139, 32, 0.15);
+            animation: spinSeal 25s linear infinite;
+        }
+
+        .rotating-gold-seal-text {
+            font-size: 0.52rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gold-dark);
+            text-align: center;
+            padding: 10px;
+        }
+
+        @keyframes spinSeal {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .editorial-floating-tag {
+            position: absolute;
+            background: #ffffff;
+            border: 1px solid var(--sand-medium);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 15;
+            transition: var(--transition-slow);
+        }
+
+        .editorial-floating-tag svg {
+            color: var(--gold-primary);
+        }
+
+        .section-danger-dark .editorial-floating-tag {
+            background: #1e1f2a;
+            border-color: rgba(255, 82, 82, 0.2);
+            color: var(--text-light);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        }
+
+        .section-danger-dark .editorial-floating-tag svg {
+            color: var(--danger-sand);
+        }
+
+        .intro-cover-section {
+            height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: var(--bg-cream);
+        }
+
+        .intro-cover-content {
+            z-index: 10;
+            max-width: 800px;
+            padding: 0 40px;
+        }
+
+        .intro-cursive-pretitle {
+            font-family: 'Satisfy', cursive;
+            font-size: 2.2rem;
+            color: var(--gold-primary);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .intro-large-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 5.6rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+            color: var(--text-dark);
+        }
+
+        .intro-tagline {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 45px;
+        }
+
+        .intro-scroll-indicator {
+            width: 1px;
+            height: 80px;
+            background: linear-gradient(to bottom, var(--gold-primary) 0%, transparent 100%);
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro-scroll-indicator::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: #ffffff;
+            animation: dropScrollLine 2s infinite cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        @keyframes dropScrollLine {
+            0% { top: -20px; }
+            100% { top: 80px; }
+        }
+
+        .pricing-grid-editorial {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .pricing-card-editorial {
+            background: #ffffff;
+            border: 1px solid var(--sand-medium);
+            padding: 40px 30px;
+            border-radius: 16px;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.03);
+        }
+
+        .pricing-card-editorial:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-primary);
+            box-shadow: 0 20px 45px rgba(184, 139, 32, 0.08);
+        }
+
+        .pricing-card-editorial.featured-card {
+            background: var(--sand-light);
+            border-color: var(--gold-primary);
+        }
+
+        .pricing-tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold-primary);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .pricing-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+
+        .pricing-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        .pricing-price span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .pricing-features-list {
+            list-style: none;
+            margin-bottom: 30px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .pricing-features-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pricing-features-list li svg {
+            color: var(--gold-primary);
+        }
+
+        .champagne-footer {
+            background-color: var(--text-dark);
+            color: var(--bg-cream);
+            padding: 80px 80px 40px 80px;
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo-title {
+            font-family: 'Satisfy', cursive;
+            font-size: 2.2rem;
+            color: var(--gold-light);
+            margin-bottom: 10px;
+        }
+
+        .footer-about {
+            color: #a8aac0;
+            line-height: 1.6;
+            max-width: 320px;
+        }
+
+        .footer-column-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold-light);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .footer-links-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links-list a {
+            color: #a8aac0;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links-list a:hover {
+            color: var(--gold-light);
+            padding-left: 4px;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #a8aac0;
+        }
+
+        .footer-legal-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-legal-links a {
+            color: #a8aac0;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-legal-links a:hover {
+            color: var(--gold-light);
+        }
+
+        @media (max-width: 900px) {
+            .header-bar {
+                padding: 0 30px;
+            }
+
+            .content-section {
+                padding: 80px 30px;
+            }
+
+            .editorial-container {
+                grid-template-columns: 1fr !important;
+                gap: 50px;
+            }
+
+            .reversed-layout .editorial-container {
+                grid-template-columns: 1fr !important;
+            }
+
+            .fine-art-portal-box {
+                order: 2;
+            }
+
+            .serif-title {
+                font-size: 2.8rem;
+            }
+
+            .pricing-grid-editorial {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-bar {
+                padding: 0 16px;
+                height: 52px;
+            }
+
+            .header-logo-text {
+                display: none;
+            }
+
+            .header-menu {
+                display: none !important;
+            }
+
+            .btn-header {
+                font-size: 0.65rem;
+                padding: 8px 16px;
+            }
+
+            .intro-large-name {
+                font-size: 3.4rem;
+            }
+
+            .serif-title {
+                font-size: 2.2rem;
+                text-align: center;
+            }
+
+            .editorial-paragraph {
+                font-size: 0.95rem;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .section-subtitle {
+                text-align: center;
+            }
+
+            .btn-header-group {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .fine-art-portal-box {
+                margin-top: 20px;
+            }
+
+            .portal-arch-frame, .portal-leaf-frame {
+                width: 200px;
+                height: 275px;
+            }
+
+            .portal-circle-frame {
+                width: 220px;
+                height: 220px;
+            }
+
+            .rotating-gold-seal {
+                width: 70px;
+                height: 70px;
+                bottom: -10px;
+                right: -10px;
+            }
+
+            .rotating-gold-seal-text {
+                font-size: 0.4rem;
+            }
+
+            .bg-watermark-text {
+                font-size: 5rem;
+            }
+
+            .champagne-footer {
+                padding: 40px 20px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="organic-cursor"></div>
+    <div id="organic-cursor-ring"></div>
+
+    <header class="header-bar">
+        <a href="#" class="header-logo-box">
+            <img class="header-logo-img" src="../assets/tata-logo-dog.png" alt="Silhueta do Cachorro Tata Pereira" style="width:24px; height:auto;">
+            <span class="header-logo-text">Tata Pereira</span>
+        </a>
+        <nav class="header-menu">
+            <a href="#section-bio" class="header-link">A Mentora</a>
+            <a href="#section-metodo" class="header-link">O Método</a>
+            <a href="#section-riscos" class="header-link">Conscientização</a>
+            <a href="#section-solucoes" class="header-link">Soluções</a>
+        </nav>
+        <div class="header-right-actions">
+            <button class="audio-toggle-btn" id="audio-toggle" onclick="toggleAudio()" aria-label="Som Orgânico">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" id="audio-icon"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M23 9l-6 6M17 9l6 6" id="audio-mute-lines"/></svg>
+            </button>
+            <a href="#" class="btn-header">Mentoria</a>
+        </div>
+    </header>
+
+    <div class="page-wrapper">
+
+        <section class="intro-cover-section">
+            <div class="bg-watermark-text" style="top: 15%; left: 5%;">MATILHAS</div>
+            <div class="intro-cover-content">
+                <span class="intro-cursive-pretitle">Conceito Editorial</span>
+                <h1 class="intro-large-name">Tata Pereira</h1>
+                <p class="intro-tagline">A ciência e a arte de guiar matilhas</p>
+                <div class="intro-scroll-indicator"></div>
+                <p style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-top: 15px; font-weight: 700;">
+                    Role para ler a obra
+                </p>
+            </div>
+        </section>
+
+        <section class="content-section" id="section-bio">
+            <div class="bg-watermark-text" style="bottom: 10%; right: 5%;">TRAJETÓRIA</div>
+            <div class="editorial-container">
+                <div class="section-left-info">
+                    <span class="section-subtitle">A Mentora</span>
+                    <h2 class="serif-title">Longe do amadorismo, <br>perto do <span class="italic">pátio real</span>.</h2>
+                    <p class="editorial-paragraph">
+                        Com mais de uma década liderando pátios operacionais de creches e hotéis de cães, eu conheço a realidade física de gerenciar grupos. Meu compromisso é transformar sua dedicação aos animais em um negócio robusto e livre do caos operacional.
+                    </p>
+                    <div class="btn-header-group">
+                        <a href="#section-metodo" class="btn-header">O Caminho Metódico</a>
+                    </div>
+                </div>
+                <div class="fine-art-portal-box">
+                    <div class="portal-leaf-frame" style="background-image: url('../assets/3.png');" id="img-bio"></div>
+                    <div class="editorial-floating-tag" style="top: 15%; left: -20px;">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        10+ Anos de Gestão
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section reversed-layout" id="section-metodo">
+            <div class="bg-watermark-text" style="top: 10%; left: 5%;">DOMUS</div>
+            <div class="editorial-container">
+                <div class="fine-art-portal-box">
+                    <div class="portal-arch-frame" style="background-image: url('../assets/1.png');" id="img-metodo">
+                        <div class="rotating-gold-seal">
+                            <div class="rotating-gold-seal-text">Método Domus • Blindado •</div>
+                        </div>
+                    </div>
+                    <div class="editorial-floating-tag" style="bottom: 25%; right: -25px;">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        POP Organizacional
+                    </div>
+                </div>
+                <div class="section-right-info" style="z-index: 10;">
+                    <span class="section-subtitle">A Engenharia Canina</span>
+                    <h2 class="serif-title">O Método <span class="italic">Domus</span>: <br>a ciência da rotina.</h2>
+                    <p class="editorial-paragraph">
+                        Processos estruturados e POPs (Procedimentos Operacionais Padrão) são as bases que permitem que sua creche funcione sem você. O método substitui a adivinhação e o cansaço por uma rotina matemática de manejo seguro de matilhas.
+                    </p>
+                    <div class="btn-header-group">
+                        <a href="#section-riscos" class="btn-header">A Verdade Sobre o "Feeling"</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section section-danger-dark" id="section-riscos">
+            <div class="bg-watermark-text" style="bottom: 10%; right: 10%;">ALERTA</div>
+            <div class="editorial-container">
+                <div class="section-left-info">
+                    <span class="section-subtitle" style="color: var(--danger-sand);">Manejo Informal</span>
+                    <h2 class="serif-title" style="color: var(--text-light);">O perigo de guiar <br>sua creche pelo <span class="italic" style="color: var(--danger-sand);">Feeling</span>.</h2>
+                    <p class="editorial-paragraph">
+                        Contar apenas com a intuição ou a boa vontade da sua equipe é arriscar a segurança física dos cães e a reputação jurídica da sua empresa. Uma triagem falha ou um portão desprotegido causam danos irreversíveis em segundos.
+                    </p>
+                    <div class="btn-header-group">
+                        <a href="#section-solucoes" class="btn-header" style="background: var(--danger-sand); color: white;">Blindar Meu Pátio</a>
+                    </div>
+                </div>
+                <div class="fine-art-portal-box">
+                    <div class="portal-arch-frame" style="background-image: url('../assets/tata-apontando-voce.png'); border-color: var(--bg-dark);" id="img-riscos"></div>
+                    <div class="editorial-floating-tag" style="top: 20%; left: -30px;">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="var(--danger-sand)" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Alto Risco Físico
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="section-solucoes">
+            <div class="bg-watermark-text" style="top: 10%; left: 5%;">DECISÃO</div>
+            <div class="editorial-container" style="grid-template-columns: 0.85fr 1.15fr;">
+                <div class="section-left-info">
+                    <span class="section-subtitle">Qual o seu caminho?</span>
+                    <h2 class="serif-title">Decida pela <span class="italic">segurança</span>.</h2>
+                    <p class="editorial-paragraph">
+                        Escolha o formato que se adequa ao momento do seu negócio. Seja com o Desafio rápido de Triagem ou com o acompanhamento próximo na Mentoria individual.
+                    </p>
+                    <div class="fine-art-portal-box" style="margin-top: 40px; justify-content: flex-start;">
+                        <div class="portal-circle-frame" style="background-image: url('../assets/tata-apontando-cima.png');" id="img-solucoes"></div>
+                    </div>
+                </div>
+                <div class="section-right-info">
+                    <div class="pricing-grid-editorial">
+                        <div class="pricing-card-editorial">
+                            <div>
+                                <span class="pricing-tag">Imediato</span>
+                                <h3 class="pricing-title">Desafio Triagem Sob Controle</h3>
+                                <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom: 20px;">
+                                    Zere os riscos de entrada de cães reativos e blinde seu portão em 7 dias.
+                                </p>
+                                <div class="pricing-price">R$ 37 <span>/ taxa única</span></div>
+                                <ul class="pricing-features-list">
+                                    <li>
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                        Checklist de Portão POP
+                                    </li>
+                                    <li>
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                        Aulas Gravadas Práticas
+                                    </li>
+                                </ul>
+                            </div>
+                            <a href="#" class="btn-header" style="text-align:center; display:block;">Inscrever-se</a>
+                        </div>
+                        <div class="pricing-card-editorial featured-card">
+                            <div>
+                                <span class="pricing-tag">Premium</span>
+                                <h3 class="pricing-title">Mentoria Domus Individual</h3>
+                                <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom: 20px;">
+                                    Acompanhamento individual comigo para formatar sua creche autônoma.
+                                </p>
+                                <div class="pricing-price">Sob Consulta</div>
+                                <ul class="pricing-features-list">
+                                    <li>
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                        4 Chamadas ao Vivo Individuais
+                                    </li>
+                                    <li>
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                        WhatsApp Direto de Suporte
+                                    </li>
+                                </ul>
+                            </div>
+                            <a href="#" class="btn-header" style="text-align:center; display:block; background: var(--gold-primary); color: white;">Falar no WhatsApp</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="champagne-footer">
+            <div class="footer-grid">
+                <div>
+                    <h4 class="footer-logo-title">Tata Pereira</h4>
+                    <p class="footer-about">
+                        Profissionalizando o mercado pet através de processos rigorosos de manejo operacional e estruturação de negócios.
+                    </p>
+                </div>
+                <div>
+                    <span class="footer-column-title">Navegação</span>
+                    <ul class="footer-links-list">
+                        <li><a href="#section-bio">A Mentora</a></li>
+                        <li><a href="#section-metodo">O Método Domus</a></li>
+                        <li><a href="#section-riscos">O Perigo do Feeling</a></li>
+                        <li><a href="#section-solucoes">Soluções e Preços</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <span class="footer-column-title">Contato</span>
+                    <ul class="footer-links-list">
+                        <li><a href="mailto:contato@tatapereira.com">contato@tatapereira.com</a></li>
+                        <li><a href="#">WhatsApp Suporte</a></li>
+                        <li><a href="#">Instagram @tatapereira</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>
+                    &copy; 2026 Tata Pereira. Todos os direitos reservados.
+                    <br>
+                    <span style="font-size:0.7rem; color:#a8aac0;">CNPJ: 38.492.203/0001-84 | Profissão Pet Escola de Adestramento LTDA</span>
+                </div>
+                <div class="footer-legal-links">
+                    <a href="#">Termos de Uso</a>
+                    <a href="#">Privacidade</a>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        let audioCtx = null;
+        let audioEnabled = false;
+
+        function toggleAudio() {
+            const btn = document.getElementById('audio-toggle');
+            const icon = document.getElementById('audio-icon');
+
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            audioEnabled = !audioEnabled;
+
+            if (audioEnabled) {
+                audioCtx.resume();
+                btn.classList.add('sound-on');
+                icon.innerHTML = '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
+                playWoodBlockSound(600); 
+            } else {
+                btn.classList.remove('sound-on');
+                icon.innerHTML = '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M23 9l-6 6M17 9l6 6"/>';
+            }
+        }
+
+        function playWoodBlockSound(frequency) {
+            if (!audioEnabled || !audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.type = 'triangle';
+                const now = audioCtx.currentTime;
+                
+                osc.frequency.setValueAtTime(frequency, now);
+                osc.frequency.exponentialRampToValueAtTime(frequency / 3, now + 0.15);
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+                osc.start(now);
+                osc.stop(now + 0.18);
+            } catch (e) {}
+        }
+
+        let dotX = 0, dotY = 0;
+        let ringX = 0, ringY = 0;
+        let targetX = 0, targetY = 0;
+        
+        const cursorDot = document.getElementById('organic-cursor');
+        const cursorRing = document.getElementById('organic-cursor-ring');
+
+        window.addEventListener('mousemove', (e) => {
+            targetX = e.clientX;
+            targetY = e.clientY;
+        });
+
+        function animateOrganicCursor() {
+            if (!window.matchMedia('(pointer: coarse)').matches) {
+                dotX += (targetX - dotX) * 0.25;
+                dotY += (targetY - dotY) * 0.25;
+                
+                ringX += (targetX - ringX) * 0.1;
+                ringY += (targetY - ringY) * 0.1;
+
+                if (cursorDot) {
+                    cursorDot.style.left = dotX + 'px';
+                    cursorDot.style.top = dotY + 'px';
+                }
+                if (cursorRing) {
+                    cursorRing.style.left = ringX + 'px';
+                    cursorRing.style.top = ringY + 'px';
+                }
+            }
+            requestAnimationFrame(animateOrganicCursor);
+        }
+        animateOrganicCursor();
+
+        const hoverSelectors = 'a, button, .portal-arch-frame, .portal-leaf-frame, .portal-circle-frame, .pricing-card-editorial';
+        document.body.addEventListener('mouseover', (e) => {
+            if (e.target.closest(hoverSelectors)) {
+                document.body.classList.add('hovering');
+            }
+        });
+        document.body.addEventListener('mouseout', (e) => {
+            if (e.target.closest(hoverSelectors)) {
+                document.body.classList.remove('hovering');
+            }
+        });
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            
+            document.querySelectorAll('.bg-watermark-text').forEach((wm, idx) => {
+                const speed = 0.3 * (idx + 1);
+                wm.style.transform = `translateX(${scrolled * speed * 0.2}px)`;
+            });
+
+            const imgBio = document.getElementById('img-bio');
+            if (imgBio) {
+                const offset = imgBio.getBoundingClientRect().top;
+                imgBio.style.transform = `translateY(${offset * 0.08}px)`;
+            }
+
+            const imgMetodo = document.getElementById('img-metodo');
+            if (imgMetodo) {
+                const offset = imgMetodo.getBoundingClientRect().top;
+                imgMetodo.style.transform = `translateY(${offset * -0.06}px)`;
+            }
+
+            const imgRiscos = document.getElementById('img-riscos');
+            if (imgRiscos) {
+                const offset = imgRiscos.getBoundingClientRect().top;
+                imgRiscos.style.transform = `translateY(${offset * 0.05}px)`;
+            }
+
+            const imgSolucoes = document.getElementById('img-solucoes');
+            if (imgSolucoes) {
+                const offset = imgSolucoes.getBoundingClientRect().top;
+                imgSolucoes.style.transform = `scale(${1 + Math.abs(offset) * 0.00015})`;
+            }
+        });
+
+        let currentSection = 0;
+        const sectionIds = ['section-bio', 'section-metodo', 'section-riscos', 'section-solucoes'];
+        
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const viewportHeight = window.innerHeight;
+            
+            sectionIds.forEach((id, idx) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top < viewportHeight / 2 && rect.bottom > viewportHeight / 2) {
+                        if (currentSection !== idx + 1) {
+                            currentSection = idx + 1;
+                            playWoodBlockSound(500 + idx * 100);
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

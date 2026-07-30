@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opção A — Split-Screen Tecnológico Escuro/Dourado</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800;900&family=Satisfy&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #010212;
+            --bg-card: #070924;
+            --accent-gold: #cfa426;
+            --accent-gold-hover: #e5be49;
+            --accent-gold-gradient: linear-gradient(135deg, #e5be49 0%, #b0871a 100%);
+            --text-white: #ffffff;
+            --text-muted: #8e99ce;
+            --border-color: rgba(207, 164, 38, 0.25);
+            --border-radius: 24px;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-slow: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            --danger-red: #ff5252;
+            --success-green: #2ecc71;
+            --header-height: 60px;
+            --footer-height: 60px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            cursor: none;
+        }
+
+        @media (pointer: coarse) {
+            #cursor-follower {
+                display: none !important;
+            }
+            body {
+                cursor: auto !important;
+            }
+        }
+
+        #cursor-follower {
+            width: 20px;
+            height: 20px;
+            border: 1.5px solid var(--accent-gold);
+            background: rgba(207, 164, 38, 0.03);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                        height 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                        background 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                        border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            mix-blend-mode: screen;
+        }
+
+        #cursor-follower.hovering {
+            width: 44px;
+            height: 44px;
+            background: rgba(207, 164, 38, 0.12);
+            border-color: var(--accent-gold-hover);
+            box-shadow: 0 0 15px rgba(207, 164, 38, 0.25);
+        }
+
+        .glowing-bg-orb {
+            position: absolute;
+            width: 750px;
+            height: 750px;
+            border-radius: 50%;
+            filter: blur(160px);
+            opacity: 0.25;
+            pointer-events: none;
+            z-index: 0;
+            transition: background 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .header-bar {
+            height: var(--header-height);
+            background: rgba(1, 2, 18, 0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 60px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .header-logo-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            opacity: 0;
+            transform: translateX(-15px);
+            transition: var(--transition-slow);
+        }
+
+        .header-logo-box.visible-logo {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .header-logo {
+            font-family: 'Satisfy', cursive;
+            font-size: 1.5rem;
+            text-transform: none;
+            color: var(--accent-gold);
+            font-weight: normal;
+        }
+
+        .header-menu {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .header-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 600;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header-link:hover {
+            color: var(--accent-gold);
+        }
+
+        .header-right-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .audio-toggle-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .audio-toggle-btn:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            transform: scale(1.05);
+        }
+
+        .audio-toggle-btn.sound-on {
+            background: rgba(207, 164, 38, 0.08);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold-hover);
+            box-shadow: 0 0 10px rgba(207, 164, 38, 0.2);
+        }
+
+        .audio-toggle-btn::after {
+            content: 'Som do Site';
+            position: absolute;
+            bottom: -32px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: rgba(10, 12, 46, 0.95);
+            border: 1px solid var(--border-color);
+            color: var(--text-white);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.62rem;
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .audio-toggle-btn:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        .btn-header {
+            background: var(--accent-gold-gradient);
+            color: var(--bg-dark);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            padding: 10px 22px;
+            border-radius: 30px;
+            border: none;
+            cursor: none;
+            transition: var(--transition);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 100%);
+            transform: skewX(-25deg);
+            transition: 0.75s;
+        }
+
+        .btn-header:hover::before {
+            left: 150%;
+        }
+
+        .btn-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(207, 164, 38, 0.35);
+        }
+
+        .btn-header .btn-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-header:hover .btn-arrow {
+            transform: translateX(4px);
+        }
+
+        .parallax-viewport {
+            height: calc(100vh - var(--header-height));
+            overflow-y: scroll;
+            position: relative;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+        .parallax-viewport::-webkit-scrollbar {
+            display: none;
+        }
+
+        .parallax-section, .intro-curtain-section {
+            height: 100%;
+            position: relative;
+            z-index: 1;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            overflow: hidden;
+        }
+
+        .parallax-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 60px;
+            gap: 60px;
+        }
+
+        .intro-curtain-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+
+        .section-left-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .info-card-text {
+            max-width: 480px;
+            transition: var(--transition-slow);
+        }
+
+        .info-card-text > * {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: var(--transition-slow);
+        }
+
+        .parallax-section.active-section .info-card-text > * {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .parallax-section.active-section .info-card-text > .badge { transition-delay: 0.1s; }
+        .parallax-section.active-section .info-card-text > h2 { transition-delay: 0.22s; }
+        .parallax-section.active-section .info-card-text > p { transition-delay: 0.35s; }
+        .parallax-section.active-section .info-card-text > .btn-group { transition-delay: 0.48s; }
+        .parallax-section.active-section .info-card-text > .credibility-labels { transition-delay: 0.6s; }
+
+        .info-card-text h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 950;
+            font-size: 2.4rem;
+            line-height: 1.15;
+            margin-bottom: 18px;
+            color: var(--text-white);
+            letter-spacing: -0.5px;
+        }
+
+        @keyframes textShimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .info-card-text h2 span.cursive {
+            font-family: 'Satisfy', cursive;
+            background: linear-gradient(90deg, #cfa426 0%, #fff 50%, #cfa426 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShimmer 6s linear infinite;
+            font-weight: normal;
+            font-size: 3.4rem;
+            text-transform: none;
+            display: inline-block;
+        }
+
+        .info-card-text p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.68;
+            margin-bottom: 30px;
+        }
+
+        .credibility-labels {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .credibility-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .credibility-item svg {
+            color: var(--accent-gold);
+        }
+
+        .scroll-down-hint {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 40px;
+            color: var(--accent-gold);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+
+        .scroll-down-hint.hidden-hint {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .mouse-icon {
+            width: 18px;
+            height: 28px;
+            border: 2px solid var(--accent-gold);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .mouse-wheel {
+            width: 4px;
+            height: 6px;
+            background: var(--accent-gold);
+            border-radius: 2px;
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scrollWheel 1.5s infinite;
+        }
+
+        @keyframes scrollWheel {
+            0% { opacity: 1; top: 5px; }
+            100% { opacity: 0; top: 15px; }
+        }
+
+        .section-right-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .visual-parallax-canvas {
+            width: 100%;
+            height: 82%;
+            background: linear-gradient(135deg, #070923 0%, #020313 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55), inset 0 0 35px rgba(0,0,0,0.8);
+            perspective: 1200px;
+        }
+
+        .blueprint-coordinates-hud {
+            position: absolute;
+            bottom: 16px;
+            left: 20px;
+            font-family: monospace;
+            font-size: 0.58rem;
+            color: rgba(207, 164, 38, 0.35);
+            z-index: 10;
+            pointer-events: none;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        .parallax-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-style: preserve-3d;
+        }
+
+        .local-grid-bg {
+            z-index: 1;
+            background-size: 30px 30px;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.015) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.015) 1px, transparent 1px);
+        }
+
+        .para-bg-shape {
+            z-index: 2;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(207, 164, 38, 0.35) 0%, rgba(2, 4, 34, 0) 75%);
+            filter: blur(20px);
+        }
+
+        .vector-blueprint-circle {
+            position: absolute;
+            width: 290px;
+            height: 290px;
+            border: 1.5px dashed rgba(207, 164, 38, 0.25);
+            border-radius: 50%;
+            animation: rotateCircle 35s linear infinite;
+            z-index: 2;
+        }
+
+        @keyframes rotateCircle {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .para-main-card {
+            z-index: 3;
+            width: 240px;
+            height: 330px;
+            background: rgba(16, 19, 58, 0.45);
+            border: 1.5px solid var(--accent-gold);
+            border-radius: 18px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(207, 164, 38, 0.15);
+            background-size: cover;
+            background-position: center top;
+            cursor: none;
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .active-section .para-main-card {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .badge-icon {
+            margin-right: 8px;
+            color: var(--accent-gold);
+            vertical-align: middle;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .para-badge {
+            z-index: 4;
+            background: rgba(10, 12, 42, 0.85);
+            border: 1px solid var(--accent-gold);
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.5);
+            position: absolute;
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(40px) scale(0.9);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .active-section .para-badge {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .dot-navigation-wrapper {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            height: 160px;
+            display: flex;
+            align-items: center;
+        }
+
+        .dot-track-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .dot-track-fill {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 2px;
+            background: var(--accent-gold-gradient);
+            transform: translateX(-50%);
+            height: 0%;
+            z-index: 2;
+            box-shadow: 0 0 8px var(--accent-gold);
+            transition: height 0.1s ease-out;
+        }
+
+        .dot-track-rider {
+            position: absolute;
+            left: 50%;
+            top: 0%;
+            width: 8px;
+            height: 8px;
+            background: var(--text-white);
+            border: 2px solid var(--accent-gold);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            box-shadow: 0 0 12px var(--accent-gold), 0 0 5px #fff;
+            pointer-events: none;
+            transition: top 0.1s ease-out;
+        }
+
+        .dot-buttons-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            position: relative;
+            z-index: 4;
+        }
+
+        .dot-btn {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #020422;
+            border: 2.5px solid rgba(255, 255, 255, 0.25);
+            cursor: none;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .dot-btn:hover {
+            border-color: var(--accent-gold);
+            transform: scale(1.2);
+        }
+
+        .dot-btn.active {
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+            transform: scale(1.4);
+            box-shadow: 0 0 10px var(--accent-gold);
+        }
+
+        .dot-btn::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 28px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(10, 12, 46, 0.95);
+            border: 1px solid var(--border-color);
+            color: var(--text-white);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .dot-btn:hover::after {
+            opacity: 1;
+            right: 22px;
+        }
+
+        .site-footer {
+            position: absolute;
+            bottom: 0;
+            left: 60px;
+            right: 60px;
+            height: var(--footer-height);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            z-index: 100;
+        }
+
+        .footer-left-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-cnpj {
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding-left: 15px;
+        }
+
+        .footer-links-box {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+            cursor: none;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-gold);
+        }
+
+        @media (max-width: 900px) {
+            .header-bar {
+                padding: 0 30px;
+            }
+
+            .parallax-section {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1.1fr 0.9fr; 
+                padding: 0 30px;
+                gap: 20px;
+            }
+            .section-left-info {
+                text-align: center;
+                align-items: center;
+            }
+            .info-card-text {
+                max-width: 100%;
+            }
+            .info-card-text h2 {
+                font-size: 1.8rem;
+                margin-bottom: 12px;
+            }
+            .info-card-text p {
+                font-size: 0.85rem;
+                line-height: 1.6;
+                margin-bottom: 20px;
+            }
+            .visual-parallax-canvas {
+                height: 88%;
+            }
+            .dot-navigation-wrapper {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-bar {
+                padding: 0 16px !important;
+                height: 52px !important;
+            }
+
+            .header-menu {
+                display: none !important;
+            }
+
+            .header-logo-box .header-logo {
+                display: none !important;
+            }
+
+            .header-right-actions {
+                gap: 10px !important;
+            }
+
+            .audio-toggle-btn {
+                width: 32px !important;
+                height: 32px !important;
+            }
+
+            .header-right-actions .btn-header {
+                font-size: 0.68rem !important;
+                padding: 8px 16px !important;
+            }
+
+            .intro-curtain-section h1 {
+                font-size: 3.4rem !important;
+            }
+            
+            .intro-curtain-section p {
+                font-size: 0.75rem !important;
+                letter-spacing: 2px !important;
+            }
+
+            .parallax-section {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1.15fr 0.85fr; 
+                padding: 20px 24px !important;
+                gap: 15px !important;
+            }
+
+            #section-4.parallax-section {
+                grid-template-rows: 1.25fr 0.75fr; 
+            }
+
+            .info-card-text h2 {
+                font-size: 1.6rem !important;
+                line-height: 1.2 !important;
+            }
+            
+            .info-card-text h2 span.cursive {
+                font-size: 2.2rem !important;
+            }
+
+            .info-card-text p {
+                font-size: 0.82rem !important;
+                line-height: 1.55 !important;
+                margin-bottom: 18px !important;
+            }
+
+            .btn-group {
+                display: flex !important;
+                gap: 10px !important;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .btn-group .btn-header {
+                font-size: 0.68rem !important;
+                padding: 8px 16px !important;
+            }
+
+            .credibility-labels {
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                margin-top: 10px;
+            }
+
+            .visual-parallax-canvas {
+                height: 90% !important;
+            }
+
+            .para-main-card {
+                width: 145px !important;
+                height: 195px !important;
+                border-radius: 12px !important;
+                padding: 16px !important;
+            }
+
+            .para-badge {
+                padding: 6px 12px !important;
+                font-size: 0.6rem !important;
+                border-radius: 8px !important;
+            }
+
+            .vector-blueprint-circle {
+                width: 180px !important;
+                height: 180px !important;
+            }
+
+            .para-bg-shape {
+                width: 140px !important;
+                height: 140px !important;
+            }
+
+            .blueprint-coordinates-hud {
+                display: none !important; 
+            }
+
+            .intro-curtain-section {
+                height: calc(100vh - 52px) !important;
+                padding: 40px 20px 20px 20px !important;
+            }
+
+            .site-footer {
+                position: relative;
+                left: 0;
+                right: 0;
+                height: auto;
+                padding: 20px 0;
+                margin-top: 25px;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+                width: 100%;
+            }
+
+            .footer-left-info {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .footer-cnpj {
+                border-left: none;
+                padding-left: 0;
+            }
+
+            .footer-links-box {
+                gap: 15px;
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor-follower"></div>
+
+    <div class="glowing-bg-orb" id="orb-1" style="top: 15%; left: 15%; background: #cfa426;"></div>
+    <div class="glowing-bg-orb" id="orb-2" style="bottom: 15%; right: 15%; background: #ff5252;"></div>
+    <div class="glowing-bg-orb" id="orb-3" style="top: 50%; left: 50%; background: #080a26; transform: translate(-50%, -50%); opacity: 0.15; width: 800px; height: 800px;"></div>
+
+    <header class="header-bar">
+        <a href="#" class="header-logo-box" id="header-logo-box">
+            <img src="../assets/tata-logo-dog.png" alt="Silhueta do Cachorro Tata Pereira" style="width: 24px; height: auto; filter: drop-shadow(0 0 5px var(--accent-gold)); flex-shrink: 0;">
+            <span class="header-logo">Tata Pereira</span>
+        </a>
+        <div class="header-menu">
+            <a href="#section-1" class="header-link" onclick="scrollToSection(1); return false;">Quem Sou</a>
+            <a href="#section-2" class="header-link" onclick="scrollToSection(2); return false;">O Método</a>
+            <a href="#section-3" class="header-link" onclick="scrollToSection(3); return false;">O Perigo</a>
+            <a href="#section-4" class="header-link" onclick="scrollToSection(4); return false;">Soluções</a>
+        </div>
+        <div class="header-right-actions">
+            <button class="audio-toggle-btn" id="audio-toggle" onclick="toggleAudioFeedback()" aria-label="Som do site">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" id="audio-icon"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M23 9l-6 6M17 9l6 6" id="audio-mute-lines"/></svg>
+            </button>
+            <a class="btn-header" href="#">
+                <span>Área do Aluno</span>
+                <svg class="btn-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </header>
+
+    <div class="dot-navigation-wrapper">
+        <div class="dot-track-line"></div>
+        <div class="dot-track-fill" id="progress-line"></div>
+        <div class="dot-track-rider" id="progress-rider"></div>
+        <div class="dot-buttons-container">
+            <button class="dot-btn active" data-label="Início" onclick="scrollToSection(0)"></button>
+            <button class="dot-btn" data-label="Quem é a Tata" onclick="scrollToSection(1)"></button>
+            <button class="dot-btn" data-label="O Método Domus" onclick="scrollToSection(2)"></button>
+            <button class="dot-btn" data-label="O Perigo do Feeling" onclick="scrollToSection(3)"></button>
+            <button class="dot-btn" data-label="Qual o Seu Caminho?" onclick="scrollToSection(4)"></button>
+        </div>
+    </div>
+
+    <div class="parallax-viewport" id="viewport">
+
+        <section class="intro-curtain-section active-section" id="section-0">
+            <div style="z-index: 10; display: flex; flex-direction: column; align-items: center;">
+                <img src="../assets/tata-logo-dog.png" alt="Silhueta do Cachorro Tata Pereira" style="width: 140px; height: auto; filter: drop-shadow(0 0 15px rgba(207, 164, 38, 0.45)); margin-bottom: 10px;">
+                <h1 style="font-family: 'Satisfy', cursive; font-size: 5rem; color: var(--accent-gold); text-shadow: 0 4px 20px rgba(0, 0, 0, 0.85); font-weight: normal; line-height: 1.1;">
+                    Tata Pereira
+                </h1>
+                <p style="font-family: 'Montserrat', sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 4px; color: var(--text-muted); margin-top: 12px; font-weight: 700;">
+                    Profissionalização de Creche Pet
+                </p>
+                <div class="scroll-down-hint" id="scroll-hint" style="margin-top: 50px;">
+                    <div class="mouse-icon"><span class="mouse-wheel"></span></div>
+                    <span>Role para iniciar a experiência</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="parallax-section" id="section-1">
+            <div class="section-left-info">
+                <div class="info-card-text">
+                    <span class="badge">Sua Mentora</span>
+                    <h2>Eu já estive <br>no <span class="cursive">pátio caótico</span></h2>
+                    <p>
+                        Passei mais de 10 anos dentro de pátios de creche, limpando, manejando matilhas e sentindo aquela exaustão física e mental de quem termina o dia rezando para não ter nenhuma briga. Eu amo os cães, mas sei que o amor sozinho não protege seu espaço. Criei o meu método para tirar você do operacional e blindar o seu negócio de forma técnica.
+                    </p>
+                    <div class="btn-group" style="pointer-events:auto;">
+                        <button class="btn-header" onclick="scrollToSection(2)">
+                            <span>Conheça Minha Metodologia</span>
+                            <svg class="btn-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-right-visual">
+                <div class="visual-parallax-canvas">
+                    <div class="parallax-layer local-grid-bg"></div>
+                    <div class="parallax-layer vector-blueprint-circle"></div>
+                    <div class="parallax-layer para-bg-shape" data-speed="0.1" data-direction="1"></div>
+                    <div class="parallax-layer" data-speed="0.22" data-direction="-1">
+                        <div class="para-main-card" style="background-image: url('../assets/3.png');"></div>
+                    </div>
+                    <div class="parallax-layer" data-speed="0.35" data-direction="1">
+                        <div class="para-badge" style="top: 20%; left: 8%;">
+                            <svg class="badge-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 4.5 1-1 3-2.5 3-4.5 0-1.66-1.34-3-3-3zm-4.5-3c-1.1 0-2 .9-2 2s1.5 2 2 3c.5-1 2-2 2-3s-.9-2-2-2zm9 0c-1.1 0-2 .9-2 2s1.5 2 2 3c.5-1 2-2 2-3s-.9-2-2-2zm-9-5C6.4 6 5.5 6.9 5.5 8s1.5 2 2 3c.5-1 2-2 2-3s-.9-2-2-2zm9 0c-1.1 0-2 .9-2 2s1.5 2 2 3c.5-1 2-2 2-3s-.9-2-2-2z"/></svg>
+                            10+ Anos de Pátio
+                        </div>
+                    </div>
+                    <div class="parallax-layer" data-speed="0.45" data-direction="-1">
+                        <div class="para-badge" style="bottom: 25%; right: 8%;">
+                            <svg class="badge-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" stroke="none"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+                            Milhares de Cães Manejados
+                        </div>
+                    </div>
+                    <div class="blueprint-coordinates-hud">DOMUS_SEC_1: [SYS_ACTIVE] | HD_RES: 1080P</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="parallax-section" id="section-2">
+            <div class="section-left-info">
+                <div class="info-card-text">
+                    <span class="badge">A Engenharia</span>
+                    <h2>O Método <br><span class="cursive">Domus</span></h2>
+                    <p>
+                        O Método Domus não é teoria de livro. É uma engenharia prática de rotinas, triagens científicas e POPs que transformam o pátio num relógio suíço. Dividido em 4 pilares, ele garante que sua equipe saiba exatamente como conduzir e agir em cada situação, devolvendo a sua liberdade de tempo e protegendo o seu negócio.
+                    </p>
+                    <div class="btn-group" style="pointer-events:auto;">
+                        <button class="btn-header" onclick="scrollToSection(3)">
+                            <span>Os Riscos do Improviso</span>
+                            <svg class="btn-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-right-visual">
+                <div class="visual-parallax-canvas">
+                    <div class="parallax-layer local-grid-bg"></div>
+                    <div class="parallax-layer vector-blueprint-circle"></div>
+                    <div class="parallax-layer para-bg-shape" data-speed="0.08" data-direction="1"></div>
+                    <div class="parallax-layer" data-speed="0.2" data-direction="-1">
+                        <div class="para-main-card" style="background-image: url('../assets/1.png'); border-bottom-color: var(--accent-gold);"></div>
+                    </div>
+                    <div class="parallax-layer" data-speed="0.35" data-direction="1">
+                        <div class="para-badge" style="top: 25%; left: 8%;">
+                            <svg class="badge-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            Manejo Blindado
+                        </div>
+                    </div>
+                    <div class="parallax-layer" data-speed="0.42" data-direction="-1">
+                        <div class="para-badge" style="bottom: 15%; right: 8%;">
+                            <svg class="badge-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+                            Checklists de Equipe
+                        </div>
+                    </div>
+                    <div class="blueprint-coordinates-hud">DOMUS_SEC_2: [MÉTODO_DELEGADO] | POP_NUM: 42</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="parallax-section" id="section-3">
+            <div class="section-left-info">
+                <div class="info-card-text">
+                    <span class="badge" style="border-color:var(--danger-red); color:var(--danger-red); background:rgba(255,82,82,0.06);">Sintomas da Falta de Processos</span>
+                    <h2>O perigo silencioso do <br><span class="cursive" style="color:var(--danger-red);">Feeling</span></h2>
+                    <p>
+                        Decidir no improviso ou confiar o pátio apenas à intuição dos funcionários é uma bomba-relógio. Um único cão instável aceito sem critérios, ou uma falha de condução no portão, pode causar um acidente grave, processos de tutores e destruir a reputação da sua marca em segundos.
+                    </p>
+                    <div class="btn-group" style="pointer-events:auto;">
+                        <button class="btn-header" style="background:var(--danger-red); color:#fff;" onclick="scrollToSection(4)">
+                            <span>Como Blindar Meu Espaço</span>
+                            <svg class="btn-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-right-visual">
+                <div class="visual-parallax-canvas" style="border-color: rgba(255,82,82,0.25);">
+                    <div class="parallax-layer local-grid-bg"></div>
+                    <div class="parallax-layer vector-blueprint-circle" style="border-color:rgba(255,82,82,0.18);"></div>
+                    <div class="parallax-layer para-bg-shape" data-speed="0.12" data-direction="-1" style="background: radial-gradient(circle, rgba(255,82,82,0.22) 0%, rgba(2,4,34,0) 70%);"></div>
+                    <div class="parallax-layer" data-speed="0.25" data-direction="1">
+                        <div class="para-main-card" style="background-image: url('../assets/tata-apontando-voce.png'); border-color: var(--danger-red); border-bottom-color: var(--danger-red); box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 82, 82, 0.15);"></div>
+                    </div>
+                    <div class="parallax-layer" data-speed="0.38" data-direction="1">
+                        <div class="para-badge" style="top: 15%; right: 8%; border-color: var(--danger-red);">
+                            <svg class="badge-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--danger-red)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                            Risco de Acidentes
+                        </div>
+                    </div>
+                    <div class="parallax-layer" data-speed="0.48" data-direction="-1">
+                        <div class="para-badge" style="bottom: 20%; left: 8%; border-color: var(--danger-red);">
+                            <svg class="badge-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--danger-red)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            Prejuízos Judiciais
+                        </div>
+                    </div>
+                    <div class="blueprint-coordinates-hud" style="color: rgba(255,82,82,0.35);">DOMUS_SEC_3: [PERIGO_IMPROVISO] | WARNING_LVL: CRITICAL</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="parallax-section" id="section-4">
+            <div class="section-left-info" style="padding-bottom: 60px;">
+                <div class="info-card-text">
+                    <span class="badge">Sua Decisão</span>
+                    <h2>Vamos juntas blindar <br>sua <span class="cursive">creche pet</span>?</h2>
+                    <p>
+                        Seja para fechar o ralo de incidentes no portão em 7 dias com o Desafio Triagem Sob Controle, ou para ter meu acompanhamento individual na Mentoria Domus para formatar sua creche autônoma, eu estou aqui para te guiar.
+                    </p>
+                    <div class="btn-group" style="display:flex; gap:12px; pointer-events:auto; flex-direction:column; align-items:flex-start;">
+                        <div style="display:flex; gap:12px; width:100%;">
+                            <button class="btn-header" style="flex:1; justify-content:center;">
+                                <span>Desafio 7 Dias</span>
+                                <svg class="btn-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                            <button class="btn-header" style="background:transparent; color:#fff; border:1px solid rgba(255,255,255,0.25); flex:1; justify-content:center;">
+                                <span>Mentoria Domus</span>
+                                <svg class="btn-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="credibility-labels">
+                        <div class="credibility-item">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            Garantia incondicional de 7 dias
+                        </div>
+                        <div class="credibility-item">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            Suporte direto pelo WhatsApp
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-right-visual" style="padding-bottom: 60px;">
+                <div class="visual-parallax-canvas">
+                    <div class="parallax-layer local-grid-bg"></div>
+                    <div class="parallax-layer vector-blueprint-circle"></div>
+                    <div class="parallax-layer para-bg-shape" data-speed="0.15" data-direction="-1"></div>
+                    <div class="parallax-layer" data-speed="0.25" data-direction="1">
+                        <div class="para-main-card" style="background-image: url('../assets/tata-apontando-cima.png');"></div>
+                    </div>
+                    <div class="parallax-layer" data-speed="0.3" data-direction="-1">
+                        <div class="para-badge" style="top: 20%; right: 10%;">
+                            <svg class="badge-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            Empresa Blindada
+                        </div>
+                    </div>
+                    <div class="parallax-layer" data-speed="0.48" data-direction="1">
+                        <div class="para-badge" style="bottom: 20%; left: 8%;">
+                            <svg class="badge-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            Tempo Livre Operacional
+                        </div>
+                    </div>
+                    <div class="blueprint-coordinates-hud">DOMUS_SEC_4: [GOAL_ACHIEVED] | FREEDOM_INDEX: 100%</div>
+                </div>
+            </div>
+
+            <footer class="site-footer">
+                <div class="footer-left-info">
+                    <span>&copy; 2026 Tata Pereira. Todos os direitos reservados.</span>
+                    <span class="footer-cnpj">CNPJ: 38.492.203/0001-84 | Profissão Pet Escola de Adestramento LTDA</span>
+                </div>
+                <div class="footer-links-box">
+                    <a href="#" class="footer-link">Termos de Uso</a>
+                    <a href="#" class="footer-link">Políticas de Privacidade</a>
+                </div>
+            </footer>
+        </section>
+
+    </div>
+
+    <script>
+        let audioCtx = null;
+        let audioEnabled = false;
+
+        function toggleAudioFeedback() {
+            const btn = document.getElementById('audio-toggle');
+            const icon = document.getElementById('audio-icon');
+
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            audioEnabled = !audioEnabled;
+
+            if (audioEnabled) {
+                audioCtx.resume();
+                btn.classList.add('sound-on');
+                icon.innerHTML = '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
+                playSweepSound(0); 
+            } else {
+                btn.classList.remove('sound-on');
+                icon.innerHTML = '<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M23 9l-6 6M17 9l6 6"/>';
+            }
+        }
+
+        function playSweepSound(index) {
+            if (!audioEnabled || !audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.type = 'sine';
+                const now = audioCtx.currentTime;
+                osc.frequency.setValueAtTime(140 + index * 20, now);
+                osc.frequency.exponentialRampToValueAtTime(75 + index * 10, now + 0.6);
+
+                gain.gain.setValueAtTime(0.06, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+
+                osc.start(now);
+                osc.stop(now + 0.6);
+            } catch (e) {}
+        }
+
+        let followerX = 0, followerY = 0;
+        let targetX = 0, targetY = 0;
+        const lerpFactor = 0.15; 
+        const follower = document.getElementById('cursor-follower');
+
+        window.addEventListener('mousemove', (e) => {
+            targetX = e.clientX;
+            targetY = e.clientY;
+        });
+
+        function animateCursorFollower() {
+            if (!window.matchMedia('(pointer: coarse)').matches) {
+                followerX += (targetX - followerX) * lerpFactor;
+                followerY += (targetY - followerY) * lerpFactor;
+
+                if (follower) {
+                    follower.style.left = followerX + 'px';
+                    follower.style.top = followerY + 'px';
+                }
+            }
+            requestAnimationFrame(animateCursorFollower);
+        }
+        animateCursorFollower();
+
+        const interactiveElements = 'a, button, .para-main-card, .dot-btn';
+        document.body.addEventListener('mouseover', (e) => {
+            if (follower && e.target.closest(interactiveElements)) {
+                follower.classList.add('hovering');
+            }
+        });
+        document.body.addEventListener('mouseout', (e) => {
+            if (follower && e.target.closest(interactiveElements)) {
+                follower.classList.remove('hovering');
+            }
+        });
+
+        const viewport = document.getElementById('viewport');
+        const dots = document.querySelectorAll('.dot-btn');
+        const orb1 = document.getElementById('orb-1');
+        const orb2 = document.getElementById('orb-2');
+        const progressLine = document.getElementById('progress-line');
+        const progressRider = document.getElementById('progress-rider');
+        const scrollHint = document.getElementById('scroll-hint');
+        const headerLogo = document.getElementById('header-logo-box');
+        let activeIndex = 0;
+
+        const orbGlowColors = [
+            { o1: '#cfa426', o2: '#0b0d26' }, 
+            { o1: '#cfa426', o2: '#080a26' }, 
+            { o1: '#cfa426', o2: '#0d0f30' }, 
+            { o1: '#ff5252', o2: '#020422' }, 
+            { o1: '#2ecc71', o2: '#cfa426' }  
+        ];
+
+        let tiltX = 0, tiltY = 0;
+
+        document.querySelectorAll('.visual-parallax-canvas').forEach(canvas => {
+            const coordinatesHud = canvas.querySelector('.blueprint-coordinates-hud');
+            const originalHudText = coordinatesHud ? coordinatesHud.innerText : '';
+
+            canvas.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const x = Math.round(e.clientX - rect.left);
+                const y = Math.round(e.clientY - rect.top);
+
+                const normX = (x / rect.width) - 0.5;
+                const normY = (y / rect.height) - 0.5;
+
+                tiltX = normX * 18; 
+                tiltY = -normY * 18; 
+
+                if (coordinatesHud) {
+                    coordinatesHud.innerText = `${originalHudText} | X: ${x} Y: ${y}`;
+                    coordinatesHud.style.color = 'var(--accent-gold)';
+                }
+            });
+
+            canvas.addEventListener('mouseleave', () => {
+                tiltX = 0;
+                tiltY = 0;
+                if (coordinatesHud) {
+                    coordinatesHud.innerText = originalHudText;
+                    coordinatesHud.style.color = '';
+                }
+            });
+        });
+
+        viewport.addEventListener('scroll', () => {
+            const sTop = viewport.scrollTop;
+            const height = viewport.clientHeight;
+            const scrollHeight = viewport.scrollHeight - height;
+
+            if (sTop > 100) {
+                scrollHint.classList.add('hidden-hint');
+            } else {
+                scrollHint.classList.remove('hidden-hint');
+            }
+
+            const scrollPercent = (sTop / scrollHeight) * 100;
+            if (progressLine) {
+                progressLine.style.height = scrollPercent + '%';
+            }
+            if (progressRider) {
+                progressRider.style.top = scrollPercent + '%';
+            }
+
+            const newActiveIndex = Math.min(Math.floor((sTop + height / 2) / height), 4);
+            
+            if (newActiveIndex !== activeIndex) {
+                activeIndex = newActiveIndex;
+                playSweepSound(activeIndex);
+
+                if (activeIndex > 0) {
+                    if (headerLogo) headerLogo.classList.add('visible-logo');
+                } else {
+                    if (headerLogo) headerLogo.classList.remove('visible-logo');
+                }
+            }
+            
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === activeIndex);
+            });
+
+            const sections = document.querySelectorAll('.parallax-section, .intro-curtain-section');
+            sections.forEach((sec, idx) => {
+                sec.classList.toggle('active-section', idx === activeIndex);
+            });
+
+            if (orb1 && orb2) {
+                orb1.style.background = orbGlowColors[activeIndex].o1;
+                orb2.style.background = orbGlowColors[activeIndex].o2;
+            }
+
+            sections.forEach((sec, idx) => {
+                const secTop = idx * height;
+                const relativeScroll = sTop - secTop;
+
+                const layers = sec.querySelectorAll('.parallax-layer');
+                layers.forEach(layer => {
+                    if (layer.classList.contains('local-grid-bg') || layer.classList.contains('vector-blueprint-circle')) return;
+
+                    const speed = parseFloat(layer.getAttribute('data-speed')) || 0;
+                    const direction = parseFloat(layer.getAttribute('data-direction')) || 1;
+
+                    const translateY = relativeScroll * speed * direction;
+                    layer.style.transform = `translateY(${translateY}px)`;
+                });
+            });
+        });
+
+        function render3DLoop() {
+            if (!window.matchMedia('(pointer: coarse)').matches) {
+                const activeSec = document.querySelector('.parallax-section.active-section');
+                if (activeSec) {
+                    const cards = activeSec.querySelectorAll('.para-main-card');
+                    cards.forEach(card => {
+                        card.style.transform = `rotateX(${tiltY}deg) rotateY(${tiltX}deg) translateZ(25px)`;
+                    });
+                    const badges = activeSec.querySelectorAll('.para-badge');
+                    badges.forEach(badge => {
+                        badge.style.transform = `rotateX(${tiltY * 1.2}deg) rotateY(${tiltX * 1.2}deg) translateZ(45px)`;
+                    });
+                }
+            }
+            requestAnimationFrame(render3DLoop);
+        }
+        render3DLoop();
+
+        function scrollToSection(idx) {
+            const height = viewport.clientHeight;
+            viewport.scrollTo({
+                top: idx * height,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
