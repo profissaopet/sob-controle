@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tata Pereira — Mentora de Creches Pet | Galeria Cinematográfica</title>
+  <meta name="description" content="Tata Pereira — Mentora especialista no Método Domus para creches pet. Transforme sua creche com método, não com feeling." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--alabaster:#f9f8f5;--petrol:#1c4a3e;--petrol-light:#2a6358;--copper:#c17d5c;--copper-light:#f0e0d4;--gray-bg:#f2f0ec;--dark:#1a1a1a;--white:#ffffff;--num-ghost:rgba(28,74,62,0.07)}
+    html,body{width:100%;height:100%;overflow:hidden;background:var(--petrol);cursor:none}
+    #cursor{position:fixed;top:0;left:0;width:40px;height:40px;pointer-events:none;z-index:9999;transition:transform .15s ease;transform:translate(-50%,-50%)}
+    #cursor svg{display:block}
+    body.cursor-hover #cursor{transform:translate(-50%,-50%) rotate(90deg) scale(1.2)}
+    #progress-bar{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--copper),var(--petrol));z-index:1000;pointer-events:none}
+    #dots-nav{position:fixed;bottom:32px;right:36px;display:flex;gap:10px;z-index:1000;align-items:center}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1.5px solid rgba(255,255,255,.5);cursor:none;transition:background .3s,transform .3s,border-color .3s}
+    .dot.active{background:var(--copper);border-color:var(--copper);transform:scale(1.4)}
+    #h-track-wrapper{position:fixed;top:0;left:0;width:100vw;height:100vh;overflow:hidden}
+    #h-track{display:flex;width:calc(6 * 100vw);height:100vh;will-change:transform}
+    .panel{width:100vw;height:100vh;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .panel-num{position:absolute;font-family:'Playfair Display',serif;font-size:clamp(120px,18vw,260px);font-weight:900;line-height:1;color:var(--num-ghost);user-select:none;pointer-events:none;z-index:0}
+    #panel-1{background:var(--petrol);flex-direction:column}
+    .p1-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;z-index:1;text-align:center;padding:40px}
+    .p1-logo{width:clamp(80px,12vw,140px);opacity:.95;filter:drop-shadow(0 4px 24px rgba(193,125,92,.3));animation:floatLogo 4s ease-in-out infinite}
+    @keyframes floatLogo{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    .p1-title{font-family:'Playfair Display',serif;font-size:clamp(52px,8vw,120px);font-weight:900;color:var(--white);line-height:1;letter-spacing:-.02em}
+    .p1-title span{color:var(--copper);font-style:italic}
+    .p1-sub{font-family:'Lato',sans-serif;font-weight:300;font-size:clamp(14px,1.8vw,20px);color:rgba(255,255,255,.65);letter-spacing:.18em;text-transform:uppercase}
+    .p1-divider{width:60px;height:2px;background:var(--copper);margin:4px auto}
+    .scroll-hint{position:absolute;bottom:40px;right:48px;display:flex;align-items:center;gap:12px;color:rgba(255,255,255,.5);font-family:'Lato',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;animation:hintPulse 2.2s ease-in-out infinite}
+    .scroll-hint-arrow{display:flex;gap:3px}
+    .scroll-hint-arrow span{display:block;width:6px;height:6px;border-right:2px solid var(--copper);border-bottom:2px solid var(--copper);transform:rotate(-45deg);animation:arrowMove 1.4s ease-in-out infinite}
+    .scroll-hint-arrow span:nth-child(2){animation-delay:.2s;opacity:.7}
+    .scroll-hint-arrow span:nth-child(3){animation-delay:.4s;opacity:.4}
+    @keyframes arrowMove{0%,100%{transform:rotate(-45deg) translateX(0);opacity:1}50%{transform:rotate(-45deg) translateX(5px);opacity:.4}}
+    @keyframes hintPulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .p1-bg-decor{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(193,125,92,.12) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+    #panel-2{background:var(--alabaster);justify-content:flex-start;align-items:stretch}
+    .p2-inner{display:flex;width:100%;height:100%;position:relative;z-index:1}
+    .p2-text-col{flex:1;display:flex;flex-direction:column;justify-content:center;padding:clamp(40px,6vw,100px) clamp(40px,5vw,80px);gap:20px}
+    .section-label{font-family:'Lato',sans-serif;font-size:11px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--copper)}
+    .p2-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,56px);font-weight:700;color:var(--dark);line-height:1.15}
+    .p2-body{font-family:'Lato',sans-serif;font-size:clamp(14px,1.3vw,17px);color:#4a4a4a;line-height:1.75;max-width:480px}
+    .p2-body strong{color:var(--petrol)}
+    .p2-photo-col{flex:0 0 42%;position:relative;overflow:hidden}
+    .p2-photo-col img{position:absolute;bottom:0;right:0;height:95%;width:auto;object-fit:contain;object-position:bottom right;filter:drop-shadow(-8px 0 40px rgba(28,74,62,.12))}
+    .p2-num{right:48px;top:50%;transform:translateY(-50%);opacity:.04}
+    #panel-3{background:var(--gray-bg);flex-direction:column;align-items:center;justify-content:center}
+    .p3-inner{display:flex;flex-direction:column;align-items:center;gap:40px;z-index:1;padding:clamp(30px,4vh,60px) clamp(40px,6vw,100px);max-width:1000px;width:100%}
+    .p3-header{text-align:center}
+    .p3-title{font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,52px);font-weight:900;color:var(--petrol);margin-top:8px}
+    .p3-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%}
+    .pillar-card{background:var(--white);border-radius:16px;padding:28px 30px;border-left:4px solid var(--copper);transition:transform .3s ease,box-shadow .3s ease;box-shadow:0 2px 20px rgba(0,0,0,.05)}
+    .pillar-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(28,74,62,.12)}
+    .pillar-icon{font-size:28px;margin-bottom:10px;display:block}
+    .pillar-title{font-family:'Playfair Display',serif;font-size:clamp(16px,1.6vw,22px);font-weight:700;color:var(--petrol);margin-bottom:8px}
+    .pillar-desc{font-family:'Lato',sans-serif;font-size:clamp(12px,1.1vw,15px);color:#5a5a5a;line-height:1.6}
+    .p3-num{right:48px;bottom:20px;opacity:.04}
+    #panel-4{background:var(--copper-light);flex-direction:column;align-items:center;justify-content:center}
+    .p4-inner{z-index:1;display:flex;align-items:center;gap:clamp(40px,6vw,100px);padding:clamp(40px,6vw,100px);max-width:1100px;width:100%}
+    .p4-text{flex:1;display:flex;flex-direction:column;gap:24px}
+    .p4-big{font-family:'Playfair Display',serif;font-size:clamp(36px,5vw,68px);font-weight:900;color:var(--petrol);line-height:1.1}
+    .p4-big em{color:var(--copper);font-style:italic;display:block}
+    .p4-body{font-family:'Lato',sans-serif;font-size:clamp(14px,1.3vw,17px);color:#3a2e28;line-height:1.75}
+    .risk-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+    .risk-list li{font-family:'Lato',sans-serif;font-size:clamp(13px,1.2vw,16px);color:#3a2e28;display:flex;align-items:flex-start;gap:10px}
+    .risk-list li::before{content:'⚠';color:var(--copper);font-size:16px;flex-shrink:0;margin-top:1px}
+    .p4-photo{flex:0 0 35%;display:flex;align-items:flex-end;justify-content:center;height:70vh;position:relative}
+    .p4-photo img{max-height:100%;width:auto;object-fit:contain;filter:drop-shadow(-4px 4px 30px rgba(193,125,92,.3))}
+    .p4-num{left:48px;bottom:20px;color:rgba(193,125,92,.15);font-size:200px}
+    #panel-5{background:var(--white);flex-direction:column;align-items:center;justify-content:center}
+    .p5-inner{z-index:1;display:flex;flex-direction:column;align-items:center;gap:36px;padding:clamp(30px,4vw,60px) clamp(40px,6vw,100px);max-width:1100px;width:100%}
+    .p5-header{text-align:center}
+    .p5-title{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,48px);font-weight:900;color:var(--petrol);margin-top:8px}
+    .p5-cards{display:flex;gap:28px;width:100%}
+    .solution-card{flex:1;border-radius:20px;padding:36px 32px;display:flex;flex-direction:column;gap:16px;position:relative;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
+    .solution-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.14)}
+    .card-a{background:var(--alabaster);border:2px solid #e5e2da}
+    .card-b{background:var(--petrol);border:2px solid var(--petrol-light)}
+    .card-tag{font-family:'Lato',sans-serif;font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;padding:5px 12px;border-radius:20px;display:inline-block;width:fit-content}
+    .card-a .card-tag{background:var(--copper-light);color:var(--copper)}
+    .card-b .card-tag{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8)}
+    .card-name{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(20px,2vw,28px)}
+    .card-a .card-name{color:var(--dark)}
+    .card-b .card-name{color:var(--white)}
+    .card-price{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(28px,3vw,40px);line-height:1}
+    .card-a .card-price{color:var(--petrol)}
+    .card-b .card-price{color:var(--copper)}
+    .card-price small{font-size:.45em;font-weight:400;font-family:'Lato',sans-serif;vertical-align:top;margin-top:6px;display:inline-block}
+    .card-features{list-style:none;display:flex;flex-direction:column;gap:9px;flex:1}
+    .card-features li{font-family:'Lato',sans-serif;font-size:clamp(12px,1.1vw,14px);display:flex;align-items:flex-start;gap:8px}
+    .card-a .card-features li{color:#4a4a4a}
+    .card-b .card-features li{color:rgba(255,255,255,.8)}
+    .card-features li::before{content:'✓';font-weight:700;flex-shrink:0}
+    .card-a .card-features li::before{color:var(--petrol)}
+    .card-b .card-features li::before{color:var(--copper)}
+    .card-btn{display:block;text-align:center;padding:14px 24px;border-radius:50px;font-family:'Lato',sans-serif;font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:transform .2s,box-shadow .2s;cursor:none;border:none}
+    .card-btn:hover{transform:scale(1.04);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+    .card-a .card-btn{background:var(--petrol);color:var(--white)}
+    .card-b .card-btn{background:var(--copper);color:var(--white)}
+    .p5-num{right:48px;bottom:10px;opacity:.04}
+    #panel-6{background:var(--petrol);flex-direction:column;align-items:center;justify-content:center}
+    .p6-inner{z-index:1;display:flex;flex-direction:column;align-items:center;gap:32px;text-align:center;padding:clamp(40px,6vw,80px);max-width:700px}
+    .p6-logo{width:clamp(60px,8vw,100px);opacity:.9}
+    .p6-title{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,52px);font-weight:900;color:var(--white);line-height:1.15}
+    .p6-title em{color:var(--copper);font-style:italic}
+    .p6-sub{font-family:'Lato',sans-serif;font-size:clamp(14px,1.3vw,18px);color:rgba(255,255,255,.65);line-height:1.7}
+    .p6-contacts{display:flex;flex-direction:column;gap:14px;align-items:center}
+    .p6-link{display:inline-flex;align-items:center;gap:10px;font-family:'Lato',sans-serif;font-size:clamp(14px,1.3vw,17px);color:rgba(255,255,255,.8);text-decoration:none;transition:color .25s;cursor:none}
+    .p6-link:hover{color:var(--copper)}
+    .p6-link span{font-size:20px}
+    .p6-cta-btn{display:inline-block;padding:16px 40px;background:var(--copper);color:var(--white);border-radius:50px;font-family:'Lato',sans-serif;font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:transform .25s,box-shadow .25s;cursor:none}
+    .p6-cta-btn:hover{transform:scale(1.05);box-shadow:0 12px 36px rgba(193,125,92,.4)}
+    .p6-divider{width:60px;height:1px;background:rgba(255,255,255,.2)}
+    .p6-footer-text{font-family:'Lato',sans-serif;font-size:12px;color:rgba(255,255,255,.3);line-height:1.8}
+    .p6-num{right:48px;bottom:20px;color:rgba(255,255,255,.04)}
+    .p6-bg-decor{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(193,125,92,.1) 0%,transparent 70%);bottom:-100px;right:-100px;pointer-events:none}
+    @media(max-width:768px){
+      html,body{overflow:hidden auto;cursor:auto}
+      #cursor{display:none}
+      #h-track-wrapper{position:static;width:100%;height:auto;overflow:visible}
+      #h-track{flex-direction:column;width:100%;height:auto;transform:none !important;will-change:auto}
+      .panel{width:100%;min-height:100vh;height:auto;flex-shrink:initial}
+      .p2-inner{flex-direction:column}
+      .p2-text-col{padding:50px 28px 28px}
+      .p2-photo-col{flex:0 0 340px;width:100%;overflow:hidden;position:relative}
+      .p2-photo-col img{position:static;width:100%;height:340px;object-fit:cover;object-position:top center;filter:none}
+      .p3-inner{padding:50px 24px}
+      .p3-grid{grid-template-columns:1fr}
+      .p4-inner{flex-direction:column;padding:50px 24px}
+      .p4-photo{height:260px;width:100%}
+      .p5-cards{flex-direction:column}
+      .p5-inner{padding:50px 24px}
+      .p6-inner{padding:50px 24px}
+      #dots-nav,#progress-bar,.scroll-hint,.p2-num,.p3-num,.p4-num,.p5-num,.p6-num{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div id="cursor">
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="20" cy="20" r="18" stroke="rgba(193,125,92,0.7)" stroke-width="1.5"/>
+      <path d="M8 20H32M8 20L13 15M8 20L13 25M32 20L27 15M32 20L27 25" stroke="#c17d5c" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div id="progress-bar"></div>
+  <div id="dots-nav">
+    <div class="dot active" data-panel="0"></div>
+    <div class="dot" data-panel="1"></div>
+    <div class="dot" data-panel="2"></div>
+    <div class="dot" data-panel="3"></div>
+    <div class="dot" data-panel="4"></div>
+    <div class="dot" data-panel="5"></div>
+  </div>
+  <div id="h-track-wrapper">
+    <div id="h-track">
+
+      <!-- PAINEL 1: ABERTURA -->
+      <section class="panel" id="panel-1">
+        <div class="p1-bg-decor"></div>
+        <div class="p1-inner">
+          <img src="../assets/tata-logo-dog.png" alt="Logo Tata Pereira" class="p1-logo" />
+          <div class="p1-divider"></div>
+          <h1 class="p1-title">Tata<br /><span>Pereira</span></h1>
+          <p class="p1-sub">Mentora de Creches Pet · Método Domus</p>
+        </div>
+        <div class="scroll-hint">Role para explorar<div class="scroll-hint-arrow"><span></span><span></span><span></span></div></div>
+      </section>
+
+      <!-- PAINEL 2: HISTÓRIA -->
+      <section class="panel" id="panel-2">
+        <span class="panel-num p2-num">01</span>
+        <div class="p2-inner">
+          <div class="p2-text-col">
+            <p class="section-label">— Quem é a Tata</p>
+            <h2 class="p2-title">Mais de uma<br />década cuidando<br />de quem você ama.</h2>
+            <p class="p2-body">Tata Pereira não entrou no mercado pet por acidente. Foi uma escolha, um chamado. <strong>Com anos de experiência prática</strong> em creches e day cares para cães, ela entendeu o que separa um negócio que sobrevive de um que prospera: <strong>método</strong>.</p>
+            <p class="p2-body">Hoje, ela é referência nacional no universo das creches pet, tendo formado e transformado dezenas de empreendedoras pelo Brasil — sempre com base no seu exclusivo <strong>Método Domus</strong>.</p>
+          </div>
+          <div class="p2-photo-col">
+            <img src="../assets/tata-bracos-cruzados.png" alt="Tata Pereira" />
+          </div>
+        </div>
+      </section>
+
+      <!-- PAINEL 3: MÉTODO DOMUS -->
+      <section class="panel" id="panel-3">
+        <span class="panel-num p3-num">02</span>
+        <div class="p3-inner">
+          <div class="p3-header">
+            <p class="section-label">— Os Fundamentos</p>
+            <h2 class="p3-title">Método Domus</h2>
+          </div>
+          <div class="p3-grid">
+            <div class="pillar-card">
+              <span class="pillar-icon">🐾</span>
+              <h3 class="pillar-title">Estrutura &amp; Espaço</h3>
+              <p class="pillar-desc">Ambientes que comunicam segurança, cuidado e profissionalismo — do pátio à recepção. Cada metro quadrado vende.</p>
+            </div>
+            <div class="pillar-card">
+              <span class="pillar-icon">📋</span>
+              <h3 class="pillar-title">Processos &amp; Protocolos</h3>
+              <p class="pillar-desc">Rotinas operacionais claras que eliminam o "feeling" e garantem consistência em cada atendimento.</p>
+            </div>
+            <div class="pillar-card">
+              <span class="pillar-icon">💬</span>
+              <h3 class="pillar-title">Comunicação &amp; Vendas</h3>
+              <p class="pillar-desc">Como atrair, converter e fidelizar tutores — com posicionamento, preço justo e autoridade de marca.</p>
+            </div>
+            <div class="pillar-card">
+              <span class="pillar-icon">📈</span>
+              <h3 class="pillar-title">Gestão &amp; Crescimento</h3>
+              <p class="pillar-desc">Indicadores, financeiro e equipe. Transforme sua creche num negócio que funciona mesmo quando você não está.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAINEL 4: RISCO -->
+      <section class="panel" id="panel-4">
+        <span class="panel-num p4-num">03</span>
+        <div class="p4-inner">
+          <div class="p4-text">
+            <p class="section-label">— O Problema Real</p>
+            <h2 class="p4-big">Sem método,<em>você está apenas sobrevivendo.</em></h2>
+            <p class="p4-body">Toda creche pet começa com amor pelos animais. Mas amor não paga boleto, não evita acidente no pátio e não retém cliente. O que separa quem escala de quem fecha é a presença (ou ausência) de um sistema.</p>
+            <ul class="risk-list">
+              <li>Precificação no sentimento — e sempre no prejuízo</li>
+              <li>Acidentes entre animais por falta de triagem adequada</li>
+              <li>Tutores sumindo sem explicação (falta de follow-up)</li>
+              <li>Equipe sem treinamento — você refaz tudo sozinha</li>
+              <li>Crescimento que paralisa em vez de escalar</li>
+            </ul>
+          </div>
+          <div class="p4-photo">
+            <img src="../assets/tata-apontando-voce.png" alt="Tata Pereira apontando" />
+          </div>
+        </div>
+      </section>
+
+      <!-- PAINEL 5: SOLUÇÕES -->
+      <section class="panel" id="panel-5">
+        <span class="panel-num p5-num">04</span>
+        <div class="p5-inner">
+          <div class="p5-header">
+            <p class="section-label">— Escolha o Seu Caminho</p>
+            <h2 class="p5-title">Como a Tata pode te ajudar</h2>
+          </div>
+          <div class="p5-cards">
+            <div class="solution-card card-a">
+              <span class="card-tag">Imersão Rápida</span>
+              <h3 class="card-name">Desafio 7 Dias</h3>
+              <p class="card-price"><small>R$</small>197</p>
+              <ul class="card-features">
+                <li>7 dias de conteúdo diário estruturado</li>
+                <li>Diagnóstico da sua creche pet</li>
+                <li>Grupo privado de suporte</li>
+                <li>Checklist operacional completo</li>
+                <li>Acesso a materiais exclusivos</li>
+              </ul>
+              <a href="https://wa.me/5511999999999?text=Quero%20o%20Desafio%207%20Dias" class="card-btn" target="_blank" rel="noopener">Quero começar agora</a>
+            </div>
+            <div class="solution-card card-b">
+              <span class="card-tag">Transformação Completa</span>
+              <h3 class="card-name">Mentoria Domus</h3>
+              <p class="card-price"><small>sob consulta</small></p>
+              <ul class="card-features">
+                <li>Acompanhamento personalizado 1:1</li>
+                <li>Implementação do Método Domus completo</li>
+                <li>Reestruturação de preços e serviços</li>
+                <li>Treinamento de equipe e protocolos</li>
+                <li>Suporte contínuo por 3 meses</li>
+              </ul>
+              <a href="https://wa.me/5511999999999?text=Quero%20saber%20sobre%20a%20Mentoria%20Domus" class="card-btn" target="_blank" rel="noopener">Solicitar proposta</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAINEL 6: CONTATO/FOOTER -->
+      <section class="panel" id="panel-6">
+        <div class="p6-bg-decor"></div>
+        <span class="panel-num p6-num">05</span>
+        <div class="p6-inner">
+          <img src="../assets/tata-logo-dog.png" alt="Logo Tata Pereira" class="p6-logo" />
+          <h2 class="p6-title">Pronta para ter uma creche pet que <em>realmente funciona?</em></h2>
+          <p class="p6-sub">Fale com a Tata. Descubra qual é o próximo passo certo para o seu negócio.</p>
+          <a href="https://wa.me/5511999999999?text=Ol%C3%A1%20Tata%2C%20quero%20transformar%20minha%20creche%20pet!" class="p6-cta-btn" target="_blank" rel="noopener">💬 Falar no WhatsApp</a>
+          <div class="p6-divider"></div>
+          <div class="p6-contacts">
+            <a href="https://instagram.com/tatapereira.pet" class="p6-link" target="_blank" rel="noopener"><span>📸</span> @tatapereira.pet</a>
+            <a href="mailto:contato@tatapereira.com.br" class="p6-link"><span>✉️</span> contato@tatapereira.com.br</a>
+          </div>
+          <div class="p6-divider"></div>
+          <p class="p6-footer-text">© 2026 Tata Pereira — Todos os direitos reservados<br />CNPJ: 38.492.203/0001-84<br />Método Domus · Mentoria de Creches Pet</p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    const isMobile=()=>window.innerWidth<=768;
+    const track=document.getElementById('h-track');
+    const progressBar=document.getElementById('progress-bar');
+    const dots=document.querySelectorAll('.dot');
+    const PANELS=6;
+    let targetX=0,currentX=0,maxScroll=0;
+    const getMaxScroll=()=>(PANELS-1)*window.innerWidth;
+    const getCurrentPanel=()=>Math.round(currentX/window.innerWidth);
+    function snapToNearestPanel(){const p=window.innerWidth;const n=Math.round(currentX/p);targetX=Math.max(0,Math.min(n*p,maxScroll));}
+    function updateDots(idx){dots.forEach((d,i)=>d.classList.toggle('active',i===idx));}
+    function animate(){
+      if(!isMobile()){
+        currentX+=(targetX-currentX)*0.08;
+        if(Math.abs(targetX-currentX)<0.1)currentX=targetX;
+        track.style.transform='translate3d('+-currentX+'px,0,0)';
+        progressBar.style.width=Math.min(100,Math.max(0,(currentX/maxScroll)*100))+'%';
+        updateDots(getCurrentPanel());
+      }
+      requestAnimationFrame(animate);
+    }
+    window.addEventListener('wheel',(e)=>{
+      if(isMobile())return;
+      e.preventDefault();
+      maxScroll=getMaxScroll();
+      targetX+=e.deltaY*1.8;
+      targetX=Math.max(0,Math.min(targetX,maxScroll));
+    },{passive:false});
+    window.addEventListener('keydown',(e)=>{
+      if(isMobile())return;
+      maxScroll=getMaxScroll();
+      const pw=window.innerWidth;
+      if(e.key==='ArrowRight'||e.key==='ArrowDown'){targetX=Math.min(PANELS-1,getCurrentPanel()+1)*pw;}
+      else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){targetX=Math.max(0,getCurrentPanel()-1)*pw;}
+    });
+    dots.forEach(d=>d.addEventListener('click',()=>{
+      if(isMobile())return;
+      targetX=parseInt(d.dataset.panel)*window.innerWidth;
+      maxScroll=getMaxScroll();
+    }));
+    let tStartX=0,tStartY=0,tStartTarget=0,tActive=false;
+    window.addEventListener('touchstart',(e)=>{if(isMobile())return;tStartX=e.touches[0].clientX;tStartY=e.touches[0].clientY;tStartTarget=targetX;tActive=true;},{passive:true});
+    window.addEventListener('touchmove',(e)=>{
+      if(isMobile()||!tActive)return;
+      const dx=tStartX-e.touches[0].clientX,dy=tStartY-e.touches[0].clientY;
+      if(Math.abs(dx)>Math.abs(dy)){e.preventDefault();maxScroll=getMaxScroll();targetX=Math.max(0,Math.min(tStartTarget+dx*2.2,maxScroll));}
+    },{passive:false});
+    window.addEventListener('touchend',()=>{if(isMobile())return;tActive=false;snapToNearestPanel();});
+    let scrollTimer;
+    window.addEventListener('wheel',()=>{clearTimeout(scrollTimer);scrollTimer=setTimeout(()=>{if(!isMobile())snapToNearestPanel();},350);},{passive:true});
+    window.addEventListener('resize',()=>{maxScroll=getMaxScroll();const idx=getCurrentPanel();targetX=idx*window.innerWidth;currentX=targetX;});
+    maxScroll=getMaxScroll();
+    requestAnimationFrame(animate);
+    const cursor=document.getElementById('cursor');
+    document.addEventListener('mousemove',(e)=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';});
+    document.querySelectorAll('a,button,.dot,.pillar-card,.solution-card').forEach(el=>{
+      el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+    });
+  </script>
+<!-- Floating Presenter Switcher Hub v2 (7 options) -->
+<div id="presentation-switcher" style="
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    z-index: 100000;
+    background: rgba(8, 10, 30, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    padding: 9px 18px;
+    border-radius: 100px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Outfit', 'Inter', 'Segoe UI', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #fff;
+    white-space: nowrap;
+">
+    <span style='color: #6e7a9a; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.5px; margin-right: 4px;'>OpÃ§Ãµes</span>
+    <a href='opcao-a.html' class='sw-opt' data-file='opcao-a.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>A</a>
+    <a href='opcao-b.html' class='sw-opt' data-file='opcao-b.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>B</a>
+    <a href='opcao-c.html' class='sw-opt' data-file='opcao-c.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>C</a>
+    <a href='opcao-d.html' class='sw-opt' data-file='opcao-d.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>D</a>
+    <a href='opcao-e.html' class='sw-opt' data-file='opcao-e.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>E</a>
+    <a href='opcao-f.html' class='sw-opt' data-file='opcao-f.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>F</a>
+    <a href='opcao-g.html' class='sw-opt' data-file='opcao-g.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>G</a>
+    <span id='sw-label' style='color:#a0a8c0; font-size:0.6rem; margin-left:5px; min-width:100px;'></span>
+</div>
+<style>
+#presentation-switcher .sw-opt.active {
+    background: #cfa426 !important;
+    color: #020422 !important;
+}
+#presentation-switcher .sw-opt:not(.active):hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff !important;
+}
+@media (max-width: 520px) {
+    #presentation-switcher { font-size: 0.65rem; padding: 7px 12px; gap: 4px; }
+    #presentation-switcher .sw-opt { padding: 4px 8px; }
+    #sw-label { display: none; }
+}
+</style>
+<script>
+(function() {
+    var labels = {
+        'opcao-a.html': 'A: Snap Scrolling',
+        'opcao-b.html': 'B: Editorial Champagne',
+        'opcao-c.html': 'C: Cinem\u00e1tico Obsidian',
+        'opcao-d.html': 'D: Bento Grid',
+        'opcao-e.html': 'E: Scrollytelling',
+        'opcao-f.html': 'F: Neo-Brutalismo',
+        'opcao-g.html': 'G: Galeria Horizontal'
+    };
+    var file = window.location.pathname.split('/').pop() || 'opcao-a.html';
+    if (!file.endsWith('.html')) file = 'opcao-a.html';
+    var label = document.getElementById('sw-label');
+    if (label) label.textContent = labels[file] || '';
+    document.querySelectorAll('#presentation-switcher .sw-opt').forEach(function(opt) {
+        var href = opt.getAttribute('data-file');
+        if (href === file) opt.classList.add('active');
+    });
+})();
+</script>
+</body>
+</html>

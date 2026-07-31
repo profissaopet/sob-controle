@@ -1341,5 +1341,75 @@
             });
         }
     </script>
+<!-- Floating Presenter Switcher Hub v2 (7 options) -->
+<div id="presentation-switcher" style="
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    z-index: 100000;
+    background: rgba(8, 10, 30, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    padding: 9px 18px;
+    border-radius: 100px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Outfit', 'Inter', 'Segoe UI', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #fff;
+    white-space: nowrap;
+">
+    <span style='color: #6e7a9a; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.5px; margin-right: 4px;'>OpÃ§Ãµes</span>
+    <a href='opcao-a.html' class='sw-opt' data-file='opcao-a.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>A</a>
+    <a href='opcao-b.html' class='sw-opt' data-file='opcao-b.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>B</a>
+    <a href='opcao-c.html' class='sw-opt' data-file='opcao-c.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>C</a>
+    <a href='opcao-d.html' class='sw-opt' data-file='opcao-d.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>D</a>
+    <a href='opcao-e.html' class='sw-opt' data-file='opcao-e.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>E</a>
+    <a href='opcao-f.html' class='sw-opt' data-file='opcao-f.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>F</a>
+    <a href='opcao-g.html' class='sw-opt' data-file='opcao-g.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>G</a>
+    <span id='sw-label' style='color:#a0a8c0; font-size:0.6rem; margin-left:5px; min-width:100px;'></span>
+</div>
+<style>
+#presentation-switcher .sw-opt.active {
+    background: #cfa426 !important;
+    color: #020422 !important;
+}
+#presentation-switcher .sw-opt:not(.active):hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff !important;
+}
+@media (max-width: 520px) {
+    #presentation-switcher { font-size: 0.65rem; padding: 7px 12px; gap: 4px; }
+    #presentation-switcher .sw-opt { padding: 4px 8px; }
+    #sw-label { display: none; }
+}
+</style>
+<script>
+(function() {
+    var labels = {
+        'opcao-a.html': 'A: Snap Scrolling',
+        'opcao-b.html': 'B: Editorial Champagne',
+        'opcao-c.html': 'C: Cinem\u00e1tico Obsidian',
+        'opcao-d.html': 'D: Bento Grid',
+        'opcao-e.html': 'E: Scrollytelling',
+        'opcao-f.html': 'F: Neo-Brutalismo',
+        'opcao-g.html': 'G: Galeria Horizontal'
+    };
+    var file = window.location.pathname.split('/').pop() || 'opcao-a.html';
+    if (!file.endsWith('.html')) file = 'opcao-a.html';
+    var label = document.getElementById('sw-label');
+    if (label) label.textContent = labels[file] || '';
+    document.querySelectorAll('#presentation-switcher .sw-opt').forEach(function(opt) {
+        var href = opt.getAttribute('data-file');
+        if (href === file) opt.classList.add('active');
+    });
+})();
+</script>
 </body>
 </html>
