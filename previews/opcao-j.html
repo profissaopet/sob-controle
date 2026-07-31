@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opção J — Aurora Gradient Mesh · Tata Pereira</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050510;--glass:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);--text:#f0f4ff;--muted:#8892b0;--transition:all 0.4s cubic-bezier(0.25,1,0.5,1);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;cursor:none;position:relative;min-height:100vh;}
+@media(pointer:coarse){#cur,#cur-ring{display:none!important;}body{cursor:auto!important;}}
+
+#cur{width:6px;height:6px;border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:10000;transform:translate3d(0,0,0) translate(-50%,-50%);will-change:transform;background:#fff;}
+#cur-ring{width:28px;height:28px;border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate3d(0,0,0) translate(-50%,-50%);will-change:transform;border:1.5px solid rgba(255,255,255,0.3);background:transparent;transition:width .3s,height .3s;}
+body.hov #cur-ring{width:44px;height:44px;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.03);}
+
+/* BLOBS */
+.blob{position:fixed;border-radius:50%;filter:blur(100px);opacity:0.32;pointer-events:none;z-index:0;}
+.blob-1{width:600px;height:600px;background:#7b2ff7;top:-100px;left:-100px;animation:blob1 22s ease-in-out infinite;}
+.blob-2{width:500px;height:500px;background:#00d4aa;bottom:-50px;right:-50px;animation:blob2 28s ease-in-out infinite;}
+.blob-3{width:400px;height:400px;background:#ff6b6b;top:40%;left:35%;animation:blob3 18s ease-in-out infinite;}
+.blob-4{width:350px;height:350px;background:#f0b429;bottom:20%;left:10%;animation:blob4 25s ease-in-out infinite;}
+@keyframes blob1{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(60px,40px) scale(1.1);}66%{transform:translate(-40px,60px) scale(0.9);}}
+@keyframes blob2{0%,100%{transform:translate(0,0) scale(1);}40%{transform:translate(-70px,-30px) scale(1.12);}70%{transform:translate(30px,-60px) scale(0.88);}}
+@keyframes blob3{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-50px,40px) scale(1.08);}}
+@keyframes blob4{0%,100%{transform:translate(0,0) scale(1);}45%{transform:translate(80px,-20px) scale(1.1);}80%{transform:translate(-30px,50px) scale(0.92);}}
+
+.glass{background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+.glass:hover{border-color:rgba(255,255,255,0.16);transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,0.4);}
+
+/* HEADER */
+.hdr{position:fixed;top:0;left:0;right:0;height:66px;padding:0 60px;display:flex;align-items:center;justify-content:space-between;z-index:1000;transition:var(--transition);}
+.hdr.scrolled{background:rgba(5,5,16,0.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);}
+.hdr-logo{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:10px;}
+.hdr-logo img{width:24px;filter:drop-shadow(0 0 8px rgba(123,47,247,0.5));}
+.btn-j{background:linear-gradient(135deg,#7b2ff7,#00d4aa);color:#fff;font-weight:700;font-size:0.72rem;letter-spacing:1px;text-transform:uppercase;padding:10px 22px;border-radius:100px;border:none;cursor:none;text-decoration:none;transition:var(--transition);box-shadow:0 4px 20px rgba(123,47,247,0.3);}
+.btn-j:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(123,47,247,0.4);}
+.btn-j.outline{background:transparent;border:1px solid var(--border);box-shadow:none;}
+.btn-j.outline:hover{border-color:rgba(255,255,255,0.25);}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 40px 80px;position:relative;z-index:10;}
+.hero-logo-img{width:80px;margin-bottom:24px;filter:drop-shadow(0 0 20px rgba(123,47,247,0.5));animation:float 4s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+.hero-tag{font-size:0.68rem;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,6vw,5rem);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:24px;background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,0.6) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{font-size:1.05rem;line-height:1.7;color:var(--muted);max-width:520px;margin:0 auto 36px;}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.scroll-hint{margin-top:60px;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted);font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;animation:fadeUpDown 2s ease-in-out infinite;}
+@keyframes fadeUpDown{0%,100%{opacity:.4;transform:translateY(0);}50%{opacity:1;transform:translateY(6px);}}
+
+/* CONTENT */
+.section{padding:80px 60px;position:relative;z-index:10;}
+.sec-tag{font-size:0.65rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#00d4aa;display:block;margin-bottom:14px;}
+h2{font-family:'Syne',sans-serif;font-size:clamp(2rem,3.5vw,2.8rem);font-weight:800;line-height:1.15;letter-spacing:-1px;margin-bottom:20px;}
+.body-p{font-size:0.92rem;line-height:1.75;color:var(--muted);}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.card{border-radius:20px;padding:32px;transition:var(--transition);}
+.card-img img{width:100%;border-radius:16px;display:block;filter:contrast(1.05);}
+.pillar-icon{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;color:#00d4aa;margin-bottom:14px;}
+.pillar-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;margin-bottom:8px;}
+.pillar-desc{font-size:0.82rem;line-height:1.6;color:var(--muted);}
+.quote-card{border-radius:20px;padding:50px;text-align:center;position:relative;overflow:hidden;}
+.quote-card::before{content:'\201C';position:absolute;top:-20px;left:20px;font-size:10rem;color:rgba(255,255,255,0.04);font-family:Georgia,serif;line-height:1;}
+blockquote{font-family:'Syne',sans-serif;font-size:clamp(1.2rem,2vw,1.8rem);font-weight:700;line-height:1.5;margin-bottom:20px;}
+.cta-section{padding:80px 60px;position:relative;z-index:10;}
+.cta-box{border-radius:24px;padding:60px;text-align:center;max-width:700px;margin:0 auto;}
+.cta-price{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;letter-spacing:-2px;margin:20px 0;background:linear-gradient(135deg,#7b2ff7,#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:28px;}
+
+footer{padding:40px 60px 24px;border-top:1px solid var(--border);position:relative;z-index:10;}
+.ftr-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:0.75rem;color:var(--muted);}
+.ftr-logo{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--text);}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s cubic-bezier(0.25,1,0.5,1),transform .65s cubic-bezier(0.25,1,0.5,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:900px){
+  .hdr{padding:0 20px;}
+  .section,.cta-section{padding:60px 24px;}
+  .grid-2,.grid-4{grid-template-columns:1fr;}
+  footer{padding:30px 24px;}
+}
+@media(max-width:480px){.hero-title{font-size:2.3rem;}.hero{padding:100px 24px 60px;}}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+<div id="cur-ring"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+<div class="blob blob-4"></div>
+
+<header class="hdr" id="hdr">
+  <a href="#" class="hdr-logo">
+    <img src="../assets/tata-logo-dog.png" alt="Logo">
+    Tata Pereira
+  </a>
+  <a href="#cta" class="btn-j">Começar Agora</a>
+</header>
+
+<section class="hero">
+  <img class="hero-logo-img" src="../assets/tata-logo-dog.png" alt="Logo">
+  <div class="hero-tag">Método Domus — Ciência do Manejo</div>
+  <h1 class="hero-title reveal">Sua creche<br>estruturada<br>e blindada.</h1>
+  <p class="hero-sub reveal" style="transition-delay:.1s">Processos científicos de triagem e manejo que transformam pátios caóticos em operações autônomas, seguras e rentáveis.</p>
+  <div class="hero-btns reveal" style="transition-delay:.2s">
+    <a href="#cta" class="btn-j">Desafio 7 Dias — R$37</a>
+    <a href="#cta" class="btn-j outline">Mentoria Domus</a>
+  </div>
+  <div class="scroll-hint">↓ &nbsp; Explorar</div>
+</section>
+
+<section class="section">
+  <div class="grid-2" style="align-items:center;gap:30px;">
+    <div class="card glass card-img reveal">
+      <img src="../assets/1.png" alt="Tata Pereira conduzindo matilha">
+    </div>
+    <div class="reveal" style="transition-delay:.1s">
+      <span class="sec-tag">A Mentora</span>
+      <h2>Do pátio caótico à metodologia do mercado</h2>
+      <p class="body-p" style="margin-bottom:14px;">Passei mais de 10 anos dentro de pátios de creche. Limpei, manejei matilhas de 30+ cães e aprendi que intuição não protege negócios.</p>
+      <p class="body-p">Criei o Método Domus para tirar você do operacional e blindar o seu espaço com ciência replicável e auditável.</p>
+      <a href="#cta" class="btn-j" style="display:inline-flex;margin-top:28px;">Conheça o Método →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:20px;">
+  <div style="text-align:center;margin-bottom:40px;">
+    <span class="sec-tag" style="justify-content:center;display:block;">Método Domus</span>
+    <h2 style="margin:0 auto;">Quatro pilares. Uma creche blindada.</h2>
+  </div>
+  <div class="grid-4">
+    <div class="card glass reveal">
+      <div class="pillar-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+      <div class="pillar-title">Percepção</div>
+      <p class="pillar-desc">Triagem científica de comportamento antes da entrada no pátio.</p>
+    </div>
+    <div class="card glass reveal" style="transition-delay:.08s">
+      <div class="pillar-icon" style="color:#7b2ff7;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="pillar-title">Sustentação</div>
+      <p class="pillar-desc">POPs de manejo e checklists para cada colaborador.</p>
+    </div>
+    <div class="card glass reveal" style="transition-delay:.16s">
+      <div class="pillar-icon" style="color:#f0b429;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="pillar-title">Delegação</div>
+      <p class="pillar-desc">Operação autônoma, dono fora do operacional.</p>
+    </div>
+    <div class="card glass reveal" style="transition-delay:.24s">
+      <div class="pillar-icon" style="color:#ff6b6b;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg></div>
+      <div class="pillar-title">Escala</div>
+      <p class="pillar-desc">Receita e crescimento sustentável sem mais caos.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:20px;">
+  <div class="quote-card glass reveal">
+    <blockquote>"Toda creche tem amor pelos cães. O que diferencia as que crescem das que fecham é ter um sistema que funciona mesmo quando você não está lá."</blockquote>
+    <span style="font-size:0.78rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;">— Tata Pereira</span>
+  </div>
+</section>
+
+<section class="cta-section" id="cta">
+  <div class="cta-box glass reveal">
+    <span class="sec-tag" style="display:block;text-align:center;">Seu próximo passo</span>
+    <h2 style="text-align:center;">Comece hoje mesmo</h2>
+    <p class="body-p" style="text-align:center;max-width:440px;margin:0 auto;">Dois caminhos para blindar sua creche — da entrada rápida ao acompanhamento premium.</p>
+    <div class="cta-price">R$37</div>
+    <p class="body-p" style="text-align:center;margin-bottom:10px;">Desafio Triagem Sob Controle — 7 dias para transformar o portão da sua creche.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn-j">Garantir Acesso — R$37</a>
+      <a href="#" class="btn-j outline">Mentoria Premium</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="ftr-inner">
+    <div>
+      <div class="ftr-logo">Tata Pereira</div>
+      <div style="margin-top:4px;">© 2026 Todos os direitos reservados.</div>
+    </div>
+    <div>CNPJ: 38.492.203/0001-84 | Profissão Pet Escola de Adestramento LTDA</div>
+    <div style="display:flex;gap:20px;">
+      <a href="#" style="color:var(--muted);text-decoration:none;transition:var(--transition);">Termos</a>
+      <a href="#" style="color:var(--muted);text-decoration:none;">Privacidade</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+let tx=0,ty=0,cx=0,cy=0,rx=0,ry=0;
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+window.addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;});
+(function loop(){
+  if(!window.matchMedia('(pointer:coarse)').matches){
+    cx+=(tx-cx)*.25;cy+=(ty-cy)*.25;rx+=(tx-rx)*.1;ry+=(ty-ry)*.1;
+    if(cur)cur.style.transform=`translate3d(${cx}px,${cy}px,0) translate(-50%,-50%)`;
+    if(ring)ring.style.transform=`translate3d(${rx}px,${ry}px,0) translate(-50%,-50%)`;
+  }requestAnimationFrame(loop);
+})();
+document.body.addEventListener('mouseover',e=>{if(e.target.closest('a,button,.card'))document.body.classList.add('hov');});
+document.body.addEventListener('mouseout',e=>{if(e.target.closest('a,button,.card'))document.body.classList.remove('hov');});
+window.addEventListener('scroll',()=>document.getElementById('hdr').classList.toggle('scrolled',window.scrollY>60));
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}}),{threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+<!-- Floating Presenter Switcher Hub v3 (16 options A-P) -->
+<div id="presentation-switcher" style="
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    z-index: 100000;
+    background: rgba(8, 10, 30, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 8px 16px;
+    border-radius: 100px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Outfit','Inter','Segoe UI',sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #fff;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+">
+    <span style='color:#5a6280;font-size:0.55rem;text-transform:uppercase;letter-spacing:1.5px;margin-right:6px;flex-shrink:0;'>OpÃ§Ãµes</span>
+    <a href='opcao-a.html' class='sw-o' data-f='opcao-a.html' title='A: Snap Scrolling'>A</a>
+    <a href='opcao-b.html' class='sw-o' data-f='opcao-b.html' title='B: Editorial Champagne'>B</a>
+    <a href='opcao-c.html' class='sw-o' data-f='opcao-c.html' title='C: CinemÃ¡tico Obsidian'>C</a>
+    <a href='opcao-d.html' class='sw-o' data-f='opcao-d.html' title='D: Bento Grid'>D</a>
+    <a href='opcao-e.html' class='sw-o' data-f='opcao-e.html' title='E: Scrollytelling'>E</a>
+    <a href='opcao-f.html' class='sw-o' data-f='opcao-f.html' title='F: Neo-Brutalismo'>F</a>
+    <a href='opcao-g.html' class='sw-o' data-f='opcao-g.html' title='G: Galeria Horizontal'>G</a>
+    <span style='color:#2a2e50;margin:0 2px;'>|</span>
+    <a href='opcao-h.html' class='sw-o' data-f='opcao-h.html' title='H: Minimalismo SuÃ­Ã§o'>H</a>
+    <a href='opcao-i.html' class='sw-o' data-f='opcao-i.html' title='I: Corporate Dark'>I</a>
+    <a href='opcao-j.html' class='sw-o' data-f='opcao-j.html' title='J: Aurora Mesh'>J</a>
+    <a href='opcao-k.html' class='sw-o' data-f='opcao-k.html' title='K: Glassmorphism iOS'>K</a>
+    <a href='opcao-l.html' class='sw-o' data-f='opcao-l.html' title='L: Typographic Maximalism'>L</a>
+    <a href='opcao-m.html' class='sw-o' data-f='opcao-m.html' title='M: Monochrome Pop'>M</a>
+    <a href='opcao-n.html' class='sw-o' data-f='opcao-n.html' title='N: Retro Anos 70'>N</a>
+    <a href='opcao-o.html' class='sw-o' data-f='opcao-o.html' title='O: Organic Biomorphic'>O</a>
+    <a href='opcao-p.html' class='sw-o' data-f='opcao-p.html' title='P: 3D Depth Parallax'>P</a>
+    <span id='sw-lbl' style='color:#8090b8;font-size:0.58rem;margin-left:8px;min-width:130px;flex-shrink:0;'></span>
+</div>
+<style>
+#presentation-switcher .sw-o{color:#4a5278;text-decoration:none;padding:5px 9px;border-radius:18px;transition:all 0.22s ease;display:inline-block;}
+#presentation-switcher .sw-o.active{background:#cfa426;color:#020422;}
+#presentation-switcher .sw-o:not(.active):hover{background:rgba(255,255,255,0.09);color:#fff;}
+@media(max-width:600px){
+  #presentation-switcher{padding:6px 10px;gap:2px;bottom:12px;}
+  #presentation-switcher .sw-o{padding:4px 6px;font-size:0.6rem;}
+  #sw-lbl{display:none;}
+  #presentation-switcher span[style*='2a2e50']{display:none;}
+}
+</style>
+<script>
+(function(){
+  var labels={'opcao-a.html':'A: Snap Scrolling','opcao-b.html':'B: Editorial Champagne','opcao-c.html':'C: CinemÃ¡tico Obsidian','opcao-d.html':'D: Bento Grid','opcao-e.html':'E: Scrollytelling','opcao-f.html':'F: Neo-Brutalismo','opcao-g.html':'G: Galeria Horizontal','opcao-h.html':'H: Minimalismo SuÃ­Ã§o','opcao-i.html':'I: Corporate Dark','opcao-j.html':'J: Aurora Mesh','opcao-k.html':'K: Glassmorphism iOS','opcao-l.html':'L: Typographic Max.','opcao-m.html':'M: Monochrome Pop','opcao-n.html':'N: Retro Anos 70','opcao-o.html':'O: Organic Biomorphic','opcao-p.html':'P: 3D Depth Parallax'};
+  var file=window.location.pathname.split('/').pop()||'opcao-a.html';
+  if(!file.endsWith('.html'))file='opcao-a.html';
+  var lbl=document.getElementById('sw-lbl');
+  if(lbl)lbl.textContent=labels[file]||'';
+  document.querySelectorAll('#presentation-switcher .sw-o').forEach(function(o){
+    if(o.getAttribute('data-f')===file)o.classList.add('active');
+  });
+})();
+</script>
+</body>
+</html>

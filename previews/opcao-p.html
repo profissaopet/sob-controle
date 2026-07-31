@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tata Pereira — Opção P (3D Depth Parallax)</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       1. CORE DESIGN SYSTEM & VARIABLES
+       ========================================================================== */
+    :root {
+      --bg-deep: #060a1a;
+      --bg-space: #090e24;
+      --bg-card: rgba(26, 31, 58, 0.65);
+      --bg-card-solid: #161c36;
+      --gold: #d4a843;
+      --gold-light: #f5d061;
+      --gold-dark: #a67c24;
+      --gold-glow: rgba(212, 168, 67, 0.4);
+      --gold-glow-strong: rgba(245, 208, 97, 0.7);
+      --text-white: #f0f4ff;
+      --text-muted: #9aa8c7;
+      --danger: #ff3333;
+      --danger-dark: #b30000;
+      --danger-glow: rgba(255, 51, 51, 0.5);
+      --card-border: rgba(212, 168, 67, 0.25);
+      --card-border-hover: rgba(245, 208, 97, 0.8);
+      --font-heading: 'Orbitron', sans-serif;
+      --font-body: 'Exo 2', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-deep);
+      color: var(--text-white);
+      font-family: var(--font-body);
+      overflow: hidden;
+      cursor: default;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-deep);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--gold-dark);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--gold);
+    }
+
+    /* Canvas Starfield Background */
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Ambient Lighting Overlays */
+    .ambient-glow-top {
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212, 168, 67, 0.15) 0%, rgba(6, 10, 26, 0) 70%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .ambient-glow-bottom {
+      position: fixed;
+      bottom: -200px;
+      right: 10%;
+      width: 700px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(26, 31, 58, 0.8) 0%, rgba(6, 10, 26, 0) 70%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       2. CUSTOM CURSOR
+       ========================================================================== */
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--gold-light);
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      box-shadow: 0 0 10px var(--gold-light);
+      transition: transform 0.05s ease-out;
+    }
+
+    .cursor-ring {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid var(--gold);
+      border-radius: 50%;
+      position: fixed;
+      top: -14px;
+      left: -14px;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s, height 0.3s, border-color 0.3s;
+      box-shadow: 0 0 15px var(--gold-glow);
+    }
+
+    body.hovered .cursor-ring {
+      width: 50px;
+      height: 50px;
+      top: -21px;
+      left: -21px;
+      border-color: var(--gold-light);
+      background: rgba(212, 168, 67, 0.08);
+    }
+
+    @media (pointer: coarse) {
+      .cursor-dot, .cursor-ring {
+        display: none !important;
+      }
+    }
+
+    /* ==========================================================================
+       3. MAIN SCROLL-SNAP CONTAINER & LAYOUT
+       ========================================================================== */
+    .viewport-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      perspective: 1200px;
+      z-index: 2;
+    }
+
+    .section-3d {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 80px 20px;
+      transform-style: preserve-3d;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 5;
+      transform-style: preserve-3d;
+    }
+
+    /* ==========================================================================
+       4. HEADER NAVIGATION
+       ========================================================================== */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(6, 10, 26, 0.6);
+      border-bottom: 1px solid rgba(212, 168, 67, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .header-logo img {
+      height: 42px;
+      filter: drop-shadow(0 0 8px var(--gold-glow));
+    }
+
+    .header-logo span {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      color: var(--text-white);
+      text-transform: uppercase;
+    }
+
+    .header-logo span em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--gold-light);
+      text-shadow: 0 0 10px var(--gold-glow);
+    }
+
+    .btn-nav {
+      padding: 10px 22px;
+      border: 1px solid var(--gold);
+      background: rgba(212, 168, 67, 0.1);
+      color: var(--gold-light);
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 0 15px rgba(212, 168, 67, 0.2);
+    }
+
+    .btn-nav:hover {
+      background: var(--gold);
+      color: var(--bg-deep);
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 0 25px var(--gold-glow-strong);
+    }
+
+    /* Section Navigation Dots */
+    .nav-dots {
+      position: fixed;
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(212, 168, 67, 0.4);
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .dot.active, .dot:hover {
+      background: var(--gold-light);
+      box-shadow: 0 0 12px var(--gold-light);
+      transform: scale(1.4);
+    }
+
+    .dot-tooltip {
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(26, 31, 58, 0.9);
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-family: var(--font-heading);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .dot:hover .dot-tooltip {
+      opacity: 1;
+      transform: translateY(-50%) translateX(-5px);
+    }
+
+    /* ==========================================================================
+       5. SECTION 1: HERO 3D DEPTH
+       ========================================================================== */
+    .hero-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .hero-logo-box {
+      transform: translateZ(60px);
+      transition: transform 0.2s ease-out;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .hero-logo-box img {
+      width: 140px;
+      height: auto;
+      filter: drop-shadow(0 15px 35px rgba(212, 168, 67, 0.4));
+      animation: floatLogo 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatLogo {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-12px) rotate(2deg); }
+    }
+
+    .hero-badge {
+      transform: translateZ(40px);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      background: rgba(212, 168, 67, 0.1);
+      border: 1px solid var(--gold);
+      border-radius: 30px;
+      color: var(--gold-light);
+      font-size: 0.85rem;
+      font-family: var(--font-heading);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      box-shadow: 0 0 20px rgba(212, 168, 67, 0.2);
+    }
+
+    .hero-title {
+      transform: translateZ(50px);
+      font-family: var(--font-heading);
+      font-size: 3.8rem;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      color: #ffffff;
+      text-transform: uppercase;
+      max-width: 900px;
+      text-shadow: 
+        0 2px 0 var(--gold-dark),
+        0 4px 10px rgba(0,0,0,0.8),
+        0 0 40px rgba(212, 168, 67, 0.3);
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, #ffffff 0%, var(--gold-light) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      transform: translateZ(30px);
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .hero-subtitle strong {
+      color: var(--text-white);
+      font-weight: 600;
+    }
+
+    .hero-cta-group {
+      transform: translateZ(45px);
+      display: flex;
+      gap: 20px;
+      margin-top: 15px;
+    }
+
+    /* 3D Depth Button Component */
+    .btn-3d-gold {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 18px 40px;
+      background: linear-gradient(135deg, #f5d061 0%, #d4a843 50%, #9e751e 100%);
+      color: #060a1a;
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 
+        0 8px 0 #735410,
+        0 15px 30px rgba(212, 168, 67, 0.4),
+        inset 0 2px 0 rgba(255, 255, 255, 0.6);
+      transform-style: preserve-3d;
+      transition: all 0.2s ease-out;
+      cursor: pointer;
+    }
+
+    .btn-3d-gold:hover {
+      transform: translateY(-4px) translateZ(10px);
+      box-shadow: 
+        0 12px 0 #735410,
+        0 20px 40px rgba(245, 208, 97, 0.6),
+        inset 0 2px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .btn-3d-gold:active {
+      transform: translateY(4px) translateZ(0);
+      box-shadow: 
+        0 4px 0 #735410,
+        0 8px 15px rgba(212, 168, 67, 0.3);
+    }
+
+    .btn-3d-secondary {
+      padding: 18px 36px;
+      background: rgba(26, 31, 58, 0.8);
+      border: 1px solid var(--gold);
+      color: var(--text-white);
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .btn-3d-secondary:hover {
+      background: rgba(212, 168, 67, 0.2);
+      border-color: var(--gold-light);
+      color: var(--gold-light);
+      transform: translateY(-3px);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateZ(20px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-family: var(--font-heading);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.8;
+      animation: pulseScroll 2s infinite;
+    }
+
+    .scroll-arrow {
+      width: 20px;
+      height: 32px;
+      border: 2px solid var(--gold);
+      border-radius: 15px;
+      position: relative;
+    }
+
+    .scroll-arrow::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 8px;
+      background: var(--gold-light);
+      border-radius: 2px;
+      animation: scrollDot 1.5s infinite;
+    }
+
+    @keyframes scrollDot {
+      0% { top: 6px; opacity: 1; }
+      100% { top: 18px; opacity: 0; }
+    }
+
+    @keyframes pulseScroll {
+      0%, 100% { opacity: 0.5; transform: translateX(-50%) translateY(0); }
+      50% { opacity: 1; transform: translateX(-50%) translateY(5px); }
+    }
+
+    /* Floating 3D Orbs / Accents */
+    .orb-3d {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(40px);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .orb-1 {
+      width: 300px;
+      height: 300px;
+      background: rgba(212, 168, 67, 0.15);
+      top: 20%;
+      left: 10%;
+      transform: translateZ(-100px);
+    }
+    .orb-2 {
+      width: 400px;
+      height: 400px;
+      background: rgba(26, 31, 58, 0.6);
+      bottom: 15%;
+      right: 10%;
+      transform: translateZ(-50px);
+    }
+
+    /* ==========================================================================
+       6. SECTION 2: SOBRE A TATA (3D TILT CARD + STATS)
+       ========================================================================== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    /* Tilt Card Container */
+    .tilt-card-wrapper {
+      perspective: 1000px;
+      position: relative;
+    }
+
+    .tilt-card {
+      position: relative;
+      background: linear-gradient(145deg, rgba(26, 31, 58, 0.8), rgba(12, 16, 36, 0.9));
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(212, 168, 67, 0.15);
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out, border-color 0.3s;
+    }
+
+    .tilt-card:hover {
+      border-color: var(--card-border-hover);
+      box-shadow: 
+        0 30px 60px -10px rgba(0, 0, 0, 0.9),
+        0 0 40px var(--gold-glow);
+    }
+
+    .tilt-card-inner {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      transform: translateZ(30px);
+    }
+
+    .tilt-card-inner img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      border-radius: 12px;
+      filter: contrast(1.05) brightness(1.02);
+    }
+
+    .tilt-card-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 30px 20px 20px;
+      background: linear-gradient(to top, rgba(6, 10, 26, 0.95), transparent);
+      transform: translateZ(50px);
+    }
+
+    .tilt-card-overlay h3 {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      color: var(--gold-light);
+    }
+
+    .tilt-card-overlay p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Floating Stats Badges in Z space */
+    .stat-badge {
+      position: absolute;
+      background: rgba(15, 20, 42, 0.9);
+      border: 1px solid var(--gold);
+      padding: 14px 22px;
+      border-radius: 12px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 10;
+      transition: transform 0.3s ease;
+    }
+
+    .stat-badge-1 {
+      top: -20px;
+      right: -20px;
+      transform: translateZ(70px);
+    }
+
+    .stat-badge-2 {
+      bottom: 40px;
+      left: -30px;
+      transform: translateZ(90px);
+    }
+
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(212, 168, 67, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-light);
+      font-size: 1.2rem;
+    }
+
+    .stat-info h4 {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      color: var(--text-white);
+      line-height: 1;
+    }
+
+    .stat-info span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* About Info Side */
+    .about-info {
+      transform: translateZ(40px);
+    }
+
+    .section-tag {
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      color: var(--gold-light);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: 2.6rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 24px;
+      color: var(--text-white);
+    }
+
+    .section-title span {
+      color: var(--gold);
+    }
+
+    .about-bio {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+
+    .about-bio strong {
+      color: var(--text-white);
+    }
+
+    .pillars-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .pillar-item {
+      background: rgba(26, 31, 58, 0.4);
+      border-left: 3px solid var(--gold);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-white);
+    }
+
+    /* ==========================================================================
+       7. SECTION 3: MÉTODO DOMUS (3D FLIP CARDS GRID)
+       ========================================================================== */
+    .section-header-center {
+      text-align: center;
+      max-width: 750px;
+      margin: 0 auto 50px;
+      transform: translateZ(40px);
+    }
+
+    .domus-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      perspective: 1000px;
+    }
+
+    /* 3D Flip Card Component */
+    .flip-card {
+      background-color: transparent;
+      height: 380px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: left;
+      transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-style: preserve-3d;
+    }
+
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    }
+
+    .flip-card-front {
+      background: linear-gradient(160deg, rgba(26, 31, 58, 0.9), rgba(12, 16, 36, 0.95));
+    }
+
+    .flip-card-back {
+      background: linear-gradient(160deg, rgba(212, 168, 67, 0.15), rgba(15, 20, 42, 0.98));
+      border-color: var(--gold);
+      transform: rotateY(180deg);
+      box-shadow: 0 0 30px var(--gold-glow);
+    }
+
+    .card-letter {
+      font-family: var(--font-heading);
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: rgba(212, 168, 67, 0.25);
+      line-height: 1;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: rgba(212, 168, 67, 0.15);
+      border: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-light);
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      color: var(--text-white);
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .flip-hint {
+      font-size: 0.75rem;
+      font-family: var(--font-heading);
+      color: var(--gold);
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 15px;
+    }
+
+    .card-back-content h4 {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      color: var(--gold-light);
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(212, 168, 67, 0.3);
+      padding-bottom: 8px;
+    }
+
+    .card-back-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-back-list li {
+      font-size: 0.85rem;
+      color: var(--text-white);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.4;
+    }
+
+    .card-back-list li::before {
+      content: '✓';
+      color: var(--gold-light);
+      font-weight: bold;
+    }
+
+    /* ==========================================================================
+       8. SECTION 4: O RISCO DA CRECHE AMADORA (DRAMATIC RED 3D)
+       ========================================================================== */
+    .section-risk {
+      background: radial-gradient(circle at center, rgba(40, 10, 15, 0.6) 0%, var(--bg-deep) 80%);
+    }
+
+    .risk-title {
+      font-family: var(--font-heading);
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--danger);
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.2;
+      text-shadow: 
+        0 1px 0 #cc0000,
+        0 2px 0 #b30000,
+        0 3px 0 #990000,
+        0 4px 0 #800000,
+        0 10px 30px var(--danger-glow);
+      margin-bottom: 16px;
+      transform: translateZ(60px);
+    }
+
+    .risk-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 650px;
+      margin: 0 auto 50px;
+      transform: translateZ(40px);
+    }
+
+    .risk-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .risk-card {
+      background: rgba(30, 12, 18, 0.7);
+      border: 1px solid rgba(255, 51, 51, 0.3);
+      border-radius: 16px;
+      padding: 30px 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+      transform-style: preserve-3d;
+      transition: all 0.3s ease;
+    }
+
+    .risk-card:hover {
+      transform: translateY(-8px) translateZ(20px);
+      border-color: var(--danger);
+      box-shadow: 0 20px 40px rgba(255, 51, 51, 0.3);
+    }
+
+    .risk-icon {
+      font-size: 2rem;
+      color: var(--danger);
+      margin-bottom: 16px;
+    }
+
+    .risk-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .risk-card p {
+      font-size: 0.9rem;
+      color: #c9a4a8;
+      line-height: 1.6;
+    }
+
+    .risk-banner {
+      margin-top: 45px;
+      background: linear-gradient(90deg, rgba(255, 51, 51, 0.15) 0%, rgba(212, 168, 67, 0.15) 100%);
+      border: 1px solid rgba(255, 51, 51, 0.4);
+      border-radius: 12px;
+      padding: 20px 30px;
+      text-align: center;
+      transform: translateZ(50px);
+    }
+
+    .risk-banner p {
+      font-size: 1.1rem;
+      color: var(--text-white);
+      font-weight: 600;
+    }
+
+    .risk-banner p strong {
+      color: var(--gold-light);
+    }
+
+    /* ==========================================================================
+       9. SECTION 5: CTA FINAL (HIGH IMPACT 3D)
+       ========================================================================== */
+    .cta-card {
+      background: linear-gradient(135deg, rgba(26, 31, 58, 0.95), rgba(10, 14, 30, 0.98));
+      border: 2px solid var(--gold);
+      border-radius: 28px;
+      padding: 60px 40px;
+      text-align: center;
+      box-shadow: 
+        0 30px 70px rgba(0, 0, 0, 0.9),
+        0 0 60px var(--gold-glow);
+      transform-style: preserve-3d;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(212, 168, 67, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font-family: var(--font-heading);
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--text-white);
+      margin-bottom: 20px;
+      line-height: 1.2;
+      transform: translateZ(40px);
+    }
+
+    .cta-title span {
+      color: var(--gold-light);
+    }
+
+    .cta-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto 35px;
+      line-height: 1.6;
+      transform: translateZ(30px);
+    }
+
+    .cta-features {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      transform: translateZ(35px);
+    }
+
+    .cta-feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-white);
+      background: rgba(212, 168, 67, 0.1);
+      padding: 8px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(212, 168, 67, 0.3);
+    }
+
+    .cta-feature-item svg {
+      color: var(--gold-light);
+    }
+
+    .cta-btn-wrapper {
+      transform: translateZ(60px);
+      margin-bottom: 20px;
+    }
+
+    .cta-guarantee {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      transform: translateZ(20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* ==========================================================================
+       10. SECTION 6 / FOOTER
+       ========================================================================== */
+    .footer-section {
+      min-height: 50vh;
+      background: #03050d;
+      border-top: 1px solid rgba(212, 168, 67, 0.2);
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-logo img {
+      height: 48px;
+    }
+
+    .footer-logo span {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--gold-light);
+    }
+
+    .footer-copy {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* ==========================================================================
+       11. RESPONSIVE DESIGN & MOBILE FALLBACKS
+       ========================================================================== */
+    @media (max-width: 1024px) {
+      .hero-title { font-size: 2.8rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .stat-badge-1 { right: 10px; }
+      .stat-badge-2 { left: 10px; }
+      .domus-grid { grid-template-columns: 1fr 1fr; }
+      .risk-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      header { padding: 15px 20px; }
+      nav { display: none; }
+      .hero-title { font-size: 2.2rem; }
+      .hero-subtitle { font-size: 1rem; }
+      .hero-cta-group { flex-direction: column; width: 100%; max-width: 320px; }
+      .btn-3d-gold, .btn-3d-secondary { width: 100%; }
+      .domus-grid { grid-template-columns: 1fr; }
+      .cta-card { padding: 40px 20px; }
+      .cta-title { font-size: 2rem; }
+      .nav-dots { display: none; }
+      .viewport-container { scroll-snap-type: none; overflow-y: auto; }
+      .section-3d { min-height: auto; padding: 60px 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Starfield Canvas -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- Ambient Light Effects -->
+  <div class="ambient-glow-top"></div>
+  <div class="ambient-glow-bottom"></div>
+
+  <!-- Custom Glow Cursor -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Fixed Navigation Header -->
+  <header>
+    <a href="#hero" class="header-logo">
+      <img src="../assets/tata-logo-dog.png" alt="Tata Pereira Logo">
+      <span>TATA <em>PEREIRA</em></span>
+    </a>
+    <nav>
+      <a href="#hero">Início</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#metodo">Método DOMUS</a>
+      <a href="#risco">Riscos</a>
+    </nav>
+    <a href="#cta" class="btn-nav">Garantir Vaga</a>
+  </header>
+
+  <!-- Side Navigation Dots -->
+  <div class="nav-dots">
+    <div class="dot active" onclick="scrollToSection(0)"><span class="dot-tooltip">01. Hero</span></div>
+    <div class="dot" onclick="scrollToSection(1)"><span class="dot-tooltip">02. Sobre</span></div>
+    <div class="dot" onclick="scrollToSection(2)"><span class="dot-tooltip">03. Método</span></div>
+    <div class="dot" onclick="scrollToSection(3)"><span class="dot-tooltip">04. Perigo</span></div>
+    <div class="dot" onclick="scrollToSection(4)"><span class="dot-tooltip">05. Decisão</span></div>
+  </div>
+
+  <!-- Viewport Scroll Snap Container -->
+  <div class="viewport-container" id="scrollContainer">
+
+    <!-- ===================================================================
+         SECTION 1: HERO 3D DEPTH
+         =================================================================== -->
+    <section class="section-3d" id="hero">
+      <div class="orb-3d orb-1"></div>
+      <div class="orb-3d orb-2"></div>
+      
+      <div class="container hero-content">
+        <div class="hero-logo-box" data-depth="0.15">
+          <img src="../assets/tata-logo-dog.png" alt="Tata Pereira Logo 3D">
+        </div>
+
+        <div class="hero-badge" data-depth="0.1">
+          <span>★ Mentoria Exclusiva para Creches Pet</span>
+        </div>
+
+        <h1 class="hero-title" data-depth="0.25">
+          Transforme sua Creche Pet em um <span>Negócio Altamente Lucrativo</span>
+        </h1>
+
+        <p class="hero-subtitle" data-depth="0.12">
+          Domine a gestão operacional, financeira e comportamental da sua creche com o método validado por mais de <strong>500 donas de creches pet</strong> em todo o Brasil.
+        </p>
+
+        <div class="hero-cta-group" data-depth="0.2">
+          <a href="#cta" class="btn-3d-gold">
+            Quero Escalar Minha Creche
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#metodo" class="btn-3d-secondary">Conhecer o Método</a>
+        </div>
+      </div>
+
+      <div class="scroll-hint">
+        <div class="scroll-arrow"></div>
+        <span>Role para explorar</span>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         SECTION 2: SOBRE A TATA PEREIRA
+         =================================================================== -->
+    <section class="section-3d" id="sobre">
+      <div class="container">
+        <div class="about-grid">
+          
+          <!-- 3D Interactive Tilt Card -->
+          <div class="tilt-card-wrapper">
+            <div class="tilt-card" id="tataTiltCard">
+              <div class="tilt-card-inner">
+                <img src="../assets/3.png" alt="Tata Pereira">
+                <div class="tilt-card-overlay">
+                  <h3>Tata Pereira</h3>
+                  <p>Mentora e Especialista em Gestão de Creches Pet</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Floating 3D Stat Badges -->
+            <div class="stat-badge stat-badge-1" data-depth="0.3">
+              <div class="stat-icon">★</div>
+              <div class="stat-info">
+                <h4>+10 Anos</h4>
+                <span>No Mercado Pet</span>
+              </div>
+            </div>
+
+            <div class="stat-badge stat-badge-2" data-depth="0.4">
+              <div class="stat-icon">🐾</div>
+              <div class="stat-info">
+                <h4>+500 Alunas</h4>
+                <span>Creches Mentoradas</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- About Biography -->
+          <div class="about-info" data-depth="0.1">
+            <span class="section-tag">// QUEM É TATA PEREIRA</span>
+            <h2 class="section-title">
+              Da Paixão por Cães à <span>Excelência em Gestão</span>
+            </h2>
+            
+            <p class="about-bio">
+              Tata Pereira não criou uma mentoria baseada apenas em teorias de livros. Ela viveu o dia a dia acelerado de uma creche pet, enfrentou o caos operacional, os custos descontrolados e a falta de processos padronizados.
+            </p>
+            <p class="about-bio">
+              Após transformar a sua própria operação em uma referência de alta rentabilidade e segurança comportamental, Tata desenvolveu o <strong>Método DOMUS</strong> — um mapa definitivo para donas de creches pet saírem da exaustão e alcançarem a previsibilidade financeira.
+            </p>
+
+            <div class="pillars-list">
+              <div class="pillar-item">Rotina Comportamental Segura</div>
+              <div class="pillar-item">Precificação e Margem Real</div>
+              <div class="pillar-item">Equipe Autônoma e Treinada</div>
+              <div class="pillar-item">Vendas e Retenção de Clientes</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         SECTION 3: MÉTODO DOMUS (3D FLIP CARDS)
+         =================================================================== -->
+    <section class="section-3d" id="metodo">
+      <div class="container">
+        
+        <div class="section-header-center" data-depth="0.15">
+          <span class="section-tag">// ARQUITETURA DE SUCESSO</span>
+          <h2 class="section-title">Conheça o <span>Método DOMUS</span></h2>
+          <p style="color: var(--text-muted); font-size: 1.05rem;">
+            Os 4 pilares fundamentais para estruturar, organizar e lucrar com sua creche pet. Passe o mouse nos cards para revelar os detalhes.
+          </p>
+        </div>
+
+        <div class="domus-grid">
+          
+          <!-- Card D -->
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <span class="card-letter">D</span>
+                <div class="card-icon">🏛️</div>
+                <div>
+                  <h3 class="card-title">Direcionamento</h3>
+                  <p class="card-desc">Planejamento estratégico e posicionamento de marca premium para atrair tutores que valorizam qualidade.</p>
+                </div>
+                <div class="flip-hint">PASSE O CURSOR PARA GIRAR ➔</div>
+              </div>
+              <div class="flip-card-back">
+                <div class="card-back-content">
+                  <h4>Pilar Direcionamento</h4>
+                  <ul class="card-back-list">
+                    <li>Análise de concorrência e diferencial</li>
+                    <li>Definição de nicho e público ideal</li>
+                    <li>Planejamento de crescimento em 12 meses</li>
+                    <li>Posicionamento de autoridade local</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card O -->
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <span class="card-letter">O</span>
+                <div class="card-icon">⚙️</div>
+                <div>
+                  <h3 class="card-title">Operação</h3>
+                  <p class="card-desc">Processos bem alinhados, controle de matilha e rotinas estruturadas para eliminar imprevistos e riscos.</p>
+                </div>
+                <div class="flip-hint">PASSE O CURSOR PARA GIRAR ➔</div>
+              </div>
+              <div class="flip-card-back">
+                <div class="card-back-content">
+                  <h4>Pilar Operação</h4>
+                  <ul class="card-back-list">
+                    <li>Protocolo de manejo e descanso</li>
+                    <li>Avaliação comportamental criteriosa</li>
+                    <li>Cronograma diário de enriquecimento</li>
+                    <li>Manual de procedimentos da equipe</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card M -->
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <span class="card-letter">M</span>
+                <div class="card-icon">📊</div>
+                <div>
+                  <h3 class="card-title">Métricas</h3>
+                  <p class="card-desc">Gestão financeira afiada, DRE simplification, precificação estratégica e controle rígido de margem de lucro.</p>
+                </div>
+                <div class="flip-hint">PASSE O CURSOR PARA GIRAR ➔</div>
+              </div>
+              <div class="flip-card-back">
+                <div class="card-back-content">
+                  <h4>Pilar Métricas</h4>
+                  <ul class="card-back-list">
+                    <li>Cálculo exato de custo por cão</li>
+                    <li>Planilha de precificação automatizada</li>
+                    <li>Indicadores de lucratividade e LTV</li>
+                    <li>Gestão de caixa e reserva de emergência</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card US -->
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <span class="card-letter">US</span>
+                <div class="card-icon">🚀</div>
+                <div>
+                  <h3 class="card-title">Sucesso & Escala</h3>
+                  <p class="card-desc">Captação contínua de alunos, equipe auto-gerenciável e expansão sustentável da sua creche pet.</p>
+                </div>
+                <div class="flip-hint">PASSE O CURSOR PARA GIRAR ➔</div>
+              </div>
+              <div class="flip-card-back">
+                <div class="card-back-content">
+                  <h4>Sucesso & Escala</h4>
+                  <ul class="card-back-list">
+                    <li>Script de vendas de alta conversão</li>
+                    <li>Estratégias de fidelização e planos</li>
+                    <li>Treinamento e liderança de monitores</li>
+                    <li>Escala sem dependência da dona</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         SECTION 4: O RISCO DA AMADORA (RED 3D DRAMATIC)
+         =================================================================== -->
+    <section class="section-3d section-risk" id="risco">
+      <div class="container">
+        
+        <h2 class="risk-title">
+          O Alto Custo do Amadorismo
+        </h2>
+
+        <p class="risk-subtitle">
+          Gerenciar uma creche pet apenas com o "amor pelos animais" sem um sistema profissional coloca o seu negócio e sua paz em risco constante.
+        </p>
+
+        <div class="risk-grid">
+          
+          <div class="risk-card" data-depth="0.2">
+            <div class="risk-icon">⚠️</div>
+            <h3>Sobrecarga & Exaustão</h3>
+            <p>Trabalhar 14 horas por dia apagando incêndios, cuidando da limpeza, atendimento e recepção sem conseguir folgar um único final de semana.</p>
+          </div>
+
+          <div class="risk-card" data-depth="0.25">
+            <div class="risk-icon">💸</div>
+            <h3>Prejuízo Invisível</h3>
+            <p>Preço cobrado sem cálculo de custos operacionais reais, gerando um faturamento ilusório que mal cobre o aluguel e os funcionários.</p>
+          </div>
+
+          <div class="risk-card" data-depth="0.3">
+            <div class="risk-icon">⚡</div>
+            <h3>Riscos Comportamentais</h3>
+            <p>Ausência de triagem adequada e falta de enriquecimento ambiental resultando em brigas de matilha, ferimentos e perda de clientes.</p>
+          </div>
+
+        </div>
+
+        <div class="risk-banner">
+          <p>
+            Não permita que a falta de gestão destrua o seu sonho. <strong>A Mentoria DOMUS é a sua virada de chave.</strong>
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         SECTION 5: CTA FINAL (HIGH IMPACT 3D)
+         =================================================================== -->
+    <section class="section-3d" id="cta">
+      <div class="container">
+        <div class="cta-card">
+          
+          <span class="section-tag" style="letter-spacing: 3px;">// O FUTURO DA SUA CRECHE PET</span>
+          
+          <h2 class="cta-title">
+            Pronta para Construir uma <span>Creche de Sucesso?</span>
+          </h2>
+
+          <p class="cta-desc">
+            Inscreva-se para a mentoria com Tata Pereira e receba acompanhamento direcionado para estruturar sua empresa com previsibilidade, lucro e tranquilidade.
+          </p>
+
+          <div class="cta-features">
+            <div class="cta-feature-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              Encontros Ao Vivo com Tata Pereira
+            </div>
+            <div class="cta-feature-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              Planilhas e Ferramentas Prontas
+            </div>
+            <div class="cta-feature-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              Comunidade VIP de Donas de Creches
+            </div>
+          </div>
+
+          <div class="cta-btn-wrapper">
+            <a href="https://wa.me/" target="_blank" class="btn-3d-gold">
+              Quero Garantir Minha Vaga Agora
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+
+          <div class="cta-guarantee">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Vagas Limitadas para Acompanhamento Individualizado
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         SECTION 6: FOOTER
+         =================================================================== -->
+    <footer class="section-3d footer-section">
+      <div class="container footer-content">
+        <div class="footer-logo">
+          <img src="../assets/tata-logo-dog.png" alt="Tata Pereira Logo Footer">
+          <span>TATA PEREIRA</span>
+        </div>
+
+        <div class="footer-links">
+          <a href="#hero">Início</a>
+          <a href="#sobre">Sobre a Tata</a>
+          <a href="#metodo">Método DOMUS</a>
+          <a href="#risco">Riscos</a>
+          <a href="#cta">Mentoria</a>
+        </div>
+
+        <p class="footer-copy">
+          © 2026 Tata Pereira — Mentoria de Creches Pet. Todos os direitos reservados.
+        </p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ==========================================================================
+       JAVASCRIPT LOGIC (3D PARALLAX, CANVAS STARFIELD, CURSOR & TILT)
+       ========================================================================== -->
+  <script>
+    /* ------------------------------------------------------------------------
+       1. CANVAS STARFIELD 3D PARTICLES ENGINE
+       ------------------------------------------------------------------------ */
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      initParticles();
+    });
+
+    const particles = [];
+    const particleCount = 110;
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = (Math.random() - 0.5) * width * 1.5;
+        this.y = (Math.random() - 0.5) * height * 1.5;
+        this.z = Math.random() * 1000 + 1;
+        this.size = Math.random() * 1.8 + 0.5;
+        this.color = Math.random() > 0.3 ? '#f5d061' : '#ffffff';
+        this.opacity = Math.random() * 0.7 + 0.3;
+        this.speedZ = Math.random() * 0.4 + 0.1;
+      }
+
+      update() {
+        this.z -= this.speedZ;
+        if (this.z <= 0) {
+          this.reset();
+          this.z = 1000;
+        }
+      }
+
+      draw() {
+        const k = 600 / this.z;
+        const px = this.x * k + width / 2;
+        const py = this.y * k + height / 2;
+
+        if (px < 0 || px > width || py < 0 || py > height) return;
+
+        const pSize = Math.max(0.5, this.size * k);
+        const alpha = Math.min(1, (1 - this.z / 1000) * this.opacity);
+
+        ctx.beginPath();
+        ctx.arc(px, py, pSize, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = alpha;
+        ctx.shadowBlur = pSize * 4;
+        ctx.shadowColor = this.color;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    function initParticles() {
+      particles.length = 0;
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function renderParticles() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw faint connections between nearby stars
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+      }
+
+      requestAnimationFrame(renderParticles);
+    }
+
+    initParticles();
+    renderParticles();
+
+
+    /* ------------------------------------------------------------------------
+       2. GLOWING CUSTOM CURSOR
+       ------------------------------------------------------------------------ */
+    const cursorDot = document.getElementById('cursorDot');
+    const cursorRing = document.getElementById('cursorRing');
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX;
+    let ringY = mouseY;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+    });
+
+    function animateCursor() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+
+      cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    // Hover effect for interactive elements
+    const interactiveElements = document.querySelectorAll('a, button, .flip-card, .tilt-card, .risk-card');
+    interactiveElements.forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
+    });
+
+
+    /* ------------------------------------------------------------------------
+       3. MOUSE 3D PARALLAX ENGINE
+       ------------------------------------------------------------------------ */
+    const parallaxElements = document.querySelectorAll('[data-depth]');
+
+    let targetMouseX = 0;
+    let targetMouseY = 0;
+    let currentMouseX = 0;
+    let currentMouseY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      targetMouseX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+      targetMouseY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+    });
+
+    function updateParallax() {
+      currentMouseX += (targetMouseX - currentMouseX) * 0.08;
+      currentMouseY += (targetMouseY - currentMouseY) * 0.08;
+
+      parallaxElements.forEach(el => {
+        const depth = parseFloat(el.getAttribute('data-depth')) || 0.1;
+        const moveX = currentMouseX * depth * 80;
+        const moveY = currentMouseY * depth * 80;
+        const rotX = -currentMouseY * depth * 15;
+        const rotY = currentMouseX * depth * 15;
+
+        el.style.transform = `translate3d(${moveX}px, ${moveY}px, ${depth * 100}px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+      });
+
+      requestAnimationFrame(updateParallax);
+    }
+    updateParallax();
+
+
+    /* ------------------------------------------------------------------------
+       4. TATA CARD 3D TILT EFFECT
+       ------------------------------------------------------------------------ */
+    const tiltCard = document.getElementById('tataTiltCard');
+
+    if (tiltCard) {
+      tiltCard.addEventListener('mousemove', (e) => {
+        const rect = tiltCard.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = ((y - centerY) / centerY) * -16;
+        const rotateY = ((x - centerX) / centerX) * 16;
+
+        tiltCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+      });
+
+      tiltCard.addEventListener('mouseleave', () => {
+        tiltCard.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+      });
+    }
+
+
+    /* ------------------------------------------------------------------------
+       5. SCROLL SNAP INDICATOR & DOTS UPDATE
+       ------------------------------------------------------------------------ */
+    const scrollContainer = document.getElementById('scrollContainer');
+    const sections = document.querySelectorAll('.section-3d');
+    const dots = document.querySelectorAll('.dot');
+
+    scrollContainer.addEventListener('scroll', () => {
+      const scrollPos = scrollContainer.scrollTop;
+      const windowHeight = window.innerHeight;
+
+      sections.forEach((sec, idx) => {
+        const top = sec.offsetTop - windowHeight / 3;
+        const bottom = top + sec.offsetHeight;
+
+        if (scrollPos >= top && scrollPos < bottom) {
+          dots.forEach(d => d.classList.remove('active'));
+          if (dots[idx]) dots[idx].classList.add('active');
+        }
+      });
+    });
+
+    function scrollToSection(index) {
+      if (sections[index]) {
+        sections[index].scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  </script>
+<!-- Floating Presenter Switcher Hub v3 (16 options A-P) -->
+<div id="presentation-switcher" style="
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    z-index: 100000;
+    background: rgba(8, 10, 30, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 8px 16px;
+    border-radius: 100px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Outfit','Inter','Segoe UI',sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #fff;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+">
+    <span style='color:#5a6280;font-size:0.55rem;text-transform:uppercase;letter-spacing:1.5px;margin-right:6px;flex-shrink:0;'>OpÃ§Ãµes</span>
+    <a href='opcao-a.html' class='sw-o' data-f='opcao-a.html' title='A: Snap Scrolling'>A</a>
+    <a href='opcao-b.html' class='sw-o' data-f='opcao-b.html' title='B: Editorial Champagne'>B</a>
+    <a href='opcao-c.html' class='sw-o' data-f='opcao-c.html' title='C: CinemÃ¡tico Obsidian'>C</a>
+    <a href='opcao-d.html' class='sw-o' data-f='opcao-d.html' title='D: Bento Grid'>D</a>
+    <a href='opcao-e.html' class='sw-o' data-f='opcao-e.html' title='E: Scrollytelling'>E</a>
+    <a href='opcao-f.html' class='sw-o' data-f='opcao-f.html' title='F: Neo-Brutalismo'>F</a>
+    <a href='opcao-g.html' class='sw-o' data-f='opcao-g.html' title='G: Galeria Horizontal'>G</a>
+    <span style='color:#2a2e50;margin:0 2px;'>|</span>
+    <a href='opcao-h.html' class='sw-o' data-f='opcao-h.html' title='H: Minimalismo SuÃ­Ã§o'>H</a>
+    <a href='opcao-i.html' class='sw-o' data-f='opcao-i.html' title='I: Corporate Dark'>I</a>
+    <a href='opcao-j.html' class='sw-o' data-f='opcao-j.html' title='J: Aurora Mesh'>J</a>
+    <a href='opcao-k.html' class='sw-o' data-f='opcao-k.html' title='K: Glassmorphism iOS'>K</a>
+    <a href='opcao-l.html' class='sw-o' data-f='opcao-l.html' title='L: Typographic Maximalism'>L</a>
+    <a href='opcao-m.html' class='sw-o' data-f='opcao-m.html' title='M: Monochrome Pop'>M</a>
+    <a href='opcao-n.html' class='sw-o' data-f='opcao-n.html' title='N: Retro Anos 70'>N</a>
+    <a href='opcao-o.html' class='sw-o' data-f='opcao-o.html' title='O: Organic Biomorphic'>O</a>
+    <a href='opcao-p.html' class='sw-o' data-f='opcao-p.html' title='P: 3D Depth Parallax'>P</a>
+    <span id='sw-lbl' style='color:#8090b8;font-size:0.58rem;margin-left:8px;min-width:130px;flex-shrink:0;'></span>
+</div>
+<style>
+#presentation-switcher .sw-o{color:#4a5278;text-decoration:none;padding:5px 9px;border-radius:18px;transition:all 0.22s ease;display:inline-block;}
+#presentation-switcher .sw-o.active{background:#cfa426;color:#020422;}
+#presentation-switcher .sw-o:not(.active):hover{background:rgba(255,255,255,0.09);color:#fff;}
+@media(max-width:600px){
+  #presentation-switcher{padding:6px 10px;gap:2px;bottom:12px;}
+  #presentation-switcher .sw-o{padding:4px 6px;font-size:0.6rem;}
+  #sw-lbl{display:none;}
+  #presentation-switcher span[style*='2a2e50']{display:none;}
+}
+</style>
+<script>
+(function(){
+  var labels={'opcao-a.html':'A: Snap Scrolling','opcao-b.html':'B: Editorial Champagne','opcao-c.html':'C: CinemÃ¡tico Obsidian','opcao-d.html':'D: Bento Grid','opcao-e.html':'E: Scrollytelling','opcao-f.html':'F: Neo-Brutalismo','opcao-g.html':'G: Galeria Horizontal','opcao-h.html':'H: Minimalismo SuÃ­Ã§o','opcao-i.html':'I: Corporate Dark','opcao-j.html':'J: Aurora Mesh','opcao-k.html':'K: Glassmorphism iOS','opcao-l.html':'L: Typographic Max.','opcao-m.html':'M: Monochrome Pop','opcao-n.html':'N: Retro Anos 70','opcao-o.html':'O: Organic Biomorphic','opcao-p.html':'P: 3D Depth Parallax'};
+  var file=window.location.pathname.split('/').pop()||'opcao-a.html';
+  if(!file.endsWith('.html'))file='opcao-a.html';
+  var lbl=document.getElementById('sw-lbl');
+  if(lbl)lbl.textContent=labels[file]||'';
+  document.querySelectorAll('#presentation-switcher .sw-o').forEach(function(o){
+    if(o.getAttribute('data-f')===file)o.classList.add('active');
+  });
+})();
+</script>
+</body>
+</html>

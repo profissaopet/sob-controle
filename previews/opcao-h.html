@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opção H — Minimalismo Suíço · Tata Pereira</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--black:#000;--white:#fff;--green:#0a3d25;--gray:#f5f5f5;--muted:#6b6b6b;--border:2px solid #000;--transition:all 0.35s cubic-bezier(0.25,1,0.5,1);}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;}
+body{background:var(--white);color:var(--black);font-family:'Inter',sans-serif;overflow-x:hidden;}
+
+/* HEADER */
+.hdr{position:fixed;top:0;left:0;right:0;height:64px;background:var(--white);border-bottom:var(--border);padding:0 60px;display:flex;align-items:center;justify-content:space-between;z-index:1000;}
+.hdr-logo{font-size:1rem;font-weight:900;text-transform:uppercase;letter-spacing:3px;text-decoration:none;color:var(--black);display:flex;align-items:center;gap:10px;}
+.hdr-logo img{width:20px;filter:grayscale(1) contrast(2);}
+.hdr-nav{display:flex;gap:30px;}
+.hdr-nav a{color:var(--muted);text-decoration:none;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;transition:var(--transition);}
+.hdr-nav a:hover{color:var(--black);}
+.btn-swiss{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;font-weight:800;font-size:0.7rem;text-transform:uppercase;letter-spacing:2px;padding:10px 22px;border:var(--border);border-color:var(--black);border-radius:0;cursor:pointer;text-decoration:none;transition:var(--transition);}
+.btn-swiss:hover{background:var(--green);border-color:var(--green);}
+.btn-swiss.outline{background:transparent;color:var(--black);}
+.btn-swiss.outline:hover{background:var(--black);color:var(--white);}
+
+/* HERO */
+.hero{padding:140px 60px 80px;border-bottom:var(--border);display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:90vh;align-items:end;}
+.hero-left{padding-right:60px;border-right:var(--border);}
+.hero-num{font-size:0.65rem;font-weight:900;letter-spacing:5px;text-transform:uppercase;color:var(--muted);margin-bottom:30px;}
+.hero-title{font-size:clamp(3rem,6vw,5.5rem);font-weight:900;line-height:1.0;letter-spacing:-2px;margin-bottom:40px;}
+.hero-title em{font-style:normal;color:var(--green);}
+.hero-right{padding-left:60px;display:flex;flex-direction:column;justify-content:flex-end;gap:30px;}
+.hero-sub{font-size:1.05rem;line-height:1.7;color:var(--muted);max-width:380px;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.hero-divider{width:40px;height:3px;background:var(--black);margin:16px 0;}
+
+/* STATS */
+.stats-band{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:var(--border);}
+.stat-cell{padding:40px 40px;border-right:var(--border);}
+.stat-cell:last-child{border-right:none;}
+.stat-num{font-size:clamp(2.5rem,4vw,3.8rem);font-weight:900;letter-spacing:-2px;line-height:1;}
+.stat-num.green{color:var(--green);}
+.stat-lbl{font-size:0.65rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:10px;}
+
+/* ABOUT */
+.about{display:grid;grid-template-columns:1fr 1fr;border-bottom:var(--border);}
+.about-img{border-right:var(--border);overflow:hidden;}
+.about-img img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;filter:grayscale(0.2) contrast(1.05);transition:var(--transition);}
+.about-img:hover img{filter:grayscale(0) contrast(1);}
+.about-text{padding:70px 60px;display:flex;flex-direction:column;justify-content:center;}
+.section-label{font-size:0.65rem;font-weight:900;letter-spacing:5px;text-transform:uppercase;color:var(--muted);margin-bottom:24px;}
+h2{font-size:clamp(1.8rem,3vw,2.8rem);font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:24px;}
+.body-text{font-size:0.92rem;line-height:1.75;color:var(--muted);margin-bottom:16px;}
+
+/* METHOD */
+.method{padding:0 60px;border-bottom:var(--border);}
+.method-header{padding:60px 0 40px;border-bottom:var(--border);}
+.method-item{display:grid;grid-template-columns:80px 200px 1fr;gap:0;border-bottom:1px solid #e0e0e0;padding:40px 0;align-items:start;opacity:0;transform:translateY(20px);transition:var(--transition);}
+.method-item.visible{opacity:1;transform:translateY(0);}
+.m-num{font-size:2rem;font-weight:900;color:#e0e0e0;letter-spacing:-1px;}
+.m-title{font-size:1rem;font-weight:900;text-transform:uppercase;letter-spacing:1px;padding-right:40px;border-right:1px solid #e0e0e0;}
+.m-desc{font-size:0.88rem;line-height:1.7;color:var(--muted);padding-left:40px;}
+
+/* CTA */
+.cta{display:grid;grid-template-columns:1fr 1fr;border-bottom:var(--border);}
+.cta-cell{padding:70px 60px;border-right:var(--border);}
+.cta-cell:last-child{border-right:none;background:var(--green);}
+.cta-cell:last-child *{color:var(--white)!important;}
+.cta-cell:last-child .btn-swiss{background:var(--white);color:var(--green);border-color:var(--white);}
+.cta-cell:last-child .btn-swiss:hover{background:var(--black);border-color:var(--black);}
+.cta-tag{font-size:0.65rem;font-weight:900;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+.cta-title{font-size:clamp(1.5rem,2.5vw,2.2rem);font-weight:900;letter-spacing:-0.5px;margin-bottom:14px;line-height:1.15;}
+.cta-price{font-size:3rem;font-weight:900;letter-spacing:-2px;margin:24px 0;line-height:1;}
+.cta-price span{font-size:0.85rem;font-weight:400;color:var(--muted);letter-spacing:0;}
+.cta-list{list-style:none;margin-bottom:30px;}
+.cta-list li{font-size:0.85rem;color:var(--muted);padding:10px 0;border-bottom:1px solid #e0e0e0;display:flex;align-items:center;gap:10px;}
+.cta-list li::before{content:'→';font-weight:900;color:var(--green);flex-shrink:0;}
+
+/* FOOTER */
+footer{background:var(--black);color:var(--white);padding:50px 60px 30px;}
+.ftr-top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #222;padding-bottom:40px;margin-bottom:30px;gap:40px;flex-wrap:wrap;}
+.ftr-logo{font-size:1.1rem;font-weight:900;text-transform:uppercase;letter-spacing:3px;margin-bottom:8px;}
+.ftr-desc{font-size:0.8rem;color:#666;max-width:260px;line-height:1.6;}
+.ftr-col h4{font-size:0.6rem;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#444;margin-bottom:14px;}
+.ftr-col a{display:block;color:#888;text-decoration:none;font-size:0.82rem;margin-bottom:8px;transition:var(--transition);}
+.ftr-col a:hover{color:var(--white);}
+.ftr-bottom{display:flex;justify-content:space-between;font-size:0.7rem;color:#444;flex-wrap:wrap;gap:8px;}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.65s cubic-bezier(0.25,1,0.5,1),transform 0.65s cubic-bezier(0.25,1,0.5,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hdr{padding:0 24px;}
+  .hdr-nav{display:none;}
+  .hero{grid-template-columns:1fr;padding:110px 24px 60px;}
+  .hero-left{border-right:none;padding-right:0;padding-bottom:40px;border-bottom:var(--border);}
+  .hero-right{padding-left:0;padding-top:40px;}
+  .stats-band{grid-template-columns:1fr 1fr;}
+  .stat-cell{border-bottom:var(--border);}
+  .about{grid-template-columns:1fr;}
+  .about-img{height:320px;}
+  .about-text{padding:40px 24px;}
+  .method{padding:0 24px;}
+  .method-item{grid-template-columns:50px 1fr;gap:20px;}
+  .m-title{border-right:none;padding-right:0;}
+  .m-desc{display:none;}
+  .cta{grid-template-columns:1fr;}
+  .cta-cell{padding:50px 24px;}
+  .cta-cell{border-right:none;border-bottom:var(--border);}
+  footer{padding:40px 24px 24px;}
+  .ftr-top{flex-direction:column;}
+  .ftr-bottom{flex-direction:column;gap:4px;}
+}
+@media(max-width:480px){
+  .stats-band{grid-template-columns:1fr;}
+  .stat-cell{border-right:none;}
+  .hero-title{font-size:2.5rem;}
+  h2{font-size:1.6rem;}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <a href="#" class="hdr-logo">
+    <img src="../assets/tata-logo-dog.png" alt="Logo">
+    Tata Pereira
+  </a>
+  <nav class="hdr-nav">
+    <a href="#sobre">A Mentora</a>
+    <a href="#metodo">Método</a>
+    <a href="#cta">Soluções</a>
+  </nav>
+  <a href="#cta" class="btn-swiss">Começar</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-num">001 — Introdução</div>
+    <h1 class="hero-title">Creche<br>Pet<br><em>Estruturada.</em></h1>
+  </div>
+  <div class="hero-right reveal">
+    <p class="hero-sub">O Método Domus transforma pátios caóticos em operações autônomas, seguras e escaláveis. Processos que funcionam mesmo quando você não está lá.</p>
+    <div class="hero-divider"></div>
+    <div class="hero-btns">
+      <a href="#cta" class="btn-swiss">Desafio 7 Dias — R$37</a>
+      <a href="#cta" class="btn-swiss outline">Mentoria Domus →</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-band">
+  <div class="stat-cell reveal">
+    <div class="stat-num green">10+</div>
+    <div class="stat-lbl">Anos de Pátio Operacional</div>
+  </div>
+  <div class="stat-cell reveal" style="transition-delay:0.1s">
+    <div class="stat-num">100+</div>
+    <div class="stat-lbl">Profissionais Capacitados</div>
+  </div>
+  <div class="stat-cell reveal" style="transition-delay:0.2s">
+    <div class="stat-num green">4</div>
+    <div class="stat-lbl">Pilares do Método Domus</div>
+  </div>
+  <div class="stat-cell reveal" style="transition-delay:0.3s">
+    <div class="stat-num">7</div>
+    <div class="stat-lbl">Dias Para Transformar o Portão</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="sobre">
+  <div class="about-img">
+    <img src="../assets/3.png" alt="Tata Pereira — Mentora">
+  </div>
+  <div class="about-text">
+    <div class="section-label">002 — A Mentora</div>
+    <h2>Do pátio caótico à metodologia de mercado</h2>
+    <p class="body-text">Passei mais de 10 anos dentro de pátios de creche. Limpei, manejei matilhas e senti na pele a exaustão de quem termina o dia rezando para não ter nenhuma briga.</p>
+    <p class="body-text">Criei o Método Domus para tirar você do operacional e blindar o seu negócio de forma técnica, replicável e auditável — com processos que qualquer funcionário consegue executar com rigor.</p>
+    <div style="margin-top:30px;"><a href="#cta" class="btn-swiss">Conheça o Método →</a></div>
+  </div>
+</section>
+
+<!-- METHOD -->
+<section class="method" id="metodo">
+  <div class="method-header">
+    <div class="section-label">003 — O Método</div>
+    <h2>Quatro pilares.<br>Uma creche blindada.</h2>
+  </div>
+  <div class="method-item reveal">
+    <div class="m-num">01</div>
+    <div class="m-title">Sistema de Percepção</div>
+    <div class="m-desc">Critérios científicos de triagem comportamental para cada cão antes da entrada no pátio. Elimina decisões baseadas em intuição e introduz protocolos objetivos e auditáveis.</div>
+  </div>
+  <div class="method-item reveal" style="transition-delay:0.1s">
+    <div class="m-num">02</div>
+    <div class="m-title">Sistema de Sustentação</div>
+    <div class="m-desc">POPs de manejo e checklists de equipe que garantem que cada colaborador saiba exatamente como conduzir, separar e intervir em qualquer situação no pátio.</div>
+  </div>
+  <div class="method-item reveal" style="transition-delay:0.2s">
+    <div class="m-num">03</div>
+    <div class="m-title">Sistema de Delegação</div>
+    <div class="m-desc">Processos de onboarding e supervisão que permitem que a operação funcione de forma autônoma, retirando o dono da dependência operacional diária.</div>
+  </div>
+  <div class="method-item reveal" style="transition-delay:0.3s">
+    <div class="m-num">04</div>
+    <div class="m-title">Receita e Escala</div>
+    <div class="m-desc">Estratégias de precificação e crescimento sustentável que transformam a creche estruturada num negócio rentável sem aumentar proporcionalmente o caos.</div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+  <div class="cta-cell reveal">
+    <div class="cta-tag">004 — Entrada Rápida</div>
+    <h3 class="cta-title">Desafio Triagem Sob Controle</h3>
+    <div class="cta-price">R$37 <span>/ única vez</span></div>
+    <ul class="cta-list">
+      <li>Protocolo POP de Portão Completo</li>
+      <li>Checklist de Triagem Comportamental</li>
+      <li>7 Dias de Implementação Guiada</li>
+      <li>Garantia incondicional de 7 dias</li>
+    </ul>
+    <a href="#" class="btn-swiss">Garantir Acesso Agora</a>
+  </div>
+  <div class="cta-cell reveal" style="transition-delay:0.15s">
+    <div class="cta-tag">005 — Premium</div>
+    <h3 class="cta-title">Mentoria Domus Individual</h3>
+    <div class="cta-price">Sob<br>Consulta</div>
+    <ul class="cta-list">
+      <li>Diagnóstico completo da sua creche</li>
+      <li>Reuniões ao vivo e auditorias</li>
+      <li>WhatsApp direto de suporte de manejo</li>
+      <li>Acompanhamento personalizado</li>
+    </ul>
+    <a href="#" class="btn-swiss" style="background:var(--white);color:var(--green);border-color:var(--white);">Solicitar Candidatura</a>
+  </div>
+</section>
+
+<footer>
+  <div class="ftr-top">
+    <div>
+      <div class="ftr-logo">Tata Pereira</div>
+      <p class="ftr-desc">Profissionalização de creches e hotéis de cães pelo Método Domus.</p>
+    </div>
+    <div class="ftr-col">
+      <h4>Navegação</h4>
+      <a href="#sobre">A Mentora</a>
+      <a href="#metodo">O Método</a>
+      <a href="#cta">Soluções</a>
+    </div>
+    <div class="ftr-col">
+      <h4>Legal</h4>
+      <a href="#">Termos de Uso</a>
+      <a href="#">Privacidade</a>
+    </div>
+  </div>
+  <div class="ftr-bottom">
+    <span>© 2026 Tata Pereira. Todos os direitos reservados.</span>
+    <span>CNPJ: 38.492.203/0001-84 | Profissão Pet Escola de Adestramento LTDA</span>
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:0.15});
+document.querySelectorAll('.reveal,.method-item').forEach(el=>obs.observe(el));
+</script>
+<!-- Floating Presenter Switcher Hub v3 (16 options A-P) -->
+<div id="presentation-switcher" style="
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    z-index: 100000;
+    background: rgba(8, 10, 30, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 8px 16px;
+    border-radius: 100px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Outfit','Inter','Segoe UI',sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #fff;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+">
+    <span style='color:#5a6280;font-size:0.55rem;text-transform:uppercase;letter-spacing:1.5px;margin-right:6px;flex-shrink:0;'>OpÃ§Ãµes</span>
+    <a href='opcao-a.html' class='sw-o' data-f='opcao-a.html' title='A: Snap Scrolling'>A</a>
+    <a href='opcao-b.html' class='sw-o' data-f='opcao-b.html' title='B: Editorial Champagne'>B</a>
+    <a href='opcao-c.html' class='sw-o' data-f='opcao-c.html' title='C: CinemÃ¡tico Obsidian'>C</a>
+    <a href='opcao-d.html' class='sw-o' data-f='opcao-d.html' title='D: Bento Grid'>D</a>
+    <a href='opcao-e.html' class='sw-o' data-f='opcao-e.html' title='E: Scrollytelling'>E</a>
+    <a href='opcao-f.html' class='sw-o' data-f='opcao-f.html' title='F: Neo-Brutalismo'>F</a>
+    <a href='opcao-g.html' class='sw-o' data-f='opcao-g.html' title='G: Galeria Horizontal'>G</a>
+    <span style='color:#2a2e50;margin:0 2px;'>|</span>
+    <a href='opcao-h.html' class='sw-o' data-f='opcao-h.html' title='H: Minimalismo SuÃ­Ã§o'>H</a>
+    <a href='opcao-i.html' class='sw-o' data-f='opcao-i.html' title='I: Corporate Dark'>I</a>
+    <a href='opcao-j.html' class='sw-o' data-f='opcao-j.html' title='J: Aurora Mesh'>J</a>
+    <a href='opcao-k.html' class='sw-o' data-f='opcao-k.html' title='K: Glassmorphism iOS'>K</a>
+    <a href='opcao-l.html' class='sw-o' data-f='opcao-l.html' title='L: Typographic Maximalism'>L</a>
+    <a href='opcao-m.html' class='sw-o' data-f='opcao-m.html' title='M: Monochrome Pop'>M</a>
+    <a href='opcao-n.html' class='sw-o' data-f='opcao-n.html' title='N: Retro Anos 70'>N</a>
+    <a href='opcao-o.html' class='sw-o' data-f='opcao-o.html' title='O: Organic Biomorphic'>O</a>
+    <a href='opcao-p.html' class='sw-o' data-f='opcao-p.html' title='P: 3D Depth Parallax'>P</a>
+    <span id='sw-lbl' style='color:#8090b8;font-size:0.58rem;margin-left:8px;min-width:130px;flex-shrink:0;'></span>
+</div>
+<style>
+#presentation-switcher .sw-o{color:#4a5278;text-decoration:none;padding:5px 9px;border-radius:18px;transition:all 0.22s ease;display:inline-block;}
+#presentation-switcher .sw-o.active{background:#cfa426;color:#020422;}
+#presentation-switcher .sw-o:not(.active):hover{background:rgba(255,255,255,0.09);color:#fff;}
+@media(max-width:600px){
+  #presentation-switcher{padding:6px 10px;gap:2px;bottom:12px;}
+  #presentation-switcher .sw-o{padding:4px 6px;font-size:0.6rem;}
+  #sw-lbl{display:none;}
+  #presentation-switcher span[style*='2a2e50']{display:none;}
+}
+</style>
+<script>
+(function(){
+  var labels={'opcao-a.html':'A: Snap Scrolling','opcao-b.html':'B: Editorial Champagne','opcao-c.html':'C: CinemÃ¡tico Obsidian','opcao-d.html':'D: Bento Grid','opcao-e.html':'E: Scrollytelling','opcao-f.html':'F: Neo-Brutalismo','opcao-g.html':'G: Galeria Horizontal','opcao-h.html':'H: Minimalismo SuÃ­Ã§o','opcao-i.html':'I: Corporate Dark','opcao-j.html':'J: Aurora Mesh','opcao-k.html':'K: Glassmorphism iOS','opcao-l.html':'L: Typographic Max.','opcao-m.html':'M: Monochrome Pop','opcao-n.html':'N: Retro Anos 70','opcao-o.html':'O: Organic Biomorphic','opcao-p.html':'P: 3D Depth Parallax'};
+  var file=window.location.pathname.split('/').pop()||'opcao-a.html';
+  if(!file.endsWith('.html'))file='opcao-a.html';
+  var lbl=document.getElementById('sw-lbl');
+  if(lbl)lbl.textContent=labels[file]||'';
+  document.querySelectorAll('#presentation-switcher .sw-o').forEach(function(o){
+    if(o.getAttribute('data-f')===file)o.classList.add('active');
+  });
+})();
+</script>
+</body>
+</html>

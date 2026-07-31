@@ -1025,74 +1025,72 @@
             });
         });
     </script>
-<!-- Floating Presenter Switcher Hub v2 (7 options) -->
+<!-- Floating Presenter Switcher Hub v3 (16 options A-P) -->
 <div id="presentation-switcher" style="
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translate3d(-50%, 0, 0);
     z-index: 100000;
-    background: rgba(8, 10, 30, 0.88);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    padding: 9px 18px;
+    background: rgba(8, 10, 30, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 8px 16px;
     border-radius: 100px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-family: 'Outfit', 'Inter', 'Segoe UI', sans-serif;
-    font-size: 0.72rem;
+    gap: 4px;
+    font-family: 'Outfit','Inter','Segoe UI',sans-serif;
+    font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.5px;
     color: #fff;
     white-space: nowrap;
+    flex-wrap: nowrap;
 ">
-    <span style='color: #6e7a9a; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.5px; margin-right: 4px;'>OpÃ§Ãµes</span>
-    <a href='opcao-a.html' class='sw-opt' data-file='opcao-a.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>A</a>
-    <a href='opcao-b.html' class='sw-opt' data-file='opcao-b.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>B</a>
-    <a href='opcao-c.html' class='sw-opt' data-file='opcao-c.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>C</a>
-    <a href='opcao-d.html' class='sw-opt' data-file='opcao-d.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>D</a>
-    <a href='opcao-e.html' class='sw-opt' data-file='opcao-e.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>E</a>
-    <a href='opcao-f.html' class='sw-opt' data-file='opcao-f.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>F</a>
-    <a href='opcao-g.html' class='sw-opt' data-file='opcao-g.html' style='color: #8e99ce; text-decoration: none; padding: 5px 11px; border-radius: 20px; transition: all 0.25s ease;'>G</a>
-    <span id='sw-label' style='color:#a0a8c0; font-size:0.6rem; margin-left:5px; min-width:100px;'></span>
+    <span style='color:#5a6280;font-size:0.55rem;text-transform:uppercase;letter-spacing:1.5px;margin-right:6px;flex-shrink:0;'>OpÃ§Ãµes</span>
+    <a href='opcao-a.html' class='sw-o' data-f='opcao-a.html' title='A: Snap Scrolling'>A</a>
+    <a href='opcao-b.html' class='sw-o' data-f='opcao-b.html' title='B: Editorial Champagne'>B</a>
+    <a href='opcao-c.html' class='sw-o' data-f='opcao-c.html' title='C: CinemÃ¡tico Obsidian'>C</a>
+    <a href='opcao-d.html' class='sw-o' data-f='opcao-d.html' title='D: Bento Grid'>D</a>
+    <a href='opcao-e.html' class='sw-o' data-f='opcao-e.html' title='E: Scrollytelling'>E</a>
+    <a href='opcao-f.html' class='sw-o' data-f='opcao-f.html' title='F: Neo-Brutalismo'>F</a>
+    <a href='opcao-g.html' class='sw-o' data-f='opcao-g.html' title='G: Galeria Horizontal'>G</a>
+    <span style='color:#2a2e50;margin:0 2px;'>|</span>
+    <a href='opcao-h.html' class='sw-o' data-f='opcao-h.html' title='H: Minimalismo SuÃ­Ã§o'>H</a>
+    <a href='opcao-i.html' class='sw-o' data-f='opcao-i.html' title='I: Corporate Dark'>I</a>
+    <a href='opcao-j.html' class='sw-o' data-f='opcao-j.html' title='J: Aurora Mesh'>J</a>
+    <a href='opcao-k.html' class='sw-o' data-f='opcao-k.html' title='K: Glassmorphism iOS'>K</a>
+    <a href='opcao-l.html' class='sw-o' data-f='opcao-l.html' title='L: Typographic Maximalism'>L</a>
+    <a href='opcao-m.html' class='sw-o' data-f='opcao-m.html' title='M: Monochrome Pop'>M</a>
+    <a href='opcao-n.html' class='sw-o' data-f='opcao-n.html' title='N: Retro Anos 70'>N</a>
+    <a href='opcao-o.html' class='sw-o' data-f='opcao-o.html' title='O: Organic Biomorphic'>O</a>
+    <a href='opcao-p.html' class='sw-o' data-f='opcao-p.html' title='P: 3D Depth Parallax'>P</a>
+    <span id='sw-lbl' style='color:#8090b8;font-size:0.58rem;margin-left:8px;min-width:130px;flex-shrink:0;'></span>
 </div>
 <style>
-#presentation-switcher .sw-opt.active {
-    background: #cfa426 !important;
-    color: #020422 !important;
-}
-#presentation-switcher .sw-opt:not(.active):hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff !important;
-}
-@media (max-width: 520px) {
-    #presentation-switcher { font-size: 0.65rem; padding: 7px 12px; gap: 4px; }
-    #presentation-switcher .sw-opt { padding: 4px 8px; }
-    #sw-label { display: none; }
+#presentation-switcher .sw-o{color:#4a5278;text-decoration:none;padding:5px 9px;border-radius:18px;transition:all 0.22s ease;display:inline-block;}
+#presentation-switcher .sw-o.active{background:#cfa426;color:#020422;}
+#presentation-switcher .sw-o:not(.active):hover{background:rgba(255,255,255,0.09);color:#fff;}
+@media(max-width:600px){
+  #presentation-switcher{padding:6px 10px;gap:2px;bottom:12px;}
+  #presentation-switcher .sw-o{padding:4px 6px;font-size:0.6rem;}
+  #sw-lbl{display:none;}
+  #presentation-switcher span[style*='2a2e50']{display:none;}
 }
 </style>
 <script>
-(function() {
-    var labels = {
-        'opcao-a.html': 'A: Snap Scrolling',
-        'opcao-b.html': 'B: Editorial Champagne',
-        'opcao-c.html': 'C: Cinem\u00e1tico Obsidian',
-        'opcao-d.html': 'D: Bento Grid',
-        'opcao-e.html': 'E: Scrollytelling',
-        'opcao-f.html': 'F: Neo-Brutalismo',
-        'opcao-g.html': 'G: Galeria Horizontal'
-    };
-    var file = window.location.pathname.split('/').pop() || 'opcao-a.html';
-    if (!file.endsWith('.html')) file = 'opcao-a.html';
-    var label = document.getElementById('sw-label');
-    if (label) label.textContent = labels[file] || '';
-    document.querySelectorAll('#presentation-switcher .sw-opt').forEach(function(opt) {
-        var href = opt.getAttribute('data-file');
-        if (href === file) opt.classList.add('active');
-    });
+(function(){
+  var labels={'opcao-a.html':'A: Snap Scrolling','opcao-b.html':'B: Editorial Champagne','opcao-c.html':'C: CinemÃ¡tico Obsidian','opcao-d.html':'D: Bento Grid','opcao-e.html':'E: Scrollytelling','opcao-f.html':'F: Neo-Brutalismo','opcao-g.html':'G: Galeria Horizontal','opcao-h.html':'H: Minimalismo SuÃ­Ã§o','opcao-i.html':'I: Corporate Dark','opcao-j.html':'J: Aurora Mesh','opcao-k.html':'K: Glassmorphism iOS','opcao-l.html':'L: Typographic Max.','opcao-m.html':'M: Monochrome Pop','opcao-n.html':'N: Retro Anos 70','opcao-o.html':'O: Organic Biomorphic','opcao-p.html':'P: 3D Depth Parallax'};
+  var file=window.location.pathname.split('/').pop()||'opcao-a.html';
+  if(!file.endsWith('.html'))file='opcao-a.html';
+  var lbl=document.getElementById('sw-lbl');
+  if(lbl)lbl.textContent=labels[file]||'';
+  document.querySelectorAll('#presentation-switcher .sw-o').forEach(function(o){
+    if(o.getAttribute('data-f')===file)o.classList.add('active');
+  });
 })();
 </script>
 </body>
