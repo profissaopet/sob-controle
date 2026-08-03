@@ -154,30 +154,25 @@
             gap: var(--space-1);
         }
 
-        .sticky-logo-dog {
-            width: 34px;
-            height: auto;
-        }
-
-        .sticky-logo-text-group {
+        .sticky-logo-stack {
             display: flex;
             flex-direction: column;
-            line-height: 1;
+            align-items: center;
+            gap: 2px;
         }
 
-        .sticky-logo-text {
-            font-family: 'Satisfy', cursive;
-            font-size: 1.35rem;
-            color: var(--text-white);
+        .sticky-logo-dog {
+            height: 28px;
+            width: auto;
+            display: block;
+            filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.4));
         }
 
-        .sticky-logo-label {
-            font-size: 0.55rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--accent-yellow);
-            margin-top: 2px;
+        .sticky-logo-nome {
+            height: 16px;
+            width: auto;
+            display: block;
+            filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.3));
         }
 
         .sticky-cta-btn {
@@ -255,31 +250,35 @@
         }
 
         .hero-logo-dog {
-            width: 80px;
+            width: 130px;
             height: auto;
             display: block;
-            margin-bottom: var(--space-1);
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+            filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.5));
+            transition: var(--transition);
         }
 
-        .hero-logo-text {
-            font-family: 'Satisfy', cursive;
-            font-size: 3rem;
-            color: var(--text-white);
-            font-weight: 400;
-            line-height: 1;
-            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+        .hero-logo-nome {
+            width: 200px;
+            height: auto;
+            display: block;
+            margin-top: -8px;
+            filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.4));
+            transition: var(--transition);
+        }
+
+        .hero-logo-container:hover .hero-logo-dog,
+        .hero-logo-container:hover .hero-logo-nome {
+            filter: drop-shadow(0 8px 24px rgba(207, 164, 38, 0.35));
         }
 
         .hero-logo-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 900;
-            letter-spacing: 7px;
+            letter-spacing: 5px;
             text-transform: uppercase;
             color: var(--accent-yellow);
             margin-top: var(--space-1);
-            opacity: 0.95;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            opacity: 0.9;
         }
 
         .hero-title-banner {
@@ -381,14 +380,12 @@
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.55);
             position: relative;
             cursor: pointer;
-            aspect-ratio: 16 / 9;
         }
 
         .video-player-container img {
             width: 100%;
-            height: 100%;
+            height: auto;
             display: block;
-            object-fit: cover;
             transition: var(--transition);
         }
 
@@ -473,18 +470,18 @@
         }
 
         h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: var(--font-2xl);
-            font-weight: 900;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 800;
             color: var(--text-dark);
             text-align: center;
             margin-bottom: var(--space-2);
             line-height: 1.25;
-            letter-spacing: -0.8px;
+            letter-spacing: 0;
         }
 
         .section-subtitle {
-            font-size: var(--font-lg);
+            font-size: 1.05rem;
             color: var(--text-muted);
             text-align: center;
             max-width: 720px;
@@ -579,8 +576,8 @@
         }
 
         .benefits-pills-list {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: var(--space-2);
         }
 
@@ -835,8 +832,21 @@
         }
 
         .mentor-stat-icon {
-            font-size: 1.4rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(207, 164, 38, 0.1);
+            border: 1px solid rgba(207, 164, 38, 0.3);
+            display: grid;
+            place-items: center;
+            color: var(--accent-yellow);
             flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .mentor-stat-card:hover .mentor-stat-icon {
+            background: rgba(207, 164, 38, 0.2);
+            border-color: var(--accent-yellow);
         }
 
         /* Solid Gold Image Wrapping for Tata */
@@ -957,11 +967,11 @@
         }
 
         .logistics-card {
-            background-color: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(145deg, #12194e, #0b1138);
+            border: 1px solid rgba(207, 164, 38, 0.25);
             padding: var(--space-4);
             border-radius: var(--border-radius);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             transition: var(--transition);
             display: flex;
             flex-direction: column;
@@ -972,17 +982,26 @@
         .logistics-card:hover {
             border-color: var(--accent-yellow);
             transform: translateY(-4px);
-            box-shadow: 0 20px 45px rgba(207, 164, 38, 0.15);
+            background: linear-gradient(145deg, #1a2560, #111a50);
+            box-shadow: 0 20px 45px rgba(207, 164, 38, 0.2);
         }
 
         .logistics-icon {
-            font-size: 1.8rem;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(207, 164, 38, 0.12);
+            border: 1px solid rgba(207, 164, 38, 0.3);
             width: 48px;
             height: 48px;
             border-radius: 50%;
             display: grid;
             place-items: center;
+            color: var(--accent-yellow);
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .logistics-card:hover .logistics-icon {
+            background: rgba(207, 164, 38, 0.22);
+            border-color: var(--accent-yellow);
         }
 
         .logistics-title {
@@ -1438,7 +1457,7 @@
             }
         }
 
-        @media (max-width: 768px) {
+            @media (max-width: 768px) {
             section {
                 padding: var(--space-6) 0 !important;
             }
@@ -1466,7 +1485,7 @@
                 font-size: 0.95rem !important;
                 margin-bottom: var(--space-3) !important;
             }
-            h2 { font-size: 1.6rem !important; }
+            h2 { font-size: 1.45rem !important; }
             .hero-quote-banner p { font-size: 1.6rem !important; font-weight: normal !important; }
             .hero-quote-banner { padding: 18px 20px !important; }
             .chaos-left-title { font-size: 1.5rem !important; text-align: center; }
@@ -1484,6 +1503,10 @@
                 border-radius: 12px !important;
                 text-align: left;
                 align-items: flex-start;
+            }
+            .benefits-pills-list {
+                grid-template-columns: 1fr !important;
+                gap: var(--space-1) !important;
             }
             .domus-house-diagram { padding: 0; }
             .logistics-grid, .steps-grid {
@@ -1851,10 +1874,9 @@
     <nav class="sticky-navbar">
         <div class="container sticky-navbar-container">
             <div class="sticky-logo-container">
-                <img class="sticky-logo-dog" src="../assets/tata-logo-dog.png" alt="Tata Pereira Logo Dog">
-                <div class="sticky-logo-text-group">
-                    <span class="sticky-logo-text">Tata Pereira</span>
-                    <span class="sticky-logo-label">Programa de Implementação</span>
+                <div class="sticky-logo-stack">
+                    <img class="sticky-logo-dog" src="../assets/tata-logo-dog.png" alt="Tata Pereira">
+                    <img class="sticky-logo-nome" src="../assets/tata-logo-nome.png" alt="Tata Pereira">
                 </div>
             </div>
             <a href="#" class="sticky-cta-btn open-app-modal">Quero Estruturar</a>
@@ -1871,8 +1893,8 @@
         <div class="container">
             <!-- Brand Logo -->
             <div class="hero-logo-container">
-                <img class="hero-logo-dog" src="../assets/tata-logo-dog.png" alt="Tata Pereira Logo Dog">
-                <span class="hero-logo-text">Tata Pereira</span>
+                <img class="hero-logo-dog" src="../assets/tata-logo-dog.png" alt="Tata Pereira">
+                <img class="hero-logo-nome" src="../assets/tata-logo-nome.png" alt="Tata Pereira">
                 <span class="hero-logo-label">Programa de Implementação</span>
             </div>
             
@@ -1916,11 +1938,10 @@
 
             <!-- CTA Button Block -->
             <div style="margin-top: 30px;">
+                <a href="#" class="hero-cta-btn open-app-modal">Quero Estruturar Minha Creche</a>
                 <p class="hero-cta-subtext">
                     Clique no botão abaixo para agendar uma reunião de diagnóstico. Isso lhe dará uma visão clara e mostrará como o programa pode te ajudar.
                 </p>
-                <a href="#" class="hero-cta-btn open-app-modal">Quero Estruturar Minha Creche</a>
-                
             </div>
         </div>
     </header>
@@ -1942,23 +1963,23 @@
                 </div>
                 <div class="target-card">
                     <div class="target-icon">✓</div>
-                    <span class="target-text">Sente que o negócio depende de você para funcionar.</span>
+                    <span class="target-text">Sente que o negócio depende de você.</span>
                 </div>
                 <div class="target-card">
                     <div class="target-icon">✓</div>
-                    <span class="target-text">Quer organizar processos, agenda e responsabilidades.</span>
+                    <span class="target-text">Quer organizar a rotina, os processos e a agenda.</span>
                 </div>
                 <div class="target-card">
                     <div class="target-icon">✓</div>
-                    <span class="target-text">Tem dificuldade para delegar com segurança.</span>
+                    <span class="target-text">Não consegue delegar com segurança.</span>
                 </div>
                 <div class="target-card">
                     <div class="target-icon">✓</div>
-                    <span class="target-text">Deseja sair do operacional e assumir mais o papel de gestora.</span>
+                    <span class="target-text">Tem a sensação de que corre e não sai do lugar.</span>
                 </div>
                 <div class="target-card">
                     <div class="target-icon">✓</div>
-                    <span class="target-text">Percebe que a equipe trabalha sem um padrão claro.</span>
+                    <span class="target-text">Percebe que a equipe trabalha sem um padrão.</span>
                 </div>
                 <div class="target-card">
                     <div class="target-icon">✓</div>
@@ -2070,23 +2091,33 @@
                 
                 <div class="mentor-stats-grid">
                     <div class="mentor-stat-card">
-                        <span class="mentor-stat-icon">🐕</span>
+                        <span class="mentor-stat-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.172C10 3.782 8.423 2.688 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5"/><path d="M14.267 5.172c0-1.39 1.577-2.484 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/><path d="M8 14v.5"/><path d="M16 14v.5"/><path d="M11.25 16.25h1.5L12 17l-.75-.75z"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444c0-1.061-.162-2.2-.493-3.309m-9.243-6.082A8.801 8.801 0 0 1 12 5c.78 0 1.5.108 2.161.306"/></svg>
+                        </span>
                         <span><strong class="stat-number" data-target="8">0</strong> anos no mercado pet</span>
                     </div>
                     <div class="mentor-stat-card">
-                        <span class="mentor-stat-icon">🎓</span>
+                        <span class="mentor-stat-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                        </span>
                         <span>Mais de <strong class="stat-number" data-target="100">0</strong> profissionais capacitados</span>
                     </div>
                     <div class="mentor-stat-card">
-                        <span class="mentor-stat-icon">🏡</span>
+                        <span class="mentor-stat-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        </span>
                         <span>Mais de <strong class="stat-number" data-target="1000">0</strong> famílias atendidas</span>
                     </div>
                     <div class="mentor-stat-card">
-                        <span class="mentor-stat-icon">💼</span>
+                        <span class="mentor-stat-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                        </span>
                         <span><strong class="stat-number" data-target="13">0</strong> anos no corporativo</span>
                     </div>
                     <div class="mentor-stat-card" style="grid-column: span 2;">
-                        <span class="mentor-stat-icon">⚙️</span>
+                        <span class="mentor-stat-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                        </span>
                         <span>Especialista em processos e estruturação de creches</span>
                     </div>
                 </div>
@@ -2259,51 +2290,59 @@
     <section class="logistics-section">
         <div class="container">
             <div class="text-center" style="margin-bottom: 50px;">
-                <p style="font-size: 0.88rem; font-weight: 800; color: var(--accent-yellow); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;">
-                      <h2>Como funciona o programa:</h2>
-                </p>
-              
+                <h2>Como funciona o programa:</h2>
             </div>
             
             <div class="logistics-grid">
                 <div class="logistics-card">
-                    <div class="logistics-icon">📅</div>
+                    <div class="logistics-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
                     <div class="logistics-title">4 MESES DE DURAÇÃO</div>
                     <p class="logistics-desc">Período planejado para redefinir as rotinas da sua empresa e acompanhar a equipe na fixação do novo modelo.</p>
                 </div>
                 <div class="logistics-card">
-                    <div class="logistics-icon">👥</div>
+                    <div class="logistics-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
                     <div class="logistics-title">10 ENCONTROS INDIVIDUAIS</div>
                     <p class="logistics-desc">Sessões estratégicas focadas no seu faturamento, processos operacionais e infraestrutura pet.</p>
                 </div>
                 <div class="logistics-card">
-                    <div class="logistics-icon">💬</div>
+                    <div class="logistics-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </div>
                     <div class="logistics-title">SUPORTE DIÁRIO DIRETO COM A TATA NO WHATSAPP</div>
                     <p class="logistics-desc">Acesso diário e direto à Tata Pereira nos intervalos das sessões para tirar dúvidas rápidas e aprovar processos.</p>
                 </div>
                 <div class="logistics-card">
-                    <div class="logistics-icon">🎥</div>
+                    <div class="logistics-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                    </div>
                     <div class="logistics-title">GRAVAÇÃO DOS ENCONTROS</div>
                     <p class="logistics-desc">Assista novamente quando quiser ou utilize as gravações para treinar seus gerentes de creche.</p>
                 </div>
                 <div class="logistics-card">
-                    <div class="logistics-icon">📂</div>
+                    <div class="logistics-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                    </div>
                     <div class="logistics-title">PROGRAMA DE IMPLEMENTAÇÃO</div>
                     <p class="logistics-desc">Acesso a modelos de POPs, planilhas operacionais e materiais de treinamento prontos para preencher.</p>
                 </div>
                 <div class="logistics-card">
-                    <div class="logistics-icon">🔄</div>
+                    <div class="logistics-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                    </div>
                     <div class="logistics-title">AUDITORIA DE TODA A ROTINA E DOCUMENTOS</div>
                     <p class="logistics-desc">Auditorias constantes dos seus procedimentos operacionais e acompanhamento dos indicadores operacionais.</p>
                 </div>
             </div>
             
             <div class="section-cta-block">
+                <a href="#" class="section-cta-btn open-app-modal">Quero Estruturar Minha Creche</a>
                 <p style="font-size: 0.88rem; color: var(--text-light-muted); margin-top: 18px; max-width: 580px; margin-left: auto; margin-right: auto; line-height: 1.6;">
                     Clique no botão abaixo para agendar uma reunião de diagnóstico. Isso lhe dará uma visão clara e mostrará como o programa pode te ajudar.
                 </p>
-                <a href="#" class="section-cta-btn open-app-modal">Quero Estruturar Minha Creche</a>
-                
             </div>
         </div>
     </section>
